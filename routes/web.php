@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\pageController;
 use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,5 +19,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Staff
+
 Route::get('/home', [StaffController::class, 'home'])->name('home');
 
+// Customer
+
+Route::get('/customerHome', [pageController::class, 'home'])->name('customerHome');
+
+Route::get('/customerHistory', [pageController::class, 'history'])->name('customerHistory');
+
+Route::get('/customerAbout', [pageController::class, 'about'])->name('customerAbout');
