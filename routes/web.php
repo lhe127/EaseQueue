@@ -23,6 +23,7 @@ Route::get('/', function () {
 
 Route::get('/home', [StaffController::class, 'home'])->name('home');
 
+Route::get('/schedule', [StaffController::class, 'schedule'])->name('schedule');
 
 Route::get('/history', [StaffController::class, 'history'])->name('history');
 

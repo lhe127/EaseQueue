@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\Request;
 
 class StaffController extends Controller
@@ -11,5 +12,8 @@ class StaffController extends Controller
     }
     public function history(){
         return view('Staff.history');
+    }
+    public function schedule(){
+        return view('Staff.schedule');
     }
 }
