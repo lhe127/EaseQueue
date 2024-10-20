@@ -20,8 +20,8 @@
             </div>
         </div>
 
-        <div class="flex flex-col bg-red-200 border-solid border-2 border-black drop-shadow-md rounded-xl w-3/12 ml-4 h-[30rem] ">
-            <p class="text-3xl text-indigo-900 self-center mt-4 mb-3"><strong>Next Number</strong></p>
+        <div class="flex flex-col bg-red-100 border-solid border-2 border-black drop-shadow-md rounded-xl w-3/12 ml-4 h-[30rem] ">
+            <p class="text-4xl text-indigo-900 self-center mt-4 mb-3"><strong>Next Number</strong></p>
             <p class="border-t-4 border-black  mb-4 w-full"></p>
             <p class="text-3xl text-indigo-900  self-center"><strong>3123</strong></p>
             <p class="border-t-4 border-black mt-3 mb-4 w-full"></p>

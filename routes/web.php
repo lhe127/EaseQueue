@@ -19,3 +19,6 @@ Route::get('/', function () {
 
 Route::get('/home', [StaffController::class, 'home'])->name('home');
 
+Route::get('/history', [StaffController::class, 'history'])->name('history');
+
+
