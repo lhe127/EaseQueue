@@ -35,3 +35,7 @@ Route::get('/customerHome', [pageController::class, 'home'])->name('customerHome
 Route::get('/customerHistory', [pageController::class, 'history'])->name('customerHistory');
 
 Route::get('/customerAbout', [pageController::class, 'about'])->name('customerAbout');
+
+Route::get('/getNumber', function(){
+    return view('Customer.getNumber');
+});
