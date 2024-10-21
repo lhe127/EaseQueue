@@ -21,9 +21,8 @@
             <div class="flex items-center justify-between py-2 text-5x1">
                 <div class="font-bold text-blue-900 text-4xl">Staff<span class="text-orange-600">Panel</span></div>
                 <div class="flex items-center text-gray-500">
-                    <span class="material-icons-outlined p-2" style="font-size: 30px">search</span>
                     <span class="material-icons-outlined p-2" style="font-size: 30px">notifications</span>
-                    <div class="bg-center bg-cover bg-no-repeat rounded-full inline-block h-12 w-12 ml-2" style="background-image: url(https://i.pinimg.com/564x/de/0f/3d/de0f3d06d2c6dbf29a888cf78e4c0323.jpg)"></div>
+                    <div onclick="toggledropdown()" class="bg-center bg-cover bg-no-repeat rounded-full inline-block h-12 w-12 ml-2" style="background-image: url(https://i.pinimg.com/564x/de/0f/3d/de0f3d06d2c6dbf29a888cf78e4c0323.jpg)"></div>
                 </div>
             </div>
         </div>
@@ -31,12 +30,12 @@
         <div class="flex flex-row pt-32 px-10 pb-4">
             <div class="w-2/12 mr-6">
                 <div class="bg-white rounded-xl shadow-lg mb-6 px-6 py-4">
-                    <a href="" class="inline-block text-gray-600 hover:text-black my-4 w-full">
+                    <a href="{{route('home')}}" class="inline-block text-gray-600 hover:text-black my-4 w-full">
                         <span class="material-icons-outlined float-left pr-2">dashboard</span>
                         Home
                         <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
                     </a>
-                    <a href="" class="inline-block hover:text-black  my-4 w-full">
+                    <a href="{{route('schedule')}}" class="inline-block hover:text-black  my-4 w-full">
                         <div class="fill-current text-gray-600 hover:text-black">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 material-icons-outlined float-left pr-1 mr-1 ml-px" viewBox="0 0 448 512">
                                 <path d="M128 0c17.7 0 32 14.3 32 32l0 32 128 0 0-32c0-17.7 14.3-32 32-32s32 14.3 32 32l0 32 48 0c26.5 0 48 21.5 48 48l0 48L0 160l0-48C0 85.5 21.5 64 48 64l48 0 0-32c0-17.7 14.3-32 32-32zM0 192l448 0 0 272c0 26.5-21.5 48-48 48L48 512c-26.5 0-48-21.5-48-48L0 192zm64 80l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zm128 0l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0zM64 400l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0zm112 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16z" />
@@ -50,7 +49,10 @@
                         Report
                         <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
                     </a>
-                    <a href="" class="inline-block hover:text-black my-4 w-full">
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg mb-6 px-6 py-4">
+                <a href="{{route('history')}}" class="inline-block hover:text-black my-4 w-full">
                         <div class="fill-current text-gray-600 hover:text-black">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 material-icons-outlined float-left pr-1 mr-1" viewBox="0 0 576 512">
                             <path d="M88.7 223.8L0 375.8 0 96C0 60.7 28.7 32 64 32l117.5 0c17 0 33.3 6.7 45.3 18.7l26.5 26.5c12 12 28.3 18.7 45.3 18.7L416 96c35.3 0 64 28.7 64 64l0 32-336 0c-22.8 0-43.8 12.1-55.3 31.8zm27.6 16.1C122.1 230 132.6 224 144 224l400 0c11.5 0 22 6.1 27.7 16.1s5.7 22.2-.1 32.1l-112 192C453.9 474 443.4 480 432 480L32 480c-11.5 0-22-6.1-27.7-16.1s-5.7-22.2 .1-32.1l112-192z" />
@@ -58,11 +60,7 @@
                         History
                         <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
                     </div>
-                        
                     </a>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-lg mb-6 px-6 py-4">
                     <a href="" class="inline-block hover:text-black my-4 w-full">
                         <div class="fill-current text-gray-600 hover:text-black">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-6 material-icons-outlined float-left pr-1 mr-1" viewBox="0 0 448 512">
@@ -73,18 +71,12 @@
                     </div>
                         
                     </a>
-                    <div onclick="toggledropdown()" class="inline-block text-gray-600 hover:text-black hover:#dropdown:block my-4 w-full cursor-pointer" id="dropdownButton">
-                        
-                        <span class="material-icons-outlined float-left pr-2">power_settings_new</span>
-                        Status
-                        <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
-                </div>
                 </div>
             </div>
            
             @yield('content')
         </div> 
-        <div class="rounded border-gray-500 bg-white  absolute ml-[18rem] mt-[-8rem] shadow-md hidden" id="dropdown">
+        <div class="rounded border-gray-500 bg-white absolute shadow-md top-[4.8rem] right-[1rem] hidden" id="dropdown">
                 <div class=" flex justify-center items-center h-[3rem] w-[9rem] text-xl hover:bg-gray-200 cursor-pointer ">Available</div>
                 <div class=" flex justify-center items-center h-[3rem] w-[9rem] text-xl hover:bg-gray-200 cursor-pointer">Pause</div>
                 <a href=""><div class=" flex justify-center items-center h-[3rem] w-[9rem] text-xl hover:bg-gray-200 cursor-pointer">Log out</div></a>
