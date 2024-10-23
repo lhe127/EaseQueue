@@ -39,3 +39,9 @@ Route::get('/customerAbout', [pageController::class, 'about'])->name('customerAb
 Route::get('/getNumber', function(){
     return view('Customer.getNumber');
 });
+
+// Admin 
+
+Route::get('/adminHome', function(){
+    return view('Admin.adminHome');
+});
