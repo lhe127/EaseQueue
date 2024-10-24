@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="/css/customer/navigation.css">
+    <link rel="stylesheet" href="/css/Customer/navigation.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -26,14 +26,17 @@
                     <div class="left"></div>
                     <div class="right"></div>
                 </div>
-                <li class="nav-item active">
-                    <a class="nav-link" href="#" data-url="{{route('customerHome')}}"><i class="fas fa-tachometer-alt"></i>Home</a>
+                <li class="nav-item {{ request()->is('/') ? 'active' : '' }}">
+                    <a class="nav-link" href="#" data-url="{{ route('customerHome') }}"><i
+                            class="fas fa-tachometer-alt"></i>Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" data-url="{{route('customerHistory')}}"><i class="fas fa-history"></i>History</a>
+                <li class="nav-item {{ request()->is('history') ? 'active' : '' }}">
+                    <a class="nav-link" href="#" data-url="{{ route('customerHistory') }}"><i
+                            class="fas fa-history"></i>History</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" data-url="{{route('customerAbout')}}"><i class="fas fa-info-circle"></i>About</a>
+                <li class="nav-item {{ request()->is('about') ? 'active' : '' }}">
+                    <a class="nav-link" href="#" data-url="{{ route('customerAbout') }}"><i
+                            class="fas fa-info-circle"></i>About</a>
                 </li>
             </ul>
         </div>
@@ -46,90 +49,92 @@
     <script>
         // Responsive navbar active animation
         function test() {
-            var tabsNewAnim = $('#navbarSupportedContent');
-            var activeItemNewAnim = tabsNewAnim.find('.active');
-            var itemPosNewAnim = activeItemNewAnim.position();
-    
-            // Debugging: Log positions and dimensions
-            console.log("Active Item Position:", itemPosNewAnim);
-            console.log("Active Item Dimensions:", {
-                height: activeItemNewAnim.innerHeight(),
-                width: activeItemNewAnim.innerWidth()
-            });
-    
-            $(".hori-selector").css({
-                "top": itemPosNewAnim.top + "px",
-                "left": itemPosNewAnim.left + "px",
-                "height": activeItemNewAnim.innerHeight() + "px",
-                "width": activeItemNewAnim.innerWidth() + "px"
-            });
-    
-            $("#navbarSupportedContent").on("click", "li", function () {
-                $('#navbarSupportedContent ul li').removeClass("active");
-                $(this).addClass('active');
-                var itemPosNewAnim = $(this).position();
-    
-                // Debugging: Log positions and dimensions
-                console.log("Clicked Item Position:", itemPosNewAnim);
-                console.log("Clicked Item Dimensions:", {
-                    height: $(this).innerHeight(),
-                    width: $(this).innerWidth()
-                });
-    
-                $(".hori-selector").css({
-                    "top": itemPosNewAnim.top + "px",
-                    "left": itemPosNewAnim.left + "px",
-                    "height": $(this).innerHeight() + "px",
-                    "width": $(this).innerWidth() + "px"
-                });
-            });
-        }
-    
-        $(document).ready(function () {
-            setTimeout(test);
+    var tabsNewAnim = $('#navbarSupportedContent');
+    var activeItemNewAnim = tabsNewAnim.find('.active');
+
+    // Fallback in case no item is active
+    if (activeItemNewAnim.length === 0) {
+        activeItemNewAnim = tabsNewAnim.find('li').first(); // Set the first nav item as active by default
+        activeItemNewAnim.addClass('active');
+    }
+
+    var itemPosNewAnim = activeItemNewAnim.position();
+
+    // Ensure the hori-selector is correctly positioned
+    $(".hori-selector").css({
+        "top": itemPosNewAnim.top + "px",
+        "left": itemPosNewAnim.left + "px",
+        "height": activeItemNewAnim.innerHeight() + "px",
+        "width": activeItemNewAnim.innerWidth() + "px"
+    });
+
+    $("#navbarSupportedContent").on("click", "li", function () {
+        $('#navbarSupportedContent ul li').removeClass("active");
+        $(this).addClass('active');
+
+        // Store the current navigation link in localStorage
+        var selectedUrl = $(this).find('.nav-link').data('url');
+        localStorage.setItem('activeNav', selectedUrl);
+
+        var itemPosNewAnim = $(this).position();
+        $(".hori-selector").css({
+            "top": itemPosNewAnim.top + "px",
+            "left": itemPosNewAnim.left + "px",
+            "height": $(this).innerHeight() + "px",
+            "width": $(this).innerWidth() + "px"
         });
-    
-        $(window).on('resize', function () {
-            setTimeout(test, 500);
-        });
-    
-        $(".navbar-toggler").click(function () {
-            $(".navbar-collapse").slideToggle(300);
-            setTimeout(test);
-        });
-    
-        // Load content dynamically based on navigation link click
-        $(document).on('click', '.nav-link', function (e) {
-            e.preventDefault();
-            var url = $(this).data('url');
-    
-            if (url) {
-                $('#content').load(url + ' #content > *', function (response, status, xhr) {
-                    if (status === "error") {
-                        alert("Sorry, but there was an error: " + xhr.status + " " + xhr.statusText);
-                    } else {
-                        history.pushState(null, '', url);
-                        $('#navbarSupportedContent .nav-item').removeClass('active');
-                        $('#navbarSupportedContent .nav-link[data-url="' + url + '"]').parent().addClass('active');
-                        test(); // Re-run the test function to update the animation
-                    }
-                });
+    });
+}
+
+// Restore active navigation from localStorage
+function restoreActiveNav() {
+    var activeNavUrl = localStorage.getItem('activeNav');
+    if (activeNavUrl) {
+        $('#navbarSupportedContent .nav-item').removeClass('active');
+        $('#navbarSupportedContent .nav-link[data-url="' + activeNavUrl + '"]').parent().addClass('active');
+    }
+}
+
+$(document).ready(function () {
+    restoreActiveNav();  // Restore the last active nav item from localStorage
+    setTimeout(test, 50); // Allow some time for layout rendering before positioning selector
+});
+
+$(window).on('resize', function () {
+    setTimeout(test, 200); // Shorter delay for smoother animation during resize
+});
+
+$(".navbar-toggler").click(function () {
+    $(".navbar-collapse").slideToggle(300, function () {
+        test(); // Update after navbar collapse animation completes
+    });
+});
+
+$(document).on('click', '.nav-link', function (e) {
+    e.preventDefault();
+    var url = $(this).data('url');
+
+    if (url) {
+        $('#content').load(url + ' #content > *', function (response, status, xhr) {
+            if (status === "error") {
+                alert("Sorry, but there was an error: " + xhr.status + " " + xhr.statusText);
             } else {
-                console.warn("No URL found for this navigation link.");
+                history.pushState(null, '', url);
+                $('#navbarSupportedContent .nav-item').removeClass('active');
+                $('#navbarSupportedContent .nav-link[data-url="' + url + '"]').parent().addClass('active');
+
+                // Store the active URL in localStorage when clicked
+                localStorage.setItem('activeNav', url);
+                test(); // Re-run animation after content load
             }
         });
-    
-        // Handle back/forward navigation
-        window.onpopstate = function () {
-            var currentPath = location.pathname;
-            $('#content').load(currentPath + ' #content > *', function (response, status, xhr) {
-                if (status === "error") {
-                    alert("Unable to load content: " + xhr.status + " " + xhr.statusText);
-                } else {
-                    test(); // Re-run the test function to update the animation
-                }
-            });
-        };
+    } else {
+        console.warn("No URL found for this navigation link.");
+    }
+});
+
+
+
     </script>
 </body>
 
