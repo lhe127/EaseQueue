@@ -6,7 +6,7 @@
 </head>
 
 <div class="container text-center my-3">
-    <h2 class="queue-title my-4">Queue Status</h2>
+    <h2 class="title my-4">Queue Status</h2>
 
     <div class="row justify-content-center">
         <div class="col-12 col-md-8 col-lg-6">

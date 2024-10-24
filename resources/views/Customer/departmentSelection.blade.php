@@ -1,4 +1,4 @@
-@extends('Customer.shared.customerNavigation')
+@extends('customer.shared.customerNavigation')
 @section('title', 'Service Providers')
 @section('content')
 <!DOCTYPE html>
@@ -13,30 +13,6 @@
     <style>
         body {
             background-color: #f4f4f4;
-        }
-
-        .service-title {
-            font-family: 'Roboto', sans-serif;
-            /* Clean font */
-            font-size: 2.2rem;
-            /* Slightly smaller font size */
-            font-weight: 500;
-            /* Medium font weight for subtlety */
-            color: #343a40;
-            /* Dark gray color for readability */
-            border-bottom: 2px solid #5161ce;
-            /* Simple underline */
-            padding-bottom: 10px;
-            /* Space below the title */
-            margin-bottom: 20px;
-            /* Space below the title */
-            transition: color 0.3s ease;
-            /* Smooth color transition */
-        }
-
-        .service-title:hover {
-            color: #5161ce;
-            /* Change color on hover for a slight effect */
         }
 
         /* Department Cards */
@@ -183,7 +159,7 @@
 <body>
 
     <div class="container">
-        <h2 class="service-title text-center my-4">Service Providers</h2>
+        <h2 class="title text-center my-4">Service Providers</h2>
 
         <!-- Department Selection Area -->
         <div class="row">
