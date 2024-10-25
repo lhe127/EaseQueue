@@ -27,6 +27,11 @@ Route::get('/schedule', [StaffController::class, 'schedule'])->name('schedule');
 
 Route::get('/history', [StaffController::class, 'history'])->name('history');
 
+Route::get('/report', [StaffController::class, 'report'])->name('report');
+
+Route::get('/contact', [StaffController::class, 'contact'])->name('contact');
+
+
 
 // Customer
 
