@@ -65,4 +65,8 @@ Route::get('/adminSettingStaff', function(){
 
 Route::get('/updateStaffInfo', function(){
     return view('Admin.Setting.updateStaffInfo');
+})->name('updateStaffInfo');
+
+Route::get('/adminSettingQueue', function(){
+    return view('Admin.Setting.settingQueue');
 });

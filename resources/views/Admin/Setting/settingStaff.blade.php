@@ -29,7 +29,7 @@
                     <td class="px-4 py-2">LHE</td>
                     <td class="px-4 py-2">
                         <a href="" class="text-blue-600 hover:text-blue-800">
-                            <span class="material-icons-outlined">edit</span>
+                            <a href="{{route('updateStaffInfo')}}" class="material-icons-outlined">edit</a>
                         </a>
                     </td>
                 </tr>
