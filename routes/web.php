@@ -54,3 +54,7 @@ Route::get('/adminHome', function(){
 Route::get('/adminMailbox', function(){
     return view('Admin.adminMailbox');
 });
+
+Route::get('/adminSettingDepartment', function(){
+    return view('Admin.Setting.settingDepartment');
+});
