@@ -27,6 +27,11 @@ Route::get('/schedule', [StaffController::class, 'schedule'])->name('schedule');
 
 Route::get('/history', [StaffController::class, 'history'])->name('history');
 
+Route::get('/report', [StaffController::class, 'report'])->name('report');
+
+Route::get('/contact', [StaffController::class, 'contact'])->name('contact');
+
+
 
 // Customer
 
@@ -44,6 +49,10 @@ Route::get('/getNumber', function(){
 
 Route::get('/adminHome', function(){
     return view('Admin.adminHome');
+});
+
+Route::get('/adminMailbox', function(){
+    return view('Admin.adminMailbox');
 });
 
 Route::get('/adminSettingDepartment', function(){

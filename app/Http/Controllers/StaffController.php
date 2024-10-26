@@ -16,4 +16,10 @@ class StaffController extends Controller
     public function schedule(){
         return view('Staff.schedule');
     }
+    public function report(){
+        return view('Staff.report');
+    }
+    public function contact(){
+        return view('Staff.contact');
+    }
 }
