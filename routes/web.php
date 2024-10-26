@@ -50,3 +50,7 @@ Route::get('/getNumber', function(){
 Route::get('/adminHome', function(){
     return view('Admin.adminHome');
 });
+
+Route::get('/adminMailbox', function(){
+    return view('Admin.adminMailbox');
+});
