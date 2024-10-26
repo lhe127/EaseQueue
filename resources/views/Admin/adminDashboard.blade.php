@@ -53,7 +53,7 @@
                     <div id="settingDropdown" class="hidden bg-white mt-2 rounded-md shadow-lg">
                         <a href="{{route('adminSetDepartment')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200">Department</a>
                         <a href="{{route('adminSetStaff')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200">Staff</a>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200">Queue</a>
+                        <a href="{{route('adminSetQueue')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200">Queue</a>
                     </div>
                 </div>
             </div>
