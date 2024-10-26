@@ -57,4 +57,12 @@ Route::get('/adminMailbox', function(){
 
 Route::get('/adminSettingDepartment', function(){
     return view('Admin.Setting.settingDepartment');
+})->name('adminSetDepartment');
+
+Route::get('/adminSettingStaff', function(){
+    return view('Admin.Setting.settingStaff');
+})->name('adminSetStaff');
+
+Route::get('/updateStaffInfo', function(){
+    return view('Admin.Setting.updateStaffInfo');
 });
