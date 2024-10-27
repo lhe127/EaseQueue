@@ -21,7 +21,7 @@
             <div class="flex items-center justify-between py-2 text-5x1">
                 <div class="font-bold text-blue-900 text-4xl">Admin<span class="text-orange-600">Panel</span></div>
                 <div class="flex items-center text-gray-500">
-                    <span class="material-icons-outlined p-2" style="font-size: 30px">notifications</span>
+                    <a class="material-icons-outlined p-2" style="font-size: 30px" href="{{route('adminMailbox')}}">notifications</a>
                     <div onclick="toggledropdown()" class="bg-center bg-cover bg-no-repeat rounded-full inline-block h-12 w-12 ml-2" style="background-image: url(https://koululainen.fi/wp-content/uploads/2024/06/kapybara_verkkoon.jpg)"></div>
                 </div>
             </div>
@@ -30,7 +30,7 @@
         <div class="flex flex-row pt-32 px-10 pb-4">
             <div class="w-2/12 mr-6">
                 <div class="bg-white rounded-xl shadow-lg mb-6 px-6 py-4">
-                    <a href="" class="inline-block text-gray-600 hover:text-black my-4 w-full">
+                    <a href="{{route('adminHome')}}" class="inline-block text-gray-600 hover:text-black my-4 w-full">
                         <span class="material-icons-outlined float-left pr-2">dashboard</span>
                         Home
                         <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
