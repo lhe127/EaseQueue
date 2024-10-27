@@ -1,12 +1,13 @@
 @extends('Admin/adminDashboard')
 @section('content')
-<div style="background-color:white col-xs-12 col-md-12">
-    <div class="flex justify-between h-full">
-        <!-- Table -->
-        <div class="w-full max-w-2lg bg-white shadow-lg rounded-sm border border-gray-200 ">
-            <header class="px-5 py-4 border-b border-gray-100">
-                <h1 class="font-bold text-gray-800">Staff Status</h1>
-            </header>
+<div style="bg-gray-200; width:100%; display:flex; flex-direction:column; gap:1rem;">
+    <div class="dashboard" style="display: flex; flex-wrap: wrap; gap: 1rem;">
+<!-- Table -->
+        <div class="staff-table-container" style="background-color:white; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; flex: 1;">
+
+        <header class="px-5 py-4 border-b border-gray-100">
+            <h1 class="font-bold text-gray-800">Staff Status</h1>
+        </header>
             <div class="p-3">
                 <div class="overflow-x-auto">
                     <table class="table-auto w-full">
@@ -147,85 +148,106 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex justify-self-end">
  
-        <div class="w-full max-w-2xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200">
-            <header class="px-5 py-4 border-b border-gray-100">
-                <h1 class="font-bold text-gray-800">Live Table</h1>
-            </header>
-            <span class="px-5 py-4 border-b border-gray-100"> Total waiting: <strong>4</strong></span>
+        <div class="live-table-container" style="background-color:white; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; flex: 0.3;">
+        <header class="px-5 py-4 border-b border-gray-100">
+         <h1 class="font-bold text-gray-800">Live Table</h1>
+     </header>
+     <span class="px-5 py-4 border-b border-gray-100"> Total waiting: <strong>4</strong></span>
 
-            <div class="p-3">
-                <div class="overflow-x-auto">
-                    <table class="table-auto w-full">
-                        <thead class="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
-                            <tr>
-                                <th class="p-2 whitespace-nowrap ">
-                                    <div class="font-semibold text-left">ID</div>
-                                </th>
-                                <th class="p-2 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Queue Number</div>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-sm divide-y divide-gray-100">
-                            <tr>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="font-medium text-gray-800">1</div>
-                                    </div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">1001</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="font-medium text-gray-800">2</div>
-                                    </div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">1002</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="font-medium text-gray-800">3</div>
-                                    </div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">2001</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="font-medium text-gray-800">4</div>
-                                    </div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">2002</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="font-medium text-gray-800">5</div>
-                                    </div>
-                                </td>
-                                <td class="p-2 whitespace-nowrap">
-                                    <div class="text-left">1003</div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-
+     <div class="p-3">
+         <div class="overflow-x-auto">
+             <table class="table-auto w-full">
+                 <thead class="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
+                     <tr>
+                         <th class="p-2 whitespace-nowrap ">
+                             <div class="font-semibold text-left">ID</div>
+                         </th>
+                         <th class="p-2 whitespace-nowrap">
+                             <div class="font-semibold text-left">Queue Number</div>
+                         </th>
+                     </tr>
+                 </thead>
+                 <tbody class="text-sm divide-y divide-gray-100">
+                     <tr>
+                         <td class="p-2 whitespace-nowrap">
+                             <div class="flex items-center">
+                                 <div class="font-medium text-gray-800">1</div>
+                             </div>
+                         </td>
+                         <td class="p-2 whitespace-nowrap">
+                             <div class="text-left">1001</div>
+                         </td>
+                     </tr>
+                     <tr>
+                         <td class="p-2 whitespace-nowrap">
+                             <div class="flex items-center">
+                                 <div class="font-medium text-gray-800">2</div>
+                             </div>
+                         </td>
+                         <td class="p-2 whitespace-nowrap">
+                             <div class="text-left">1002</div>
+                         </td>
+                     </tr>
+                     <tr>
+                         <td class="p-2 whitespace-nowrap">
+                             <div class="flex items-center">
+                                 <div class="font-medium text-gray-800">3</div>
+                             </div>
+                         </td>
+                         <td class="p-2 whitespace-nowrap">
+                             <div class="text-left">2001</div>
+                         </td>
+                     </tr>
+                     <tr>
+                         <td class="p-2 whitespace-nowrap">
+                             <div class="flex items-center">
+                                 <div class="font-medium text-gray-800">4</div>
+                             </div>
+                         </td>
+                         <td class="p-2 whitespace-nowrap">
+                             <div class="text-left">2002</div>
+                         </td>
+                     </tr>
+                     <tr>
+                         <td class="p-2 whitespace-nowrap">
+                             <div class="flex items-center">
+                                 <div class="font-medium text-gray-800">5</div>
+                             </div>
+                         </td>
+                         <td class="p-2 whitespace-nowrap">
+                             <div class="text-left">1003</div>
+                         </td>
+                     </tr>
+                 </tbody>
+             </table>
+         </div>
+     </div>
+ </div>
 </div>
+</div>
+
+<style>
+    @media (min-width: 992px) {
+        .staff-table-container {
+            width: 70%;
+        }
+        .live-table-container {
+            width: 30%;
+        }
+        .dashboard {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+
+    @media (max-width: 430px) {
+        .dashboard {
+            display: block;
+        }
+        .staff-table-container, .live-table-container {
+            width: 100%;
+        }
+    }
+</style>
 @endsection

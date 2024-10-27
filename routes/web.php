@@ -49,11 +49,11 @@ Route::get('/getNumber', function(){
 
 Route::get('/adminHome', function(){
     return view('Admin.adminHome');
-});
+})->name('adminHome');
 
 Route::get('/adminMailbox', function(){
     return view('Admin.adminMailbox');
-});
+})->name('adminMailbox');
 
 Route::get('/adminSettingDepartment', function(){
     return view('Admin.Setting.settingDepartment');
