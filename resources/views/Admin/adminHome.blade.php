@@ -6,7 +6,7 @@
         <div class="staff-table-container" style="background-color:white; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; flex: 1;">
 
         <header class="px-5 py-4 border-b border-gray-100">
-            <h1 class="font-bold text-gray-800">Staff Status</h1>
+            <h1 class="font-bold text-gray-800" style="font-size:1.5em">Staff Status</h1>
         </header>
             <div class="p-3">
                 <div class="overflow-x-auto">
@@ -151,7 +151,7 @@
  
         <div class="live-table-container" style="background-color:white; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; flex: 0.3;">
         <header class="px-5 py-4 border-b border-gray-100">
-         <h1 class="font-bold text-gray-800">Live Table</h1>
+         <h1 class="font-bold text-gray-800" style="font-size:1.2em">Live Table</h1>
      </header>
      <span class="px-5 py-4 border-b border-gray-100"> Total waiting: <strong>4</strong></span>
 
@@ -228,26 +228,34 @@
 </div>
 
 <style>
-    @media (min-width: 992px) {
-        .staff-table-container {
-            width: 70%;
-        }
-        .live-table-container {
-            width: 30%;
-        }
-        .dashboard {
-            display: flex;
-            justify-content: space-between;
-        }
+    .live-table-container {
+        max-height: 340px; 
+        padding: 2px;     
     }
 
-    @media (max-width: 430px) {
-        .dashboard {
-            display: block;
-        }
-        .staff-table-container, .live-table-container {
-            width: 100%;
-        }
+    .live-table-container table {
+        width: 100%;       
     }
-</style>
+    @media (min-width: 992px) {
+            .staff-table-container {
+                width: 70%;
+            }
+            .live-table-container {
+                width: 30%;
+            }
+            .dashboard {
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .dashboard {
+                display: block;
+            }
+            .staff-table-container, .live-table-container {
+                width: 100%;
+            }
+        }
+    </style>
 @endsection
