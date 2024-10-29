@@ -31,6 +31,7 @@ Route::get('/report', [StaffController::class, 'report'])->name('report');
 
 Route::get('/contact', [StaffController::class, 'contact'])->name('contact');
 
+Route::get('/transfer', [StaffController::class, 'transfer'])->name('transfer');
 
 
 // Customer

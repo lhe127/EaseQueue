@@ -22,4 +22,7 @@ class StaffController extends Controller
     public function contact(){
         return view('Staff.contact');
     }
+    public function transfer(){
+        return view('Staff.transfer');
+    }
 }
