@@ -56,6 +56,14 @@ Route::get('/adminMailbox', function(){
     return view('Admin.adminMailbox');
 })->name('adminMailbox');
 
+Route::get('/adminReport', function(){
+    return view('Admin.Report.adminReport');
+})->name('adminReport');
+
+Route::get('/adminReportDetail', function(){
+    return view('Admin.Report.adminReportDetail');
+})->name('adminReportDetail');
+
 Route::get('/adminSettingDepartment', function(){
     return view('Admin.Setting.settingDepartment');
 })->name('adminSetDepartment');
