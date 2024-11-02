@@ -14,7 +14,7 @@
 
     <!-- Modal Structure -->
     <div id="addCounterModal"
-        class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50 p-4">
+        class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50 p-4">
         <div class="bg-white rounded-lg shadow-xl w-full max-w-lg p-8">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-bold text-black">Add New Counter</h2>
