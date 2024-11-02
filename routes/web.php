@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\pageController;
 use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
@@ -79,3 +80,12 @@ Route::get('/updateStaffInfo', function(){
 Route::get('/adminSettingQueue', function(){
     return view('Admin.Setting.settingQueue');
 })->name('adminSetQueue');
+
+
+//Department Management
+Route::get('/adminSettingDepartment', [AdminController::class, 'index'])->name('adminSetDepartment');
+
+Route::post('/addNewCounter', [AdminController::class, 'store'])->name('addNewCounter');
+
+Route::delete('/deleteCounter/{id}', [AdminController::class, 'deleteCounter'])->name('deleteCounter');
+Route::delete('/deleteDepartment/{id}', [AdminController::class, 'deleteDepartment'])->name('deleteDepartment');
