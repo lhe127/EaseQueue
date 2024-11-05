@@ -22,7 +22,17 @@
                 <div class="font-bold text-blue-900 text-4xl">Staff<span class="text-orange-600">Panel</span></div>
                 <div class="flex items-center text-gray-500">
                     <span class="material-icons-outlined p-2" style="font-size: 30px">notifications</span>
-                    <div onclick="toggledropdown()" class="bg-center bg-cover bg-no-repeat rounded-full inline-block h-12 w-12 ml-2" style="background-image: url(https://i.pinimg.com/564x/de/0f/3d/de0f3d06d2c6dbf29a888cf78e4c0323.jpg)"></div>
+                    <div class="bg-center bg-cover bg-no-repeat rounded-full inline-block h-12 w-12 ml-2"
+                        style="background-image: url(https://i.pinimg.com/564x/de/0f/3d/de0f3d06d2c6dbf29a888cf78e4c0323.jpg)">
+                    </div>
+                    
+                    <select id="statusDropdown" class="ml-4 border rounded-md p-2 text-white shadow-sm focus:outline-none focus:border-blue-500" style="width: 150px;" onchange="changeDropdownColor()">
+                        <option value="available">Available</option>
+                        <option value="pause">Pause</option>
+                        <option value="break">Break</option>
+                        <option value="offline">Offline</option>
+                        <option value="logout">Log out</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -76,17 +86,36 @@
            
             @yield('content')
         </div> 
-        <div class="rounded border-gray-500 bg-white absolute shadow-md top-[4.8rem] right-[1rem] hidden" id="dropdown">
-                <div class=" flex justify-center items-center h-[3rem] w-[9rem] text-xl hover:bg-gray-200 cursor-pointer ">Available</div>
-                <div class=" flex justify-center items-center h-[3rem] w-[9rem] text-xl hover:bg-gray-200 cursor-pointer">Pause</div>
-                <a href=""><div class=" flex justify-center items-center h-[3rem] w-[9rem] text-xl hover:bg-gray-200 cursor-pointer">Log out</div></a>
-            </div>
     </div>
     <script>
-        function toggledropdown(){
-            const dropdown = document.getElementById('dropdown');
-            dropdown.classList.toggle('hidden');
+        function changeDropdownColor() {
+            const dropdown = document.getElementById('statusDropdown');
+            const selectedValue = dropdown.value;
+
+            dropdown.classList.remove('bg-green-500', 'bg-yellow-500', 'bg-orange-500', 'bg-gray-500', 'bg-red-500');
+
+            switch (selectedValue) {
+                case 'available':
+                    dropdown.classList.add('bg-green-500');  
+                    break;
+                case 'pause':
+                    dropdown.classList.add('bg-yellow-500'); 
+                    break;
+                case 'break':
+                    dropdown.classList.add('bg-orange-500'); 
+                    break;
+                case 'offline':
+                    dropdown.classList.add('bg-gray-500');   
+                    break;
+                case 'logout':
+                    dropdown.classList.add('bg-red-500');   
+                    break;
+            }
         }
+        
+        window.onload = () => {
+            changeDropdownColor();
+        };
     </script>
 </body>
 
