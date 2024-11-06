@@ -81,6 +81,10 @@ Route::get('/adminSettingQueue', function(){
     return view('Admin.Setting.settingQueue');
 })->name('adminSetQueue');
 
+Route::get('/addStaff', function(){
+    return view('Admin.Setting.addStaff');
+})->name('adminAddStaff');
+
 
 //Department Management
 Route::get('/adminSettingDepartment', [AdminController::class, 'index'])->name('adminSetDepartment');
