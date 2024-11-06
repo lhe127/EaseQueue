@@ -107,4 +107,8 @@ class AdminController extends Controller
 
         return redirect()->back()->with('error', 'Department not found.');
     }
+
+    public function showStaff(){
+        
+    }
 }
