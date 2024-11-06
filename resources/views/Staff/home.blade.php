@@ -3,7 +3,7 @@
 
 <div class="w-10/12 mt-3">
     <div class="flex flex-row">
-        <div class=" bg-gray-200 border-solid border-2 border-black rounded-xl w-9/12 h-[30rem] mr-2 p-6">
+        <div class=" bg-stone-200 border-solid border-2 border-cyan-900	rounded-xl w-9/12 h-[30rem] mr-2 p-6">
             <div class="flex justify-center mt-[3rem]">
                 <p class="text-7xl text-indigo-900 "><strong>3122</strong></p>
             </div>
@@ -16,19 +16,19 @@
             <div class="flex justify-center gap-[4rem] mt-[4rem]">
                 <form action="">
                     <div class="self-center">
-                        <button class="text-xl  bg-cyan-500 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full">
+                        <button class="text-xl  bg-cyan-300 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full">
                             Call
                         </button>
                     </div>
                 </form>
                     <div onclick="openModal('modelConfirm')" class="self-center">
-                        <button class="text-xl bg-cyan-500 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full">
+                        <button class="text-xl bg-cyan-300 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full">
                             Transfer
                         </button>
                     </div>
                 <form action="">
                     <div class="self-center">
-                        <button class="text-xl bg-cyan-500 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full">
+                        <button class="text-xl bg-cyan-300 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full">
                             Next
                         </button>
                     </div>
