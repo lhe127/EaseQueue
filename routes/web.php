@@ -4,7 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\pageController;
 use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\FullCalenderController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,7 +34,9 @@ Route::get('/contact', [StaffController::class, 'contact'])->name('contact');
 
 Route::get('/transfer', [StaffController::class, 'transfer'])->name('transfer');
 
+Route::get('fullcalender', [FullCalenderController::class, 'index'])->name('calendar');
 
+Route::post('fullcalenderAjax', [FullCalenderController::class, 'ajax']);
 // Customer
 
 Route::get('/customerHome', [pageController::class, 'home'])->name('customerHome');
