@@ -13,4 +13,8 @@ class Counter extends Model
     public function department(){
         return $this->belongsTo(Department::class);
     }
+
+    public function staff(){
+        return $this->hasOne(Staff::class);
+    }
 }

@@ -8,5 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Staff extends Model
 {
     use HasFactory;
-    protected $fillable = ['name','password','position','department_id','counter_id','status'];
+    protected $fillable = ['staffID','name','password','position','department_id','counter_id','status'];
+
+    public function department(){
+        return $this->belongsTo(Department::class);
+    }
+
+    public function counter(){
+        return $this->belongsTo(Counter::class);
+    }
 }

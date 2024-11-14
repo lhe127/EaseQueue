@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Counter;
 use App\Models\Department;
+use App\Models\Staff;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -15,7 +16,7 @@ class AdminController extends Controller
 
     public function index()
     {
-        $departments = Department::with('counters')->get();
+        $departments = Department::with('counter')->get();
         return view('Admin.Setting.settingDepartment', compact('departments'));
     }
 
@@ -108,7 +109,62 @@ class AdminController extends Controller
         return redirect()->back()->with('error', 'Department not found.');
     }
 
-    public function showStaff(){
-        
+    const PREFIX = 'S';
+
+    public function privateInfo(Request $request, $departmentId = null)
+    {
+        $staffID = $this->generateNewStaffID();
+        $departments = Department::all();
+        $departmentId = $departmentId ?? $request->input('department_id', $departments->first()?->id);
+
+        // Fetch all counters
+        $counters = Counter::all();
+
+        return view('Admin.Setting.addStaff', compact('staffID', 'departments', 'counters'));
+    }
+
+    public function addStaff(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'department_id' => 'required|exists:departments,id',
+            'counter_id' => 'required|exists:counters,id',
+            'password' => 'required|string|min:8', // Ensuring a secure password
+        ]);
+
+        $staffID = $this->generateNewStaffID();
+
+        // Save the staff details to the database
+        $staff = new Staff();
+        $staff->staffID = $staffID;
+        $staff->name = $request->input('name');
+        $staff->department_id = $request->input('department_id');
+        $staff->counter_id = $request->input('counter_id');
+        $staff->password = bcrypt($request->input('password')); // Ensure passwords are stored securely
+        $staff->save();
+
+        return redirect()->route('adminSetStaff');
+    }
+
+    private function generateNewStaffID()
+    {
+        $year = date('y');
+
+        $maxStaffID = Staff::where('staffID', 'LIKE', self::PREFIX . $year . '%')->orderBy('staffID', 'desc')->first();
+
+        if ($maxStaffID) {
+            $currentNumber = (int) substr($maxStaffID->staffID, strlen(self::PREFIX) + 2);
+            $newNumber = $currentNumber + 1;
+        } else {
+            $newNumber = 1;
+        }
+        $newStaffID = self::PREFIX . $year . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+
+        return $newStaffID;
+    }
+
+    public function displayStaffInfo(){
+        $allStaff = Staff::all();
+        return view('Admin.Setting.settingStaff', compact('allStaff'));
     }
 }
