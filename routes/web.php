@@ -67,13 +67,13 @@ Route::get('/adminReportDetail', function(){
     return view('Admin.Report.adminReportDetail');
 })->name('adminReportDetail');
 
-Route::get('/adminSettingDepartment', function(){
-    return view('Admin.Setting.settingDepartment');
-})->name('adminSetDepartment');
+// Route::get('/adminSettingDepartment', function(){
+//     return view('Admin.Setting.settingDepartment');
+// })->name('adminSetDepartment');
 
-Route::get('/adminSettingStaff', function(){
-    return view('Admin.Setting.settingStaff');
-})->name('adminSetStaff');
+// Route::get('/adminSettingStaff', function(){
+//     return view('Admin.Setting.settingStaff');
+// })->name('adminSetStaff');
 
 Route::get('/updateStaffInfo', function(){
     return view('Admin.Setting.updateStaffInfo');
@@ -83,15 +83,18 @@ Route::get('/adminSettingQueue', function(){
     return view('Admin.Setting.settingQueue');
 })->name('adminSetQueue');
 
-Route::get('/addStaff', function(){
-    return view('Admin.Setting.addStaff');
-})->name('adminAddStaff');
-
-
-//Department Management
+//Department Management function
 Route::get('/adminSettingDepartment', [AdminController::class, 'index'])->name('adminSetDepartment');
 
 Route::post('/addNewCounter', [AdminController::class, 'store'])->name('addNewCounter');
 
 Route::delete('/deleteCounter/{id}', [AdminController::class, 'deleteCounter'])->name('deleteCounter');
 Route::delete('/deleteDepartment/{id}', [AdminController::class, 'deleteDepartment'])->name('deleteDepartment');
+
+//Staff Management function
+Route::get('/addStaff', [AdminController::class, 'privateInfo'])->name('adminAddStaff');
+
+Route::post('/addedSuccessful', [AdminController::class, 'addStaff'])->name('addStaff');
+
+Route::get('/adminSettingStaff', [AdminController::class, 'displayStaffInfo'])->name('adminSetStaff');
+

@@ -34,15 +34,17 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach ($allStaff as $staff)
                 <tr class="border-t">
-                    <td class="px-4 py-2"></td>
-                    <td class="px-4 py-2"></td>
+                    <td class="px-4 py-2">{{$staff->staffID}}</td>
+                    <td class="px-4 py-2">{{$staff->name}}</td>
                     <td class="px-4 py-2">
                         <a href="" class="text-blue-600 hover:text-blue-800">
                             <a href="{{route('updateStaffInfo')}}" class="material-icons-outlined">edit</a>
                         </a>
                     </td>
                 </tr>
+                @endforeach
             </tbody>
         </table>
     </div>

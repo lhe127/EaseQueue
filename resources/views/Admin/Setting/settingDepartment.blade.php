@@ -164,7 +164,7 @@
         </thead>
         <tbody>
             @foreach ($departments as $department)
-            @if ($department->counters->isEmpty())
+            @if ($department->counter->isEmpty())
             <tr class="bg-white hover:bg-gray-100">
                 <td colspan="2" class="px-6 py-4 text-center font-semibold text-lg text-black"
                     style="border: 1px solid black;">
@@ -200,10 +200,10 @@
                 </td>
             </tr>
             @else
-            @foreach ($department->counters as $index => $counter)
+            @foreach ($department->counter as $index => $counter)
             <tr class="bg-white hover:bg-gray-100">
                 @if ($loop->first)
-                <td rowspan="{{ $department->counters->count() }}"
+                <td rowspan="{{ $department->counter->count() }}"
                     class="px-6 py-4 text-center font-semibold text-lg text-black" style="border: 1px solid black;">
                     {{ $department->name }}
                 </td>
