@@ -51,9 +51,8 @@ Route::get('/getNumber', function(){
 
 // Admin 
 
-Route::get('/adminHome', function(){
-    return view('Admin.adminHome');
-})->name('adminHome');
+Route::get('/adminHome', [AdminController::class, 'adminHome'])->name('adminHome');
+
 
 Route::get('/adminMailbox', function(){
     return view('Admin.adminMailbox');

@@ -1,5 +1,6 @@
 @extends('Admin/adminDashboard')
 @section('content')
+
 <div style="bg-gray-200; width:100%; display:flex; flex-direction:column; gap:1rem;">
     <div class="dashboard" style="display: flex; flex-wrap: wrap; gap: 1rem;">
 <!-- Table -->
@@ -23,127 +24,39 @@
                                     <div class="font-semibold text-left">Counter</div>
                                 </th>
                                 <th class="p-4 whitespace-nowrap">
-                                    <div class="font-semibold text-center">Status</div>
+                                    <div class="font-semibold text-left">Status</div>
                                 </th>
                             </tr>
                         </thead>
                         <tbody class="text-sm divide-y divide-gray-100">
+                        @foreach($staff as $member)
                             <tr>
                                 <td class="p-4 whitespace-nowrap">
                                     <div class="flex items-center">
-                                        <div class="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3"><img class="rounded-full" src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg" width="40" height="40" alt="Alex Shatov"></div>
-                                        <div class="font-medium text-gray-800">Alex Shatov</div>
+                                        <div class="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
+                                            <img class="rounded-full" src="https://via.placeholder.com/40" alt="{{ $member->name }}">
+                                        </div>
+                                        <div class="font-medium text-gray-800">{{ $member->name }}</div>
                                     </div>
                                 </td>
                                 <td class="p-4 whitespace-nowrap">
-                                    <div class="text-left">AARO</div>
+                                    <div class="text-left">{{ $member->department->name }}</div>
                                 </td>
                                 <td class="p-4 whitespace-nowrap">
-                                    <div class="text-center font-medium ">1</div>
+                                    <div class="text-left font-medium">{{ $member->counter->name }}</div>
                                 </td>
                                 <td class="p-4 whitespace-nowrap">
-                                <select class="border border-gray-300 rounded px-2 py-1 w-32">
-                                    <option value="available">Available</option>
-                                    <option value="pause">Pause</option>
-                                    <option value="services">Services</option>
-                                    <option value="break">Break</option>
-                                    <option value="offline">Offline</option>
-                                </select>
+                                    <select class="border border-gray-300 rounded px-2 py-1 w-32">
+                                        <option value="available" {{ $member->status === 'available' ? 'selected' : '' }}>Available</option>
+                                        <option value="pause" {{ $member->status === 'pause' ? 'selected' : '' }}>Pause</option>
+                                        <option value="services" {{ $member->status === 'services' ? 'selected' : '' }}>Services</option>
+                                        <option value="break" {{ $member->status === 'break' ? 'selected' : '' }}>Break</option>
+                                        <option value="offline" {{ $member->status === 'offline' ? 'selected' : '' }}>Offline</option>
+                                    </select>
                                 </td>
                             </tr>
-                            <tr>
-                                <td class="p-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3"><img class="rounded-full" src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-06.jpg" width="40" height="40" alt="Philip Harbach"></div>
-                                        <div class="font-medium text-gray-800">Philip Harbach</div>
-                                    </div>
-                                </td>
-                                <td class="p-4 whitespace-nowrap">
-                                    <div class="text-left">AARO</div>
-                                </td>
-                                <td class="p-4 whitespace-nowrap">
-                                    <div class="text-center font-medium ">2</div>
-                                </td>
-                                <td class="p-4 whitespace-nowrap">
-                                <select class="border border-gray-300 rounded px-2 py-1 w-32">
-                                    <option value="available">Available</option>
-                                    <option value="pause">Pause</option>
-                                    <option value="services">Services</option>
-                                    <option value="break">Break</option>
-                                    <option value="offline">Offline</option>
-                                </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3"><img class="rounded-full" src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-07.jpg" width="40" height="40" alt="Mirko Fisuk"></div>
-                                        <div class="font-medium text-gray-800">Mirko Fisuk</div>
-                                    </div>
-                                </td>
-                                <td class="p-4 whitespace-nowrap">
-                                    <div class="text-left">AGO</div>
-                                </td>
-                                <td class="p-4 whitespace-nowrap">
-                                    <div class="text-center font-medium ">3</div>
-                                </td>
-                                <td class="p-4 whitespace-nowrap">
-                                <select class="border border-gray-300 rounded px-2 py-1 w-32">
-                                    <option value="available">Available</option>
-                                    <option value="pause">Pause</option>
-                                    <option value="services">Services</option>
-                                    <option value="break">Break</option>
-                                    <option value="offline">Offline</option>
-                                </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3"><img class="rounded-full" src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-08.jpg" width="40" height="40" alt="Olga Semklo"></div>
-                                        <div class="font-medium text-gray-800">Olga Semklo</div>
-                                    </div>
-                                </td>
-                                <td class="p-4 whitespace-nowrap">
-                                    <div class="text-left">AFO</div>
-                                </td>
-                                <td class="p-4 whitespace-nowrap">
-                                    <div class="text-center font-medium ">4</div>
-                                </td>
-                                <td class="p-4 whitespace-nowrap">
-                                <select class="border border-gray-300 rounded px-2 py-1 w-32">
-                                    <option value="available">Available</option>
-                                    <option value="pause">Pause</option>
-                                    <option value="services">Services</option>
-                                    <option value="break">Break</option>
-                                    <option value="offline">Offline</option>
-                                </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3"><img class="rounded-full" src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-09.jpg" width="40" height="40" alt="Burak Long"></div>
-                                        <div class="font-medium text-gray-800">Burak Long</div>
-                                    </div>
-                                </td>
-                                <td class="p-4 whitespace-nowrap">
-                                    <div class="text-left">AFO</div>
-                                </td>
-                                <td class="p-4 whitespace-nowrap">
-                                    <div class="text-center font-medium ">5</div>
-                                </td>
-                                <td class="p-4 whitespace-nowrap">
-                                <select class="border border-gray-300 rounded px-2 py-1 w-32">
-                                    <option value="available">Available</option>
-                                    <option value="pause">Pause</option>
-                                    <option value="services">Services</option>
-                                    <option value="break">Break</option>
-                                    <option value="offline">Offline</option>
-                                </select>
-                                </td>
-                            </tr>
-                        </tbody>
+                        @endforeach
+                    </tbody>
                     </table>
                 </div>
             </div>
