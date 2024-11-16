@@ -32,6 +32,8 @@ Route::get('/report', [StaffController::class, 'report'])->name('report');
 
 Route::get('/contact', [StaffController::class, 'contact'])->name('contact');
 
+Route::post('/postContact', [StaffController::class, 'postContact'])->name('postContact');
+
 Route::get('/transfer', [StaffController::class, 'transfer'])->name('transfer');
 
 Route::get('fullcalender', [FullCalenderController::class, 'index'])->name('calendar');
