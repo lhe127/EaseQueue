@@ -11,7 +11,9 @@ class AdminController extends Controller
 {
     public function adminHome()
     {
-        return view('Admin.adminHome');
+        $staff = Staff::all();
+
+        return view('Admin.adminHome', compact('staff'));
     }
 
     public function index()
