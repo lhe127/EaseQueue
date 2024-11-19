@@ -76,9 +76,9 @@ Route::get('/adminReportDetail', function(){
 //     return view('Admin.Setting.settingStaff');
 // })->name('adminSetStaff');
 
-Route::get('/updateStaffInfo', function(){
-    return view('Admin.Setting.updateStaffInfo');
-})->name('updateStaffInfo');
+// Route::get('/updateStaffInfo', function(){
+//     return view('Admin.Setting.updateStaffInfo');
+// })->name('updateStaffInfo');
 
 Route::get('/adminSettingQueue', function(){
     return view('Admin.Setting.settingQueue');
@@ -99,3 +99,6 @@ Route::post('/addedSuccessful', [AdminController::class, 'addStaff'])->name('add
 
 Route::get('/adminSettingStaff', [AdminController::class, 'displayStaffInfo'])->name('adminSetStaff');
 
+Route::get('/editStaff/{staffID}', [AdminController::class, 'editStaff'])->name('updateStaffInfo');
+
+Route::post('/updateStaff/{staffID}', [AdminController::class, 'updateStaff'])->name('updateStaff');
