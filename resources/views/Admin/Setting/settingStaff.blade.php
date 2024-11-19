@@ -40,7 +40,7 @@
                     <td class="px-4 py-2">{{$staff->name}}</td>
                     <td class="px-4 py-2">
                         <a href="" class="text-blue-600 hover:text-blue-800">
-                            <a href="{{route('updateStaffInfo')}}" class="material-icons-outlined">edit</a>
+                            <a href="{{route('updateStaffInfo', ['staffID' => $staff->staffID])}}" class="material-icons-outlined">edit</a>
                         </a>
                     </td>
                 </tr>

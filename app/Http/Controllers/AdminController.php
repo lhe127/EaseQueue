@@ -12,7 +12,6 @@ class AdminController extends Controller
     public function adminHome()
     {
         $staff = Staff::all();
-
         return view('Admin.adminHome', compact('staff'));
     }
 
@@ -165,8 +164,41 @@ class AdminController extends Controller
         return $newStaffID;
     }
 
-    public function displayStaffInfo(){
+    public function displayStaffInfo()
+    {
         $allStaff = Staff::all();
         return view('Admin.Setting.settingStaff', compact('allStaff'));
+    }
+
+    public function editStaff($staffID)
+    {
+        $staff = Staff::where('staffID', $staffID)->first();
+        $departments = Department::all(); // Assuming you need all departments for the dropdown
+        $counters = Counter::all(); // Assuming you need all counters for the dropdown
+        return view('Admin.Setting.updateStaffInfo', compact('staff', 'departments', 'counters'));
+    }
+
+
+    public function updateStaff(Request $request, $staffID)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'department_id' => 'required|exists:departments,id',
+            'counter_id' => 'required|exists:counters,id',
+            'password' => 'nullable|string|min:8', // Password is optional during update
+        ]);
+
+        $staff = Staff::where('staffID', $staffID)->first();
+        $staff->name = $request->input('name');
+        $staff->department_id = $request->input('department_id');
+        $staff->counter_id = $request->input('counter_id');
+
+        if ($request->filled('password')) {
+            $staff->password = bcrypt($request->input('password')); // Update password only if provided
+        }
+
+        $staff->save();
+
+        return redirect()->route('adminSetStaff');
     }
 }
