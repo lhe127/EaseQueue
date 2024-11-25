@@ -30,6 +30,14 @@
                                     required />
                             </div>
 
+                            {{-- Email --}}
+                            <div class="md:col-span-5">
+                                <label for="email">Email</label>
+                                <input type="email" name="email" id="email"
+                                    class="h-10 border rounded px-4 w-full bg-gray-50" value="{{ old('email') }}"
+                                    required />
+                            </div>
+
                             <!-- Password Field -->
                             <div class="md:col-span-5">
                                 <label for="password">Password</label>
@@ -45,7 +53,7 @@
                                     class="h-10 border rounded px-4 w-full bg-gray-50" required>
                                     <option disabled>Select Department</option>
                                     @foreach($departments as $department)
-                                    <option value="{{ $department->id }}" {{ $department->id == old('department_id') ? 
+                                    <option value="{{ $department->id }}" {{ $department->id == old('department_id') ?
                                         'selected' : '' }}>{{ $department->name }}</option>
                                     @endforeach
                                 </select>

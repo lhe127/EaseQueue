@@ -128,6 +128,7 @@ class AdminController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:staff', // Adding validation for email
             'department_id' => 'required|exists:departments,id',
             'counter_id' => 'required|exists:counters,id',
             'password' => 'required|string|min:8', // Ensuring a secure password
@@ -139,6 +140,7 @@ class AdminController extends Controller
         $staff = new Staff();
         $staff->staffID = $staffID;
         $staff->name = $request->input('name');
+        $staff->email = $request->input('email'); // Save the email
         $staff->department_id = $request->input('department_id');
         $staff->counter_id = $request->input('counter_id');
         $staff->password = bcrypt($request->input('password')); // Ensure passwords are stored securely
@@ -183,6 +185,7 @@ class AdminController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:staff,email,' . $staffID . ',staffID', // Adding validation for email
             'department_id' => 'required|exists:departments,id',
             'counter_id' => 'required|exists:counters,id',
             'password' => 'nullable|string|min:8', // Password is optional during update
@@ -190,6 +193,7 @@ class AdminController extends Controller
 
         $staff = Staff::where('staffID', $staffID)->first();
         $staff->name = $request->input('name');
+        $staff->email = $request->input('email'); // Update the email
         $staff->department_id = $request->input('department_id');
         $staff->counter_id = $request->input('counter_id');
 

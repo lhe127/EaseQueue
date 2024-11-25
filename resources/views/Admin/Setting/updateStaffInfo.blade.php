@@ -17,8 +17,8 @@
                             <div class="md:col-span-5">
                                 <label for="staffID">Staff ID</label>
                                 <input type="text" name="staffID" id="staffID"
-                                    class="h-10 border rounded px-4 w-full bg-gray-50"
-                                    value="{{ $staff->staffID }}" readonly disabled required />
+                                    class="h-10 border rounded px-4 w-full bg-gray-50" value="{{ $staff->staffID }}"
+                                    readonly disabled required />
                             </div>
 
                             <!-- Name Field -->
@@ -29,11 +29,20 @@
                                     value="{{ old('name', $staff->name) }}" required />
                             </div>
 
+                            <!-- Email Field -->
+                            <div class="md:col-span-5">
+                                <label for="email">Email</label>
+                                <input type="email" name="email" id="email"
+                                    class="h-10 border rounded px-4 w-full bg-gray-50"
+                                    value="{{ old('email', $staff->email) }}" required />
+                            </div>
+
                             <!-- Password Field -->
                             <div class="md:col-span-5">
                                 <label for="password">Password</label>
                                 <input type="password" name="password" id="password"
-                                    class="h-10 border rounded px-4 w-full bg-gray-50" readonly disabled/>
+                                    class="h-10 border rounded px-4 w-full bg-gray-50" 
+                                    value="{{ old('password') }}" />
                             </div>
 
                             <!-- Department Dropdown -->
@@ -43,10 +52,10 @@
                                     class="h-10 border rounded px-4 w-full bg-gray-50" required>
                                     <option value="">Select Department</option>
                                     @foreach($departments as $department)
-                                        <option value="{{ $department->id }}"
-                                            {{ old('department_id', $staff->department_id) == $department->id ? 'selected' : '' }}>
-                                            {{ $department->name }}
-                                        </option>
+                                    <option value="{{ $department->id }}" {{ old('department_id', $staff->department_id)
+                                        == $department->id ? 'selected' : '' }}>
+                                        {{ $department->name }}
+                                    </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -58,11 +67,10 @@
                                     class="h-10 border rounded px-4 w-full bg-gray-50" required>
                                     <option value="">Select Counter</option>
                                     @foreach($counters as $counter)
-                                        <option data-department="{{ $counter->department_id }}"
-                                            value="{{ $counter->id }}"
-                                            {{ old('counter_id', $staff->counter_id) == $counter->id ? 'selected' : '' }}>
-                                            {{ $counter->name }}
-                                        </option>
+                                    <option data-department="{{ $counter->department_id }}" value="{{ $counter->id }}"
+                                        {{ old('counter_id', $staff->counter_id) == $counter->id ? 'selected' : '' }}>
+                                        {{ $counter->name }}
+                                    </option>
                                     @endforeach
                                 </select>
                             </div>
