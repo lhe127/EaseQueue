@@ -1,0 +1,143 @@
+
+        body {
+            background-color: #f4f4f4;
+        }
+
+        /* Department Cards */
+        .card.department-card {
+            cursor: pointer;
+            margin: 15px 0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card.department-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-body {
+            height: 130px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background-color: #ffffff;
+            z-index: 1;
+        }
+
+        .card.department-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to right, #5161ce, #64c3e8);
+            opacity: 0.1;
+            z-index: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card-body>i {
+            margin-bottom: 10px;
+            font-size: 3em;
+            color: #5161ce;
+        }
+
+        @media (max-width: 576px) {
+            .card-body>i {
+                font-size: 2em;
+            }
+        }
+
+        h5 {
+            font-size: 1.25em;
+        }
+
+        @media (max-width: 576px) {
+            h5 {
+                font-size: 1em;
+            }
+        }
+
+        /* Redesigned Modal */
+        .modal-content {
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background-color: #5161ce;
+            color: white;
+            border-bottom: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .modal-header .close {
+            color: white;
+            opacity: 0.8;
+        }
+
+        .modal-body {
+            background-color: #f4f4f4;
+            padding: 30px;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            text-align: center;
+        }
+
+        .modal-body h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .modal-footer {
+            border-top: none;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .btn-primary {
+            background-color: #5161ce;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #64c3e8;
+        }
+
+        .btn-secondary {
+            background-color: #e0e0e0;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+        }
+
+        @media (max-width: 576px) {
+            .modal-body h3 {
+                font-size: 18px;
+            }
+
+            .modal-title {
+                font-size: 24px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
