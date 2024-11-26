@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('staff', function (Blueprint $table) {
             $table->string('staffID')->primary();
             $table->string('name');
+            $table->string('email');
             $table->string('password');
-            $table->string('position')->nullable();
             $table->foreignId('department_id')->nullable()->constrained()->onDelete('set null');
             $table->foreignId('counter_id')->nullable()->constrained()->onDelete('set null')->unique();
             $table->string('status')->nullable();

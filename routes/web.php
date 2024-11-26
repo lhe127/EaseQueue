@@ -5,6 +5,8 @@ use App\Http\Controllers\pageController;
 use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FullCalenderController;
+use App\Http\Controllers\QueueSettingController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -47,7 +49,7 @@ Route::get('/customerHistory', [pageController::class, 'history'])->name('custom
 
 Route::get('/customerAbout', [pageController::class, 'about'])->name('customerAbout');
 
-Route::get('/getNumber', function(){
+Route::get('/getNumber', function () {
     return view('Customer.getNumber');
 });
 
@@ -56,15 +58,15 @@ Route::get('/getNumber', function(){
 Route::get('/adminHome', [AdminController::class, 'adminHome'])->name('adminHome');
 
 
-Route::get('/adminMailbox', function(){
+Route::get('/adminMailbox', function () {
     return view('Admin.adminMailbox');
 })->name('adminMailbox');
 
-Route::get('/adminReport', function(){
+Route::get('/adminReport', function () {
     return view('Admin.Report.adminReport');
 })->name('adminReport');
 
-Route::get('/adminReportDetail', function(){
+Route::get('/adminReportDetail', function () {
     return view('Admin.Report.adminReportDetail');
 })->name('adminReportDetail');
 
@@ -80,9 +82,9 @@ Route::get('/adminReportDetail', function(){
 //     return view('Admin.Setting.updateStaffInfo');
 // })->name('updateStaffInfo');
 
-Route::get('/adminSettingQueue', function(){
-    return view('Admin.Setting.settingQueue');
-})->name('adminSetQueue');
+// Route::get('/adminSettingQueue', function () {
+//     return view('Admin.Setting.settingQueue');
+// })->name('adminSetQueue');
 
 //Department Management function
 Route::get('/adminSettingDepartment', [AdminController::class, 'index'])->name('adminSetDepartment');
@@ -102,3 +104,11 @@ Route::get('/adminSettingStaff', [AdminController::class, 'displayStaffInfo'])->
 Route::get('/editStaff/{staffID}', [AdminController::class, 'editStaff'])->name('updateStaffInfo');
 
 Route::post('/updateStaff/{staffID}', [AdminController::class, 'updateStaff'])->name('updateStaff');
+
+/* Queue Setting Page */
+
+Route::middleware(['check.queue.hours'])->group(function () {
+    Route::get('/adminSettingQueue', [QueueSettingController::class, 'show'])->name('adminSetQueue');
+    Route::post('/updatedQueueSetting', [QueueSettingController::class, 'update'])->name('updateQueueSettings');
+    // Other queue-related routes
+});
