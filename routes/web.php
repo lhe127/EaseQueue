@@ -7,6 +7,8 @@ use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FullCalenderController;
 use App\Http\Controllers\QueueSettingController;
+use App\Http\Controllers\AuthController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -118,3 +120,17 @@ Route::middleware(['check.queue.hours'])->group(function () {
 /* Customer Page */
 
 Route::get('/customerHome', [customerController::class, 'displayDepartment'])->name('customerHome');
+
+//login
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/add-staff', [AdminController::class, 'addStaffForm'])->name('admin.addStaff');
+    Route::post('/admin/add-staff', [AdminController::class, 'addStaff']);
+    // Add other admin routes here
+});
