@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\customerController;
 use App\Http\Controllers\pageController;
 use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
@@ -41,9 +42,10 @@ Route::get('/transfer', [StaffController::class, 'transfer'])->name('transfer');
 Route::get('fullcalender', [FullCalenderController::class, 'index'])->name('calendar');
 
 Route::post('fullcalenderAjax', [FullCalenderController::class, 'ajax']);
+
 // Customer
 
-Route::get('/customerHome', [pageController::class, 'home'])->name('customerHome');
+// Route::get('/customerHome', [pageController::class, 'home'])->name('customerHome');
 
 Route::get('/customerHistory', [pageController::class, 'history'])->name('customerHistory');
 
@@ -86,7 +88,7 @@ Route::get('/adminReportDetail', function () {
 //     return view('Admin.Setting.settingQueue');
 // })->name('adminSetQueue');
 
-//Department Management function
+/* Manage Department */
 Route::get('/adminSettingDepartment', [AdminController::class, 'index'])->name('adminSetDepartment');
 
 Route::post('/addNewCounter', [AdminController::class, 'store'])->name('addNewCounter');
@@ -94,7 +96,7 @@ Route::post('/addNewCounter', [AdminController::class, 'store'])->name('addNewCo
 Route::delete('/deleteCounter/{id}', [AdminController::class, 'deleteCounter'])->name('deleteCounter');
 Route::delete('/deleteDepartment/{id}', [AdminController::class, 'deleteDepartment'])->name('deleteDepartment');
 
-//Staff Management function
+/* Manage Staff */
 Route::get('/addStaff', [AdminController::class, 'privateInfo'])->name('adminAddStaff');
 
 Route::post('/addedSuccessful', [AdminController::class, 'addStaff'])->name('addStaff');
@@ -112,3 +114,7 @@ Route::middleware(['check.queue.hours'])->group(function () {
     Route::post('/updatedQueueSetting', [QueueSettingController::class, 'update'])->name('updateQueueSettings');
     // Other queue-related routes
 });
+
+/* Customer Page */
+
+Route::get('/customerHome', [customerController::class, 'displayDepartment'])->name('customerHome');

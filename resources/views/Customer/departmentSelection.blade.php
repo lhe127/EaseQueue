@@ -163,33 +163,17 @@
 
         <!-- Department Selection Area -->
         <div class="row">
+            @foreach($departments as $department)
             <div class="col-12 col-sm-6 col-md-4">
                 <div class="card department-card" data-toggle="modal" data-target="#joinQueueModal"
-                    data-department="Academic Affairs, Admission & Registration Office">
+                    data-department="{{ $department['name'] }}">
                     <div class="card-body text-center">
-                        <i class="fas fa-graduation-cap"></i>
-                        <h5>Academic Affairs, Admission & Registration Office</h5>
+                        <i class="fas {{ $department['icon'] }}"></i>
+                        <h5>{{ $department['name'] }}</h5>
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-4">
-                <div class="card department-card" data-toggle="modal" data-target="#joinQueueModal"
-                    data-department="Asset Management And General Affairs Office">
-                    <div class="card-body text-center">
-                        <i class="fas fa-building"></i>
-                        <h5>Asset Management And General Affairs Office</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4">
-                <div class="card department-card" data-toggle="modal" data-target="#joinQueueModal"
-                    data-department="Student Recruitment Office">
-                    <div class="card-body text-center">
-                        <i class="fas fa-id-card"></i>
-                        <h5>Student Recruitment Office</h5>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 
@@ -220,19 +204,37 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
-        // When a department card is clicked, store the department name in the modal
-        $('.department-card').on('click', function() {
-            var department = $(this).data('department');
-            $('#departmentName').text(department);
-        });
+            // When a department card is clicked, store the department name in local storage
+            $('.department-card').on('click', function() {
+                var department = $(this).data('department');
+                console.log('Department clicked:', department); // Debugging log
+                localStorage.setItem('selectedDepartment', department);
+                $('#departmentName').text(department);
+            });
 
-        // When the "Join Queue" button is clicked, redirect to the getNumber page
-        $('#joinQueueButton').on('click', function() {
-            var department = $('#departmentName').text();
-            var url = "/getNumber?department=" + encodeURIComponent(department);
-            window.location.href = url; // Redirect to getNumber page with department as a query parameter
+            // When the modal is shown, retrieve the department name from local storage
+            $('#joinQueueModal').on('show.bs.modal', function() {
+                var department = localStorage.getItem('selectedDepartment');
+                console.log('Department retrieved from local storage:', department); // Debugging log
+                if (department) {
+                    $('#departmentName').text(department);
+                }
+            });
+
+            // When the "Join Queue" button is clicked, redirect to the getNumber page
+            $('#joinQueueButton').on('click', function() {
+                var department = $('#departmentName').text();
+                console.log('Joining queue for department:', department); // Debugging log
+                var url = "/getNumber?department=" + encodeURIComponent(department);
+                window.location.href = url; // Redirect to getNumber page with department as a query parameter
+            });
+
+            // Clear local storage when the modal is hidden
+            $('#joinQueueModal').on('hidden.bs.modal', function() {
+                console.log('Clearing local storage'); // Debugging log
+                localStorage.removeItem('selectedDepartment');
+            });
         });
-    });
     </script>
 </body>
 
