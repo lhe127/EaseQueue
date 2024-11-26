@@ -83,7 +83,7 @@
 </div>
 
 <!-- Modal -->
-@if(session('queue_closed'))
+{{-- @if(session('queue_closed'))
     <div id="queueClosedModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75">
         <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-lg w-full p-6">
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Queue is Closed</h3>
@@ -91,7 +91,7 @@
             <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition" onclick="document.getElementById('queueClosedModal').style.display='none'">OK</button>
         </div>
     </div>
-@endif
+@endif --}}
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -126,9 +126,9 @@
         filterCounters();
 
         // Show modal if queue is closed
-        if ("{{ session('queue_closed') }}") {
-            document.getElementById('queueClosedModal').style.display = 'flex';
-        }
+        // if ("{{ session('queue_closed') }}") {
+        //     document.getElementById('queueClosedModal').style.display = 'flex';
+        // }
     });
 </script>
 @endsection
