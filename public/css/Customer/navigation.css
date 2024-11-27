@@ -1,196 +1,121 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto');
-
-body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #f4f4f4;
-}
-
+/* General Reset for Padding and Margin */
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
-i {
-    margin-right: 10px;
+/* Body Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #e9f1f7; /* Light background for the page */
+    color: #333;
 }
 
-/*----------bootstrap-navbar-css------------*/
-.navbar-logo {
-    padding: 15px;
-    color: #fff;
+/* Navbar Styles */
+.navbar {
+    background-color: #1a2530; /* Dark charcoal-blue */
+    padding: 20px 30px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.navbar-mainbg {
-    background-color: #5161ce;
-    padding: 0;
+/* Navbar Brand (Logo) */
+.navbar-brand {
+    color: #ffffff !important;
+    font-size: 1.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
 }
 
-#navbarSupportedContent {
-    overflow: hidden;
-    position: relative;
+.navbar-logo:hover {
+    color: #00bcd4; /* Light cyan on hover */
 }
 
-#navbarSupportedContent ul {
-    padding: 0;
-    margin: 0;
+/* Navbar Toggler (Hamburger Menu) */
+.navbar-toggler {
+    border: none;
+    color: #ffffff;
 }
 
-#navbarSupportedContent ul li a i {
-    margin-right: 10px;
+.navbar-toggler-icon {
+    color: #ffffff;
 }
 
-#navbarSupportedContent li {
-    list-style-type: none;
-    float: left;
+/* Navbar Links */
+.navbar-nav .nav-item .nav-link {
+    color: #cfd8dc !important; /* Light gray for text */
+    font-size: 1rem;
+    padding: 12px 22px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
 }
 
-#navbarSupportedContent ul li a {
-    color: rgba(255, 255, 255, 0.5);
-    text-decoration: none;
-    font-size: 15px;
-    display: block;
-    padding: 20px;
-    transition-duration: 0.6s;
-    transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    position: relative;
+.navbar-nav .nav-item .nav-link:hover {
+    color: #00bcd4 !important; /* Light cyan color on hover */
+    background-color: #34495e; /* Darker blue-gray background */
+    border-radius: 4px;
 }
 
-#navbarSupportedContent>ul>li.active>a {
-    color: #5161ce;
-    background-color: transparent;
-    transition: all 0.7s;
+/* Active State of Navbar Items */
+.navbar-nav .nav-item.active .nav-link {
+    color: #ffffff !important;
+    background-color: #00bcd4; /* Light cyan for active item */
+    border-radius: 4px;
 }
 
-#navbarSupportedContent a:not(:only-child):after {
-    content: "\f105";
-    position: absolute;
-    right: 20px;
-    top: 10px;
-    font-size: 14px;
-    font-family: "Font Awesome 5 Free";
-    display: inline-block;
-    padding-right: 3px;
-    vertical-align: middle;
-    font-weight: 900;
-    transition: 0.5s;
-}
-
-#navbarSupportedContent .active>a:not(:only-child):after {
-    transform: rotate(90deg);
-}
-
+/* Horizontal Selector */
 .hori-selector {
-    display: inline-block;
     position: absolute;
-    height: 100%;
-    top: 0;
-    left: 0;
-    transition-duration: 0.6s;
-    transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    background-color: #fff;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    margin-top: 10px;
+    width: 100%;
+    height: 3px;
+    background-color: #00bcd4; /* Cyan color for active indicator */
+    transition: all 0.3s ease;
 }
 
-.hori-selector .right,
-.hori-selector .left {
+.hori-selector .left, .hori-selector .right {
+    background-color: #00bcd4;
+    height: 3px;
     position: absolute;
-    width: 25px;
-    height: 25px;
-    background-color: #fff;
-    bottom: 10px;
+    top: 0;
+}
+
+.hori-selector .left {
+    width: 50%;
+    left: 0;
 }
 
 .hori-selector .right {
-    right: -25px;
+    width: 50%;
+    right: 0;
 }
 
-.hori-selector .left {
-    left: -25px;
+/* Hover Effect for Navigation Items */
+.navbar-nav .nav-item:hover .nav-link {
+    background-color: #34495e; /* Darker blue on hover */
+    color: #ffffff !important;
 }
 
-.hori-selector .right:before,
-.hori-selector .left:before {
-    content: '';
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: #5161ce;
-}
-
-.hori-selector .right:before {
-    bottom: 0;
-    right: -25px;
-}
-
-.hori-selector .left:before {
-    bottom: 0;
-    left: -25px;
-}
-
-/* Media Queries for Small and Large Screens */
-@media (min-width: 992px) {
-    .navbar-expand-custom {
-        flex-flow: row nowrap;
-        justify-content: flex-start;
+/* Responsive Navbar */
+@media (max-width: 767px) {
+    .navbar-nav {
+        margin-top: 10px;
     }
 
-    .navbar-expand-custom .navbar-nav {
-        flex-direction: row;
+    .navbar-nav .nav-item {
+        margin-bottom: 12px;
     }
 
-    .navbar-expand-custom .navbar-toggler {
-        display: none;
-    }
-
-    .navbar-expand-custom .navbar-collapse {
-        display: flex !important;
-        flex-basis: auto;
+    .navbar-toggler {
+        background-color: #00bcd4; /* Cyan color for the hamburger menu */
     }
 }
 
-@media (max-width: 991px) {
-    .navbar-expand-custom .navbar-collapse {
-        display: none;
-    }
-
-    #navbarSupportedContent ul li a {
-        padding: 12px 30px;
-    }
-
-    .hori-selector {
-        margin-top: 0;
-        margin-left: 10px;
-        border-radius: 0;
-        border-top-left-radius: 25px;
-        border-bottom-left-radius: 25px;
-    }
-
-    .hori-selector .left,
-    .hori-selector .right {
-        right: 10px;
-    }
-
-    .hori-selector .left {
-        top: -25px;
-        left: auto;
-    }
-
-    .hori-selector .right {
-        bottom: -25px;
-    }
-
-    .hori-selector .left:before {
-        left: -25px;
-        top: -25px;
-    }
-
-    .hori-selector .right:before {
-        bottom: -25px;
-        left: -25px;
-    }
+/* Container */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px;
 }
 
 .title {
@@ -202,8 +127,4 @@ i {
     border-bottom: 2px solid #5161ce;
     padding-bottom: 15px;
     margin-bottom: 30px;
-}
-
-.title:hover{
-    color: #5161ce;
 }

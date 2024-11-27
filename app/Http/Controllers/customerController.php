@@ -11,4 +11,8 @@ class customerController extends Controller
         $departments = Department::all();
         return view('Customer.departmentSelection', compact('departments'));
     }
+
+    public function joinQueue(Request $request) {
+        
+    }
 }
