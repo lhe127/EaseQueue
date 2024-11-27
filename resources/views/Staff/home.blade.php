@@ -3,7 +3,7 @@
 
 <div class="w-10/12 mt-3">
     <div class="flex flex-row">
-        <div class=" bg-stone-200 border-solid border-2 border-cyan-900	rounded-xl w-9/12 h-[30rem] mr-2 p-6">
+        <div class=" bg-stone-200 border-solid border-2 border-cyan-900 rounded-xl w-9/12 h-[30rem] mr-2 p-6">
             <div class="flex justify-center mt-[3rem]">
                 <p class="text-7xl text-indigo-900 "><strong>3122</strong></p>
             </div>
@@ -91,18 +91,16 @@
         </div>
 
         <div class="p-6 pt-0 text-center">
-            <h1 class=" font-bold text-4xl block ">Transfer To</h1>
-            <div class="border border-solid border-black mt-4 mx-2 flex justify-between items-center">
-                <label for="Department1" class=" font-bold text-2xl block m-3">Department 1 </label>
-                <input id="Department1" type="radio" value="Department1" name="transfer" class="mr-3 w-7 h-7 text-blue-900 bg-gray-100 border-gray-300 ">
+            <h1 class=" font-bold text-4xl block mb-5 ">Transfer To</h1>
+            @foreach($departments as $department)
+            <div class="border border-solid border-black mt-2 mx-1 flex justify-between items-center">
+                <label for="{{$department->id}}" class=" font-bold text-2xl block m-3">{{ $department->name }}</label>
+                <input id="{{$department->id}}" type="radio" value="{{$department->id}}" name="transfer" class="mr-3 w-7 h-7 text-blue-900 bg-gray-100 border-gray-300 ">
             </div>
-            <div class="border border-solid border-black mx-2 mb-4 flex justify-between items-center">
-                <label for="Department2" class=" font-bold text-2xl block m-3">Department 2 </label>
-                <input id="Department2" type="radio" value="Department2" name="transfer" class="mr-3 w-7 h-7 text-blue-900 bg-gray-100 border-gray-300 ">
-            </div>
+            @endforeach
             <form action="">
                 @csrf
-                <button onclick="closeModal('modelConfirm')" type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
+                <button onclick="closeModal('modelConfirm')" type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center mt-5 px-3 py-2.5 text-center mr-2">
                     Transfer
                 </button>
             </form>
