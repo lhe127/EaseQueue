@@ -3,6 +3,11 @@
             background-color: #f4f4f4;
         }
 
+        .container {
+            margin: 0 auto; /* Remove extra spacing */
+            padding-top: 10px /* Reset container padding */
+        }
+
         /* Department Cards */
         .card.department-card {
             cursor: pointer;

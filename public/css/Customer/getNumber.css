@@ -5,6 +5,11 @@
         /* Use the Roboto font */
     }
 
+    .container {
+        margin-top: 0;
+        padding: 10px;
+    }
+
     .queue-title {
         font-family: 'Roboto', sans-serif;
         /* Clean font */

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FullCalenderController;
 use App\Http\Controllers\QueueSettingController;
 use App\Http\Controllers\AuthController;
-
+use App\Models\QueueNumber;
 
 /*
 |--------------------------------------------------------------------------
@@ -120,6 +120,10 @@ Route::middleware(['check.queue.hours'])->group(function () {
 /* Customer Page */
 
 Route::get('/customerHome', [customerController::class, 'displayDepartment'])->name('customerHome');
+
+Route::get('/joinQueue/{deparment}', [customerController::class, 'joinQueue'])->name('joinQueue');
+
+// Route::get('/queueStatus/{queue_number}', [customerController::class, 'getQueueStatus'])->name('queue.status');
 
 //login
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
