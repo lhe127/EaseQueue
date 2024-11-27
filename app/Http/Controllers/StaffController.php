@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\contact;
+use App\Models\Department;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\Request;
 
 class StaffController extends Controller
 {
     public function home(){
-        return view('Staff.home');
+        $departments = Department::all();
+        return view('Staff.home' , compact("departments"));
     }
     public function history(){
         return view('Staff.history');
@@ -46,7 +48,7 @@ class StaffController extends Controller
         contact::create([
             'staffID' => $validate['staffID'],
             'requestType' => $validate['Type'],
-            'MCimage' => $imageName, // This will either be the uploaded image name or null
+            'image' => $imageName, // This will either be the uploaded image name or null
             'Fdate' => $validate['Fdate'],
             'Tdate' => $validate['Tdate'],
             'reason' => $validate['Reason'],
