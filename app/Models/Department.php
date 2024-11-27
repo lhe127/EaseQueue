@@ -17,4 +17,9 @@ class Department extends Model
     public function staff(){
         return $this->hasMany(Staff::class);
     }
+
+    public function queueNumbers()
+    {
+        return $this->hasMany(QueueNumber::class);
+    }
 }

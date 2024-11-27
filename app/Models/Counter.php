@@ -17,4 +17,9 @@ class Counter extends Model
     public function staff(){
         return $this->hasOne(Staff::class);
     }
+
+    public function queueNumbers()
+    {
+        return $this->hasMany(QueueNumber::class);
+    }
 }

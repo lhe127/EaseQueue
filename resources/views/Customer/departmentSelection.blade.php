@@ -1,5 +1,7 @@
 @extends('customer.shared.customerNavigation')
+
 @section('title', 'Service Providers')
+
 @section('content')
 
 <!DOCTYPE html>
@@ -16,7 +18,7 @@
 <body>
 
     <div class="container">
-        <h2 class="title text-center my-4">Service Providers</h2>
+        <h2 class="title">Service Providers</h2>
 
         <!-- Department Selection Area -->
         <div class="row">
@@ -50,7 +52,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="joinQueueButton">Join Queue</button>
+                    <!-- Form that will submit the department to the controller -->
+                    <form id="joinQueueForm" method="get" action="{{ route('joinQueue', ':department') }}">
+                        <button type="submit" class="btn btn-primary" id="joinQueueButton">Join Queue</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -64,18 +69,17 @@
             // When a department card is clicked, store the department name in the modal
             $('.department-card').on('click', function() {
                 var department = $(this).data('department'); // Get department name from data attribute
-                console.log('Department clicked:', department); // Debugging log
                 $('#departmentName').text(department); // Set department name in modal
                 $('#joinQueueButton').data('department', department); // Store department name in button data attribute
+                // Replace the form action with the correct department name
+                $('#joinQueueForm').attr('action', "/joinQueue/" + encodeURIComponent(department));
             });
 
-            // When the "Join Queue" button is clicked, redirect to the getNumber page with the department name as a query parameter
+            // Optional: Handle button click
             $('#joinQueueButton').on('click', function() {
                 var department = $(this).data('department'); // Get department name from button data attribute
                 if (department) {
-                    var url = "/getNumber?department=" + encodeURIComponent(department); // URL with department parameter
-                    console.log('Redirecting to:', url); // Debugging log
-                    window.location.href = url; // Redirect to getNumber page
+                    // The form will automatically submit on button click
                 }
             });
         });
@@ -84,63 +88,5 @@
 </body>
 
 </html>
+
 @endsection
-
-{{-- @extends('customer.shared.customerNavigation')
-
-@section('title', 'Service Providers')
-
-@section('content')
-<div class="container">
-    <h2 class="title text-center my-4">Service Providers</h2>
-
-    <!-- Department Selection Area -->
-    <div class="row">
-        @foreach($departments as $department)
-        <div class="col-12 col-sm-6 col-md-4">
-            <div class="card department-card" data-toggle="modal" data-target="#joinQueueModal"
-                data-department="{{ $department->name }}">
-                <div class="card-body text-center">
-                    <i class="fas {{ $department->icon }}"></i>
-                    <h5>{{ $department->name }}</h5>
-                </div>
-            </div>
-        </div>
-        @endforeach
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="joinQueueModal" tabindex="-1" role="dialog" aria-labelledby="joinQueueModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="joinQueueModalLabel">Join Queue</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to join the queue for <span id="departmentName"></span>?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="confirmJoinQueue">Join Queue</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    $('#joinQueueModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget);
-        var department = button.data('department');
-        var modal = $(this);
-        modal.find('#departmentName').text(department);
-
-        $('#confirmJoinQueue').off('click').on('click', function () {
-            window.location.href = '/queueing/' + department;
-        });
-    });
-</script>
-@endsection --}}
