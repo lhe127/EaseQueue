@@ -11,10 +11,16 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
+        public function dashboard()
+    {
+        return view('admin.adminDashboard');
+    }
+    
     public function adminHome()
     {
-        $staff = Staff::all();
-        return view('Admin.adminHome', compact('staff'));
+        $staff = Staff::where('staffID', 'like', 'S%')->get();
+        
+        return view('admin.adminHome', ['staff' => $staff]);
     }
 
     public function index()

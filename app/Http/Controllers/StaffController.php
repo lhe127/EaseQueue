@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class StaffController extends Controller
 {
+    public function dashboard()
+    {
+        return view('Staff.dashboard');
+    }
+
     public function home(){
         $departments = Department::all();
         return view('Staff.home' , compact("departments"));

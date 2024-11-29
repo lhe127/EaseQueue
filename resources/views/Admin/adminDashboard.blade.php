@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+@if(Auth::check())
 
 <head>
     <meta charset="UTF-8">
@@ -13,9 +14,8 @@
     <script src="https://kit.fontawesome.com/6a7808c541.js" crossorigin="anonymous"></script>
 
 </head>
-
-
 <body>
+
     <div class="bg-gray-200 min-h-screen select-none">
         <div class="fixed bg-white text-blue-800 px-10 py-1 z-10 w-full">
             <div class="flex items-center justify-between py-2 text-5x1">
@@ -30,7 +30,7 @@
         <div class="flex flex-row pt-32 px-10 pb-4">
             <div class="w-2/12 mr-6">
                 <div class="bg-white rounded-xl shadow-lg mb-6 px-6 py-4">
-                    <a href="{{route('adminHome')}}" class="inline-block text-gray-600 hover:text-black my-4 w-full">
+                    <a href="{{route('admin.adminHome')}}" class="inline-block text-gray-600 hover:text-black my-4 w-full">
                         <span class="material-icons-outlined float-left pr-2">dashboard</span>
                         Home
                         <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
@@ -55,16 +55,20 @@
                         <a href="{{route('adminSetStaff')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200">Staff</a>
                         <a href="{{route('adminSetQueue')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200">Queue</a>
                     </div>
+                    
                 </div>
             </div>
            
             @yield('content')
         </div> 
         <div class="rounded border-gray-500 bg-white absolute shadow-md top-[4.8rem] right-[1rem] hidden" id="dropdown">
-                <div class=" flex justify-center items-center h-[3rem] w-[9rem] text-xl hover:bg-gray-200 cursor-pointer ">Available</div>
-                <div class=" flex justify-center items-center h-[3rem] w-[9rem] text-xl hover:bg-gray-200 cursor-pointer">Pause</div>
-                <a href=""><div class=" flex justify-center items-center h-[3rem] w-[9rem] text-xl hover:bg-gray-200 cursor-pointer">Log out</div></a>
-            </div>
+    <form action="{{ route('logout') }}" method="POST">
+        @csrf
+        <button type="submit" class="flex justify-center items-center h-[3rem] w-[9rem] text-xl hover:bg-gray-200 cursor-pointer">
+            Log out
+        </button>
+    </form>
+</div>
     </div>
     <script>
         function toggledropdown(){
@@ -78,5 +82,6 @@
         }
     </script>
 </body>
+@endif
 
 </html>

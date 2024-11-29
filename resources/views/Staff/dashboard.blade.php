@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+@if(Auth::check())
 
 <head>
     <meta charset="UTF-8">
@@ -26,12 +27,18 @@
                         style="background-image: url(https://i.pinimg.com/564x/de/0f/3d/de0f3d06d2c6dbf29a888cf78e4c0323.jpg)">
                     </div>
                     
+                    
                     <select id="statusDropdown" class="ml-4 border rounded-md p-2 text-white shadow-sm focus:outline-none focus:border-blue-500" style="width: 150px;" onchange="changeDropdownColor()">
                         <option value="available">Available</option>
                         <option value="pause">Pause</option>
                         <option value="break">Break</option>
                         <option value="offline">Offline</option>
-                        <option value="logout">Log out</option>
+                        <option value="logout">Log out </option>
+                    </select>
+                        <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                            <button type="submit">Log out</button>
+                        </form>
                     </select>
                 </div>
             </div>
@@ -108,8 +115,8 @@
                     dropdown.classList.add('bg-gray-500');   
                     break;
                 case 'logout':
-                    dropdown.classList.add('bg-red-500');   
-                    break;
+                document.getElementById("logoutForm").submit();
+                break;
             }
         }
         
@@ -118,5 +125,6 @@
         };
     </script>
 </body>
+@endif
 
 </html>
