@@ -29,6 +29,7 @@
                             </tr>
                         </thead>
                         <tbody class="text-sm divide-y divide-gray-100">
+
                         @foreach($staff as $member)
                             <tr>
                                 <td class="p-4 whitespace-nowrap">
@@ -40,10 +41,10 @@
                                     </div>
                                 </td>
                                 <td class="p-4 whitespace-nowrap">
-                                    <div class="text-left">{{ $member->department->name }}</div>
+                                    <div class="text-left">{{$member->department ->name }}</div>
                                 </td>
                                 <td class="p-4 whitespace-nowrap">
-                                    <div class="text-left font-medium">{{ $member->counter->name }}</div>
+                                    <div class="text-left font-medium">{{$member->counter ->name }}</div>
                                 </td>
                                 <td class="p-4 whitespace-nowrap">
                                     <select class="border border-gray-300 rounded px-2 py-1 w-32">

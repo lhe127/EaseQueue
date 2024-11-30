@@ -22,12 +22,14 @@ use App\Models\QueueNumber;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 // Staff
 
-Route::get('/home', [StaffController::class, 'home'])->name('home');
+Route::get('/dashboard', [StaffController::class, 'dashboard'])->name('staff.dashboard');
+
+Route::get('/staff/home', [StaffController::class, 'home'])->name('staff.home');
 
 Route::get('/schedule', [StaffController::class, 'schedule'])->name('schedule');
 
@@ -59,8 +61,7 @@ Route::get('/getNumber', function () {
 
 // Admin 
 
-Route::get('/adminHome', [AdminController::class, 'adminHome'])->name('adminHome');
-
+Route::get('/admin/home', [AdminController::class, 'adminHome'])->name('admin.adminHome');
 
 Route::get('/adminMailbox', function () {
     return view('Admin.adminMailbox');
@@ -91,6 +92,8 @@ Route::get('/adminReportDetail', function () {
 // })->name('adminSetQueue');
 
 /* Manage Department */
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
 Route::get('/adminSettingDepartment', [AdminController::class, 'index'])->name('adminSetDepartment');
 
 Route::post('/addNewCounter', [AdminController::class, 'store'])->name('addNewCounter');
@@ -125,16 +128,24 @@ Route::get('/joinQueue/{deparment}', [customerController::class, 'joinQueue'])->
 
 // Route::get('/queueStatus/{queue_number}', [customerController::class, 'getQueueStatus'])->name('queue.status');
 
-//login
-Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
-Route::post('/register', [AuthController::class, 'register'])->name('register');
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
+Route::get('/login', [AuthController::class, 'loginPage'])->name('login.page');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/admin/add-staff', [AdminController::class, 'addStaffForm'])->name('admin.addStaff');
-    Route::post('/admin/add-staff', [AdminController::class, 'addStaff']);
-    // Add other admin routes here
+Route::get('/register', [AuthController::class, 'registerPage'])->name('auth.registerPage');
+Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
+Route::middleware(['web'])->group(function () {
+    // Other routes...
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
+// Protected Routes
+Route::middleware(['auth', 'is_admin'])->group(function () {
+    Route::get('/adminHome', function () {
+        return view('admin.adminHome');
+    })->name('adminHome');
+});
+
+    // Staff Routes
+    Route::middleware(['auth', 'is_staff'])->group(function () {
+        Route::get('/home', function () {
+            return view('staff.home');
+        })->name('home');
+    });
