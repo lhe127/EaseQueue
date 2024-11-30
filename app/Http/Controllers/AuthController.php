@@ -80,6 +80,6 @@ class AuthController extends Controller
 }
 
     public function getIsAdminAttribute() {
-        return $this->is_admin == 1;
+        return Auth::user()->is_admin == 1;
     }
 }
