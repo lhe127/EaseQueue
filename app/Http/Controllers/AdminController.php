@@ -11,15 +11,15 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-        public function dashboard()
+    public function dashboard()
     {
         return view('admin.adminDashboard');
     }
-    
+
     public function adminHome()
     {
         $staff = Staff::where('staffID', 'like', 'S%')->get();
-        
+
         return view('admin.adminHome', ['staff' => $staff]);
     }
 
@@ -107,7 +107,7 @@ class AdminController extends Controller
 
         if ($department) {
             // Check if the department has any counters
-            if ($department->counters->isEmpty()) {
+            if ($department->counter->isEmpty()) {
                 $department->delete();
                 return redirect()->back()->with('success', 'Department deleted successfully.');
             } else {
@@ -133,52 +133,84 @@ class AdminController extends Controller
     }
 
     public function addStaff(Request $request)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:staff',
-        'department_id' => 'required|exists:departments,id',
-        'counter_id' => 'required|exists:counters,id',
-        'password' => 'required|string|min:8',
-    ]);
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:staff', // Adding validation for email
+            'department_id' => 'required|exists:departments,id',
+            'counter_id' => 'required|exists:counters,id',
+            'password' => 'required|string|min:8', // Ensuring a secure password
+        ]);
 
-    $staffID = $this->generateNewStaffID();
+        $staffID = $this->generateNewStaffID();
 
-    // Save the staff details to the database
-    $staff = new Staff();
-    $staff->staffID = $staffID;
-    $staff->name = $request->input('name');
-    $staff->email = $request->input('email');
-    $staff->department_id = $request->input('department_id');
-    $staff->counter_id = $request->input('counter_id');
-    $staff->password = Hash::make($request->input('password')); // Hash password securely
-    $staff->save();
+        // Save the staff details to the database
+        $staff = new Staff();
+        $staff->staffID = $staffID;
+        $staff->name = $request->input('name');
+        $staff->email = $request->input('email'); // Save the email
+        $staff->department_id = $request->input('department_id');
+        $staff->counter_id = $request->input('counter_id');
+        $staff->password = bcrypt($request->input('password')); // Ensure passwords are stored securely
+        $staff->save();
 
-    return redirect()->route('adminSetStaff');
-}
-
-public function updateStaff(Request $request, $staffID)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:staff,email,' . $staffID . ',staffID',
-        'department_id' => 'required|exists:departments,id',
-        'counter_id' => 'required|exists:counters,id',
-        'password' => 'nullable|string|min:8',
-    ]);
-
-    $staff = Staff::where('staffID', $staffID)->first();
-    $staff->name = $request->input('name');
-    $staff->email = $request->input('email');
-    $staff->department_id = $request->input('department_id');
-    $staff->counter_id = $request->input('counter_id');
-
-    if ($request->filled('password')) {
-        $staff->password = Hash::make($request->input('password')); // Hash password securely
+        return redirect()->route('adminSetStaff');
     }
 
-    $staff->save();
+    private function generateNewStaffID()
+    {
+        $year = date('y');
 
-    return redirect()->route('adminSetStaff');
-}
+        $maxStaffID = Staff::where('staffID', 'LIKE', self::PREFIX . $year . '%')->orderBy('staffID', 'desc')->first();
+
+        if ($maxStaffID) {
+            $currentNumber = (int) substr($maxStaffID->staffID, strlen(self::PREFIX) + 2);
+            $newNumber = $currentNumber + 1;
+        } else {
+            $newNumber = 1;
+        }
+        $newStaffID = self::PREFIX . $year . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+
+        return $newStaffID;
+    }
+
+    public function displayStaffInfo()
+    {
+        $allStaff = Staff::all();
+        return view('Admin.Setting.settingStaff', compact('allStaff'));
+    }
+
+    public function editStaff($staffID)
+    {
+        $staff = Staff::where('staffID', $staffID)->first();
+        $departments = Department::all(); // Assuming you need all departments for the dropdown
+        $counters = Counter::all(); // Assuming you need all counters for the dropdown
+        return view('Admin.Setting.updateStaffInfo', compact('staff', 'departments', 'counters'));
+    }
+
+
+    public function updateStaff(Request $request, $staffID)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:staff,email,' . $staffID . ',staffID', // Adding validation for email
+            'department_id' => 'required|exists:departments,id',
+            'counter_id' => 'required|exists:counters,id',
+            'password' => 'nullable|string|min:8', // Password is optional during update
+        ]);
+
+        $staff = Staff::where('staffID', $staffID)->first();
+        $staff->name = $request->input('name');
+        $staff->email = $request->input('email'); // Update the email
+        $staff->department_id = $request->input('department_id');
+        $staff->counter_id = $request->input('counter_id');
+
+        if ($request->filled('password')) {
+            $staff->password = bcrypt($request->input('password')); // Update password only if provided
+        }
+
+        $staff->save();
+
+        return redirect()->route('adminSetStaff');
+    }
 }

@@ -143,9 +143,9 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     })->name('adminHome');
 });
 
-    // Staff Routes
-    Route::middleware(['auth', 'is_staff'])->group(function () {
-        Route::get('/home', function () {
-            return view('staff.home');
-        })->name('home');
-    });
+// Staff Routes
+Route::middleware(['auth', 'is_staff'])->group(function () {
+    Route::get('/home', function () {
+        return view('staff.home');
+    })->name('home');
+});
