@@ -32,9 +32,7 @@
                     
                     <button type="submit" class="w-full bg-blue-600 text-white py-3 mt-4 rounded-lg font-medium hover:bg-blue-700 transition duration-300">Login</button>
                     <div class="mt-4 text-center">
-                    <p class="text-white mt-4">Don't have an account? 
-                        <a href="{{ route('auth.registerPage') }}" class="text-blue-400 hover:underline">Register</a>
-                    </p>                    
+                    
                 </div>
                 </form>
             </div>
