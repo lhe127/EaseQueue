@@ -71,78 +71,92 @@
         }
 
         /* Redesigned Modal */
-        .modal-content {
-            border-radius: 20px;
-            overflow: hidden;
-        }
+.modal-content {
+    background-color: #ffffff; /* Set modal background to white */
+    border-radius: 20px;
+    overflow: hidden;
+}
 
-        .modal-header {
-            background-color: #5161ce;
-            color: white;
-            border-bottom: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+.modal-header {
+    background-color: #1a2530; /* Keep the header background color */
+    color: #ffffff; /* White text for contrast */
+    border-bottom: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-        .modal-title {
-            font-size: 28px;
-            font-weight: 600;
-        }
+.modal-title {
+    font-size: 28px;
+    font-weight: 600;
+}
 
-        .modal-header .close {
-            color: white;
-            opacity: 0.8;
-        }
+.modal-header .close {
+    color: #ffffff; /* White close button */
+    opacity: 0.8;
+}
 
-        .modal-body {
-            background-color: #f4f4f4;
-            padding: 30px;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-            text-align: center;
-        }
+.modal-body {
+    background-color: #ffffff; /* Ensure body background is white */
+    padding: 30px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for depth */
+}
 
-        .modal-body h3 {
-            font-size: 20px;
-            margin-bottom: 20px;
-        }
+.modal-body h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #333; /* Dark text for readability */
+    background-color: #ffffff; /* Change text background to white */
+    padding: 10px; /* Add padding for better appearance */
+    border-radius: 5px; /* Rounded corners for the text background */
+}
 
-        .modal-footer {
-            border-top: none;
-            justify-content: center;
-            padding: 20px;
-        }
+.modal-footer {
+    border-top: none;
+    padding: 20px;
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space between buttons */
+}
 
-        .btn-primary {
-            background-color: #5161ce;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 50px;
-            transition: background-color 0.3s ease;
-        }
+.btn {
+    width: 50%; /* Set each button to take 50% of the footer width */
+    margin: 0; /* Remove margin to ensure they fit perfectly */
+}
 
-        .btn-primary:hover {
-            background-color: #64c3e8;
-        }
+.btn-primary {
+    background-color: #00bcd4; /* Match the active navbar item color */
+    border: none;
+    padding: 10px 0; /* Adjust padding for better appearance */
+    border-radius: 50px;
+    transition: background-color 0.3s ease;
+    color: #ffffff; /* White text for buttons */
+}
 
-        .btn-secondary {
-            background-color: #e0e0e0;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 50px;
-        }
+.btn-primary:hover {
+    background-color: #0097a7; /* Darker shade for hover effect */
+}
 
-        @media (max-width: 576px) {
-            .modal-body h3 {
-                font-size: 18px;
-            }
+.btn-secondary {
+    background-color: #e0e0e0; /* Keep secondary button color */
+    border: none;
+    padding: 10px 0; /* Adjust padding for better appearance */
+    border-radius: 50px;
+    color: #333; /* Dark text for secondary button */
+}
 
-            .modal-title {
-                font-size: 24px;
-            }
+@media (max-width: 576px) {
+    .modal-body h3 {
+        font-size: 18px;
+    }
 
-            .btn {
-                width: 100%;
-            }
-        }
+    .modal-title {
+        font-size: 24px;
+    }
+
+    .btn {
+        width: 100%; /* Ensure buttons take full width on small screens */
+    }
+}
