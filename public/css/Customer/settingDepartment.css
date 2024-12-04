@@ -118,20 +118,24 @@
     border-top: none;
     padding: 20px;
     display: flex; /* Use flexbox for layout */
-    justify-content: space-between; /* Space between buttons */
 }
 
 .btn {
-    width: 50%; /* Set each button to take 50% of the footer width */
+    flex: 1; /* Allow buttons to grow and take equal space */
     margin: 0; /* Remove margin to ensure they fit perfectly */
+    padding: 10px; /* Adjust padding for better appearance */
+    border: none; /* No border for clean look */
+    border-radius: 50px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.flex-form {
+    flex: 1; /* Allow the form to take equal space */
+    display: flex; /* Ensure the form behaves like a flex container */
 }
 
 .btn-primary {
-    background-color: #00bcd4; /* Match the active navbar item color */
-    border: none;
-    padding: 10px 0; /* Adjust padding for better appearance */
-    border-radius: 50px;
-    transition: background-color 0.3s ease;
+    background-color: #00bcd4; /* Primary button color */
     color: #ffffff; /* White text for buttons */
 }
 
@@ -140,23 +144,17 @@
 }
 
 .btn-secondary {
-    background-color: #e0e0e0; /* Keep secondary button color */
-    border: none;
-    padding: 10px 0; /* Adjust padding for better appearance */
-    border-radius: 50px;
+    background-color: #e0e0e0; /* Secondary button color */
     color: #333; /* Dark text for secondary button */
 }
 
+.btn-secondary:hover {
+    background-color: #d5d5d5; /* Darker shade for hover effect */
+}
+
 @media (max-width: 576px) {
-    .modal-body h3 {
-        font-size: 18px;
-    }
-
-    .modal-title {
-        font-size: 24px;
-    }
-
-    .btn {
+    .btn, .flex-form {
         width: 100%; /* Ensure buttons take full width on small screens */
+        margin: 5px 5px; /* Add vertical margin for spacing */
     }
 }
