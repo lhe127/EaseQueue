@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
 {
     Schema::table('staff', function (Blueprint $table) {
-        $table->boolean('is_admin')->default(false); // Add is_admin with a default value
+        // $table->boolean('is_admin')->default(false); // Add is_admin with a default value
     });
 }
 

@@ -10,6 +10,12 @@ use PHPUnit\Framework\Constraint\Count;
 
 class customerController extends Controller
 {
+    public function index()
+    {
+        $departments = Department::all();
+        return view('customer.departmentSelection', compact('departments'));
+    }
+
     public function displayDepartment()
     {
         $departments = Department::all();
