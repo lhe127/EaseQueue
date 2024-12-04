@@ -36,30 +36,38 @@
         </div>
     </div>
 
-    <!-- Modal for Joining Queue -->
     <div class="modal fade" id="joinQueueModal" tabindex="-1" role="dialog" aria-labelledby="joinQueueModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
+                <!-- Modal Header -->
                 <div class="modal-header">
                     <h5 class="modal-title" id="joinQueueModalLabel">Join Queue</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+
+                <!-- Modal Body -->
                 <div class="modal-body">
-                    <h3>Do you want to join the queue for <span id="departmentName"></span>?</h3>
+                    <h3 class="modal-question">Do you want to join the queue for <span id="departmentName"></span>?</h3>
                 </div>
+
+                <!-- Modal Footer -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <!-- Form that will submit the department to the controller -->
-                    <form id="joinQueueForm" method="get" action="{{ route('joinQueue', ':department') }}">
-                        <button type="submit" class="btn btn-primary" id="joinQueueButton">Join Queue</button>
+                    <button type="button" class="btn btn-secondary btn-cancel" data-dismiss="modal">Cancel</button>
+                    <form id="joinQueueForm" method="get" action="{{ route('joinQueue', ':department') }}"
+                        class="flex-form">
+                        <button type="submit" class="btn btn-primary btn-confirm" id="joinQueueButton">Join
+                            Queue</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+
+
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>

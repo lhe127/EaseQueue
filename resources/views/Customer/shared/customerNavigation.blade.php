@@ -22,17 +22,17 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
-                <div class="hori-selector">
+                {{-- <div class="hori-selector">
                     <div class="left"></div>
                     <div class="right"></div>
-                </div>
+                </div> --}}
                 <li class="nav-item {{ request()->is('/') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('customerHome') }}"><i class="fas fa-tachometer-alt"></i>
                         Home</a>
                 </li>
-                <li class="nav-item {{ request()->is('history') ? 'active' : '' }}">
+                {{-- <li class="nav-item {{ request()->is('history') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('customerHistory') }}"><i class="fas fa-history"></i> History</a>
-                </li>
+                </li> --}}
                 <li class="nav-item {{ request()->is('about') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('customerAbout') }}"><i class="fas fa-info-circle"></i> About</a>
                 </li>

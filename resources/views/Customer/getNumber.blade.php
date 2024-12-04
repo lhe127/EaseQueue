@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="css/Customer/getNumber.css">
 </head>
 
-<div class="container text-center">
+<div class="container text-center" style="padding-top: 0">
     <h2 class="title">Queue Status</h2>
 
     <div class="row justify-content-center">
