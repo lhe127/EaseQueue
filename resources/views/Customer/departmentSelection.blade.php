@@ -56,7 +56,8 @@
                 <!-- Modal Footer -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary btn-cancel" data-dismiss="modal">Cancel</button>
-                    <form id="joinQueueForm" method="get" action="{{ route('joinQueue', ':department') }}">
+                    <form id="joinQueueForm" method="get" action="{{ route('joinQueue', ':department') }}"
+                        class="flex-form">
                         <button type="submit" class="btn btn-primary btn-confirm" id="joinQueueButton">Join
                             Queue</button>
                     </form>
