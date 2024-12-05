@@ -36,6 +36,9 @@
                 <li class="nav-item {{ request()->is('about') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('customerAbout') }}"><i class="fas fa-info-circle"></i> About</a>
                 </li>
+                <li class="nav-item {{ request()->is('logout') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('customerLogin') }}"><i class="fas fa-arrow-alt-circle-left"></i> Log Out</a>
+                </li>
             </ul>
         </div>
     </nav>

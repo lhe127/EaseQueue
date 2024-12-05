@@ -126,7 +126,7 @@ Route::middleware(['check.queue.hours'])->group(function () {
 
 /* Customer Page */
 
-Route::get('/customerHome', [customerController::class, 'displayDepartment'])->name('customerHome');
+// Route::get('/customerHome', [customerController::class, 'displayDepartment'])->name('customerHome');
 
 Route::get('/joinQueue/{deparment}', [customerController::class, 'joinQueue'])->name('joinQueue');
 
@@ -167,13 +167,7 @@ Route::post('/customer/logout', function () {
     return redirect()->route('customerLogin.page');
 })->name('customer.logout');
 
-Route::get('/get-number', function () {
-    // Example logic to fetch queue details
-    $queue = Queue::where('customer_id', Auth::id())->first();
-    return view('customer.getNumber', compact('queue'));
-})->name('getNumber')->middleware('auth:customer');
-
 Route::middleware(['auth:customer'])->group(function () {
-    Route::get('/department-selection', [CustomerController::class, 'index'])->name('departmentSelection')->middleware('auth:customer');
-    Route::post('/join-queue/{department}', [CustomerController::class, 'joinQueue'])->name('joinQueue');
+    Route::get('/customerHome', [customerController::class, 'displayDepartment'])->name('customerHome');
+    Route::get('/getNumber', [customerController::class, 'getNumber'])->name('getNumber');
 });
