@@ -9,6 +9,8 @@ use App\Http\Controllers\FullCalenderController;
 use App\Http\Controllers\QueueSettingController;
 use App\Http\Controllers\AuthController;
 use App\Models\QueueNumber;
+use App\Http\Controllers\CustomerAuthController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -137,15 +139,39 @@ Route::middleware(['web'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 // Protected Routes
-Route::middleware(['auth', 'is_admin'])->group(function () {
+// Admin Routes
+Route::middleware(['auth:staff', 'is_admin'])->group(function () {
     Route::get('/adminHome', function () {
         return view('admin.adminHome');
     })->name('adminHome');
 });
 
 // Staff Routes
-Route::middleware(['auth', 'is_staff'])->group(function () {
+Route::middleware(['auth:staff', 'is_staff'])->group(function () {
     Route::get('/home', function () {
         return view('staff.home');
     })->name('home');
+});
+
+// Customer Login and Registration
+Route::get('/customer/login', [CustomerAuthController::class, 'showLoginForm'])->name('customerLogin.page');
+Route::post('/customer/login', [CustomerAuthController::class, 'login'])->name('customerLogin');
+
+Route::get('/customer/register', [CustomerAuthController::class, 'showRegisterForm'])->name('customerRegister.page');
+Route::post('/customer/register', [CustomerAuthController::class, 'register'])->name('auth.customerRegister');
+
+Route::post('/customer/logout', function () {
+    Auth::guard('customer')->logout();
+    return redirect()->route('customerLogin.page');
+})->name('customer.logout');
+
+Route::get('/get-number', function () {
+    // Example logic to fetch queue details
+    $queue = App\Models\Queue::where('customer_id', Auth::id())->first();
+    return view('customer.getNumber', compact('queue'));
+})->name('getNumber')->middleware('auth:customer');
+
+Route::middleware(['auth:customer'])->group(function () {
+    Route::get('/department-selection', [CustomerController::class, 'index'])->name('departmentSelection')->middleware('auth:customer');
+    Route::post('/join-queue/{department}', [CustomerController::class, 'joinQueue'])->name('joinQueue');
 });

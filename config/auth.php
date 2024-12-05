@@ -59,17 +59,39 @@ return [
     |
     */
 
-    'providers' => [
-        'staff' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Staff::class,
-        ],
+   'guards' => [
+    'staff' => [
+        'driver' => 'session',
+        'provider' => 'staff',
+    ],
+    'customer' => [
+        'driver' => 'session',
+        'provider' => 'customers',
+    ],
+],
+
+'providers' => [
+    'staff' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Staff::class,
+    ],
+    'customers' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Customer::class,
+    ],
+],
+
+'defaults' => [
+    'guard' => 'staff', // Default guard for authentication
+    'passwords' => 'staff',
+],
+
 
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
-    ],
+
 
     /*
     |--------------------------------------------------------------------------
