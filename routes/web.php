@@ -10,7 +10,9 @@ use App\Http\Controllers\QueueSettingController;
 use App\Http\Controllers\AuthController;
 use App\Models\QueueNumber;
 use App\Http\Controllers\CustomerAuthController;
-
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Queue;
 
 /*
 |--------------------------------------------------------------------------
@@ -167,7 +169,7 @@ Route::post('/customer/logout', function () {
 
 Route::get('/get-number', function () {
     // Example logic to fetch queue details
-    $queue = App\Models\Queue::where('customer_id', Auth::id())->first();
+    $queue = Queue::where('customer_id', Auth::id())->first();
     return view('customer.getNumber', compact('queue'));
 })->name('getNumber')->middleware('auth:customer');
 
