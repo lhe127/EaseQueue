@@ -14,6 +14,7 @@ class contact extends Model
         'image',
         'Fdate',
         'Tdate',
-        'reason'
+        'reason',
+        'status'
     ];
 }
