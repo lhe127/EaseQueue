@@ -67,9 +67,9 @@ Route::get('/getNumber', function () {
 
 Route::get('/admin/home', [AdminController::class, 'adminHome'])->name('admin.adminHome');
 
-Route::get('/adminMailbox', function () {
-    return view('Admin.adminMailbox');
-})->name('adminMailbox');
+// Route::get('/adminMailbox', function () {
+//     return view('Admin.adminMailbox');
+// })->name('adminMailbox');
 
 Route::get('/adminReport', function () {
     return view('Admin.Report.adminReport');
@@ -177,3 +177,7 @@ Route::middleware(['auth:customer'])->group(function () {
     Route::get('/department-selection', [CustomerController::class, 'index'])->name('departmentSelection')->middleware('auth:customer');
     Route::post('/join-queue/{department}', [CustomerController::class, 'joinQueue'])->name('joinQueue');
 });
+
+// Admin receive mail
+Route::get('/adminMailbox', [AdminController::class, 'showRequests'])->name('adminMailbox');
+Route::put('/admin/requests/{id}', [AdminController::class, 'updateRequestStatus'])->name('admin.updateRequest');

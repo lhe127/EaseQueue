@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contact;
 use App\Models\Counter;
 use App\Models\Department;
 use App\Models\Staff;
@@ -212,5 +213,33 @@ class AdminController extends Controller
         $staff->save();
 
         return redirect()->route('adminSetStaff');
+    }
+
+    // Display all requests
+    public function showRequests()
+    {
+        $requests = Contact::all(); // Retrieve all requests
+        return view('Admin.adminMailbox', compact('requests'));
+    }
+
+    // Update request status
+    public function updateRequestStatus($id)
+    {
+        // Find the request by ID
+        $request = Contact::findOrFail($id);
+
+        // Get the status from the form
+        $status = request('status');
+
+        // Validate the status
+        if (!in_array($status, ['Approved', 'Rejected'])) {
+            return redirect()->route('adminMailbox')->with('error', 'Invalid status provided!');
+        }
+
+        // Update the status
+        $request->update(['status' => $status]);
+
+        // Redirect with a success message
+        return redirect()->route('adminMailbox')->with('message', 'Request status updated successfully!');
     }
 }
