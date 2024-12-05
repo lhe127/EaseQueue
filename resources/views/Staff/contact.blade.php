@@ -17,7 +17,6 @@
         <div class="p-6 space-y-6">
             <form action="{{route('postContact')}}" method="post" enctype='multipart/form-data'>
                 @csrf
-                <input type="hidden" name="staffID" value="S24001">
                 <div class="grid grid-cols-6 gap-6">
                     <div id="Type" class="col-span-6 sm:col-span-3">
                         <label for="Type" class="text-xl font-medium text-gray-900 block mb-4">Type</label>

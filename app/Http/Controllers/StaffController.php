@@ -43,7 +43,6 @@ class StaffController extends Controller
         }
         
         $validate = request()->validate([
-            'staffID' => 'required',
             'Fdate' => 'required',
             'Tdate' => 'required',
             'Type' => 'required',
@@ -51,7 +50,7 @@ class StaffController extends Controller
         ]);
         
         contact::create([
-            'staffID' => $validate['staffID'],
+            'staffID' => auth()->id(),
             'requestType' => $validate['Type'],
             'image' => $imageName, // This will either be the uploaded image name or null
             'Fdate' => $validate['Fdate'],
@@ -59,6 +58,6 @@ class StaffController extends Controller
             'reason' => $validate['Reason'],
         ]);
         
-        return redirect()->route('home');
+        return redirect()->route('staff.home');
     }
 }
