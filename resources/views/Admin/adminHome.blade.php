@@ -1,7 +1,7 @@
 @extends('Admin/adminDashboard')
 @section('content')
 
-<div style="bg-gray-200; width:100%; display:flex; flex-direction:column; gap:1rem;">
+<div class="bg-gray-200 w-full flex flex-col gap-4">
     <div class="dashboard" style="display: flex; flex-wrap: wrap; gap: 1rem;">
 <!-- Table -->
         <div class="staff-table-container" style="background-color:white; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; flex: 1;">
