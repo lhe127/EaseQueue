@@ -24,7 +24,7 @@ class CustomerAuthController extends Controller
 
         if ($customer) {
             Auth::guard('customer')->login($customer);
-            return redirect()->route('departmentSelection');
+            return redirect()->route('customerHome');
         }
 
         return back()->withErrors(['phone' => 'Customer not found.']);
@@ -47,6 +47,6 @@ class CustomerAuthController extends Controller
 
         Auth::guard('customer')->login($customer);
 
-        return redirect()->route('departmentSelection');
+        return redirect()->route('customerHome');
     }
 }
