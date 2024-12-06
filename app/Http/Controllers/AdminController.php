@@ -14,7 +14,7 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        return view('admin.adminDashboard');
+        return view('Admin.adminDashboard');
     }
 
     public function adminHome()
@@ -218,7 +218,8 @@ class AdminController extends Controller
     // Display all requests
     public function showRequests()
     {
-        $requests = Contact::all(); // Retrieve all requests
+        $requests = Contact::orderBy('created_at', 'desc')->get();
+
         return view('Admin.adminMailbox', compact('requests'));
     }
 
