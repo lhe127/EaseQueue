@@ -45,11 +45,13 @@ Route::get('/contact', [StaffController::class, 'contact'])->name('contact');
 
 Route::post('/postContact', [StaffController::class, 'postContact'])->name('postContact');
 
-Route::get('/transfer', [StaffController::class, 'transfer'])->name('transfer');
-
 Route::get('fullcalender', [FullCalenderController::class, 'index'])->name('calendar');
 
 Route::post('fullcalenderAjax', [FullCalenderController::class, 'ajax']);
+
+Route::post('/nextNumber',[StaffController::class, 'nextNumber'])->name('nextNumber');
+
+Route::post('/transfer/{id}',[StaffController::class, 'transfer'])->name('transfer');
 
 // Customer
 

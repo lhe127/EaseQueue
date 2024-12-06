@@ -4,29 +4,38 @@
 <div class="w-10/12 mt-3">
     <div class="flex flex-row">
         <div class=" bg-stone-200 border-solid border-2 border-cyan-900 rounded-xl w-9/12 h-[30rem] mr-2 p-6">
+            @if($number)
             <div class="flex justify-center mt-[3rem]">
-                <p class="text-7xl text-indigo-900 "><strong>3122</strong></p>
+                <p class="text-7xl text-indigo-900"><strong>{{ $number->queue_number }}</strong></p>
             </div>
             <div class="flex justify-center mt-[2rem]">
-                <p class="text-3xl text-indigo-900"><strong>Renew License</strong></p>
+                <p class="text-3xl text-indigo-900"><strong>{{ $number->department->name }}</strong></p>
             </div>
             <div class="flex justify-center mt-[1rem]">
                 <p class="text-3xl text-indigo-900"><strong>00:00:00</strong>
             </div>
+            @else
+            <div class="flex justify-center ml-[6rem] mt-[3rem]">
+                <p class="text-7xl text-red-500"><strong>No unserved queue numbers available.</strong></p>
+            </div>
+            @endif
             <div class="flex justify-center gap-[4rem] mt-[4rem]">
                 <form action="">
+                    @csrf
                     <div class="self-center">
                         <button class="text-xl  bg-cyan-300 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full">
                             Call
                         </button>
                     </div>
                 </form>
-                    <div onclick="openModal('modelConfirm')" class="self-center">
-                        <button class="text-xl bg-cyan-300 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full">
-                            Transfer
-                        </button>
-                    </div>
-                <form action="">
+                @csrf
+                <div onclick="openModal('modelConfirm')" class="self-center">
+                    <button class="text-xl bg-cyan-300 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full">
+                        Transfer
+                    </button>
+                </div>
+                <form action="{{route('nextNumber')}}" method="post">
+                    @csrf
                     <div class="self-center">
                         <button class="text-xl bg-cyan-300 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full">
                             Next
@@ -41,73 +50,50 @@
                 <h2 class="text-2xl font-semibold text-gray-800 my-2">Queue Numbers</h2>
             </div>
             <ul class="divide-y divide-gray-200">
+                @foreach($queueLists as $queueList)
                 <li class="flex items-center py-4 px-6">
-                    <span class="text-gray-700 text-lg font-medium mr-8">1.</span>
                     <div class="flex-1">
-                        <h2 class="text-xl font-medium text-gray-800">1001</h3>
+                        <h2 class="text-xl font-medium text-gray-800">{{$queueList->queue_number}}</h3>
                     </div>
                 </li>
-                <li class="flex items-center py-4 px-6">
-                    <span class="text-gray-700 text-lg font-medium mr-8">2.</span>
-                    <div class="flex-1">
-                        <h2 class="text-xl font-medium text-gray-800">1002</h3>
-                    </div>
-                </li>
-                <li class="flex items-center py-4 px-6">
-                    <span class="text-gray-700 text-lg font-medium mr-8">3.</span>
-                    <div class="flex-1">
-                        <h2 class="text-xl font-medium text-gray-800">1003</h3>
-                    </div>
-                </li>
-                <li class="flex items-center py-4 px-6">
-                    <span class="text-gray-700 text-lg font-medium mr-8">4.</span>
-                    <div class="flex-1">
-                        <h2 class="text-xl font-medium text-gray-800">1004</h3>
-                    </div>
-                </li>
-                <li class="flex items-center py-4 px-6">
-                    <span class="text-gray-700 text-lg font-medium mr-8">5.</span>
-                    <div class="flex-1">
-                        <h2 class="text-xl font-medium text-gray-800">1005</h3>
-                    </div>
-                </li>
+                @endforeach
             </ul>
         </div>
     </div>
-    
+
 
     <div id="modelConfirm" class="fixed hidden z-50 inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
-    <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
+        <div class="relative top-40 mx-auto shadow-xl rounded-md bg-white max-w-md">
 
-        <div class="flex justify-end p-2">
-            <button onclick="closeModal('modelConfirm')" type="button"
-                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                        clip-rule="evenodd"></path>
-                </svg>
-            </button>
-        </div>
-
-        <div class="p-6 pt-0 text-center">
-            <h1 class=" font-bold text-4xl block mb-5 ">Transfer To</h1>
-            @foreach($departments as $department)
-            <div class="border border-solid border-black mt-2 mx-1 flex justify-between items-center">
-                <label for="{{$department->id}}" class=" font-bold text-2xl block m-3">{{ $department->name }}</label>
-                <input id="{{$department->id}}" type="radio" value="{{$department->id}}" name="transfer" class="mr-3 w-7 h-7 text-blue-900 bg-gray-100 border-gray-300 ">
-            </div>
-            @endforeach
-            <form action="">
-                @csrf
-                <button onclick="closeModal('modelConfirm')" type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center mt-5 px-3 py-2.5 text-center mr-2">
-                    Transfer
+            <div class="flex justify-end p-2">
+                <button onclick="closeModal('modelConfirm')" type="button"
+                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clip-rule="evenodd"></path>
+                    </svg>
                 </button>
-            </form>
-        </div>
+            </div>
 
+            <div class="p-6 pt-0 text-center">
+                <form action="{{ route('transfer', ['id' => $number->id]) }}" method="post">
+                    @csrf
+                    <h1 class="font-bold text-4xl block mb-5">Transfer To</h1>
+                    @foreach($departments as $department)
+                    <div class="border border-solid border-black mt-2 mx-1 flex justify-between items-center">
+                        <label for="{{ $department->id }}" class="font-bold text-2xl block m-3">{{ $department->name }}</label>
+                        <input id="{{ $department->id }}" type="radio" value="{{ $department->id }}" name="department_id" class="mr-3 w-7 h-7 text-blue-900 bg-gray-100 border-gray-300">
+                    </div>
+                    @endforeach
+                    <button onclick="closeModal('modelConfirm')" type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center mt-5 px-3 py-2.5 text-center mr-2">
+                        Transfer
+                    </button>
+                </form>
+            </div>
+
+        </div>
     </div>
-</div>
 </div>
 <script type="text/javascript">
     window.openModal = function(modalId) {
