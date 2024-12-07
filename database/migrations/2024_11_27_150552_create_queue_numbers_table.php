@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('counter_id')->constrained()->onDelete('cascade');
             $table->integer('queue_number');
             $table->boolean('is_served')->default(0);
+            $table->foreignId('customer_id')->nullable()->constrained('customers')->onDelete('set null');
             $table->timestamps();
         });
     }
@@ -30,6 +31,13 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('queue_numbers', function (Blueprint $table) {
+            if (Schema::hasColumn('queue_numbers', 'customer_id')) {
+                $table->dropForeign(['customer_id']);
+                $table->dropColumn('customer_id');
+            }
+        });
+
         Schema::dropIfExists('queue_numbers');
     }
 };
