@@ -60,16 +60,10 @@ class StaffController extends Controller
 
     
     public function home() {
-        return $this->handleQueueNumbers();
+        return $this->showQueueNumbers();
     }
     
     public function nextNumber() {
-        return $this->handleQueueNumbers();
-    }
-    
-    private function handleQueueNumbers() {
-        $departments = Department::all();
-        
         // Separate all queues into department by department
         $separate = QueueNumber::where('department_id', auth()->user()->department_id);
         
@@ -81,18 +75,58 @@ class StaffController extends Controller
             $number->is_served = true;
             $number->save();
         }
+
+        return redirect("staff/home");
+    }
+    
+    private function showQueueNumbers() {
+        $departments = Department::all();
+        
+        // Separate all queues into department by department
+        $separate = QueueNumber::where('department_id', auth()->user()->department_id);
+        
         
         // Get the updated list of unserved queue numbers
         $newQueueList = $separate->where('is_served', false)
-                                 ->orderBy('created_at', 'ASC')
-                                 ->paginate(5);
-        
+                         ->orderBy('created_at', 'ASC')
+                         ->paginate(6)
+                         ->skip(1);
+
+        $number = $separate->where('is_served', false)->first();
+
         return view('Staff.home', [
             'queueLists' => $newQueueList,
+            'departments' => $departments,
             'number' => $number,
-            'departments' => $departments
         ]);
     }
+    
+    // private function advanceQueueNumber() {
+    //     $departments = Department::all();
+        
+    //     // Separate all queues into department by department
+    //     $separate = QueueNumber::where('department_id', auth()->user()->department_id);
+        
+    //     // Take number based on the separated group
+    //     $number = $separate->where('is_served', false)->first();
+        
+    //     if ($number) {
+    //         // Update the status to 'true'
+    //         $number->is_served = true;
+    //         $number->save();
+    //     }
+        
+    //     // Get the updated list of unserved queue numbers
+    //     $newQueueList = $separate->where('is_served', false)
+    //                              ->orderBy('created_at', 'ASC')
+    //                              ->paginate(5);
+        
+    //     return view('Staff.home', [
+    //         'queueLists' => $newQueueList,
+    //         'number' => $number,
+    //         'departments' => $departments
+    //     ]);
+    // }
     
     public function transfer(Request $request, $id) {
         $departmentId = $request->input('department_id');
@@ -104,6 +138,6 @@ class StaffController extends Controller
             $number->save();
         }
     
-        return redirect()->route('staff.home');
+        return redirect('staff/home');
     }
 }
