@@ -76,14 +76,23 @@ class StaffController extends Controller
         // Separate all queues into department by department
         $separate = QueueNumber::where('department_id', auth()->user()->department_id);
 
-        // Take number based on the separated group
-        $number = $separate->where('is_served', false)->first();
-        if ($number) {
+
+        // check if the number have a staffID to avoid conflict between two staff
+        $lock = $separate->where('staffID' , auth()->id())->where('is_served', false)->first();
+        $number = $separate->where('staffID', null)->first();
+        if($lock){
+            $currentNum = $lock;
+        }
+        else{
+            $currentNum = $number;
+        }
+    
+        //Take number based on the separated group
+        if ($currentNum) {
             // Update the status to 'true'
-            $number->is_served = true;
-            $number->counter_id = auth()->user()->counter->id;
-            $number->service_end_time = Carbon::now("Asia/Kuala_Lumpur");
-            $number->save();
+            $currentNum->is_served = true;
+            $currentNum->service_end_time = Carbon::now("Asia/Kuala_Lumpur");
+            $currentNum->save();
         }
 
         return redirect("staff/home");
@@ -122,27 +131,38 @@ class StaffController extends Controller
 
         // Separate all queues into department by department
         $separate = QueueNumber::where('department_id', auth()->user()->department_id);
-
-
-        // Get the updated list of unserved queue numbers
-        $newQueueList = $separate->where('is_served', false)
-            ->orderBy('created_at', 'ASC')
-            ->paginate(6)
-            ->skip(1);
-
-        $number = $separate->where('is_served', false)->first();
-
-        if ($number) {
-            $number->staffID = auth()->id();
-            $number->counter_id = auth()->user()->counter->id;
-            $number->service_start_time = Carbon::now("Asia/Kuala_Lumpur");
-            $number->save();
+        
+        // check if the number have a staffID to avoid conflict between two staff
+        $lock = $separate->where('staffID' , auth()->id())->where('is_served', false)->first();
+        $number = QueueNumber::where('department_id', auth()->user()->department_id)
+                     ->whereNull('staffID')
+                     ->first();
+        if($lock){
+            $currentNum = $lock;
         }
+        else{
+            $currentNum = $number;
+        }
+        
+        if ($currentNum) {
+                    $currentNum->staffID = auth()->id();
+                    $currentNum->counter_id = auth()->user()->counter->id;
+                    $currentNum->service_start_time = Carbon::now("Asia/Kuala_Lumpur");
+                    $currentNum->save();
+                }
+        // Get the updated list of unserved queue numbers
+        $newQueueList = QueueNumber::whereNull('staffID')
+                         ->where('department_id', auth()->user()->department_id)
+                         ->orderBy('created_at', 'ASC')
+                         ->skip(1)
+                         ->paginate(5);
+
+        
 
         return view('Staff.home', [
             'queueLists' => $newQueueList,
             'departments' => $departments,
-            'number' => $number,
+            'number' => $currentNum,
         ]);
     }
 

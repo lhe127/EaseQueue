@@ -14,14 +14,16 @@ return new class extends Migration
     public function up()
 {
     Schema::table('staff', function (Blueprint $table) {
-        // $table->boolean('is_admin')->default(false); // Add is_admin with a default value
+        $table->boolean('is_admin')->default(false); // Add is_admin with a default value
     });
 }
 
 public function down()
 {
     Schema::table('staff', function (Blueprint $table) {
-        $table->dropColumn('is_admin');
+        if (Schema::hasColumn('staff', 'is_admin')) {
+            $table->dropColumn('is_admin');
+        }
     });
 }
 };
