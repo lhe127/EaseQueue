@@ -17,7 +17,7 @@ class CustomerAuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'phone' => 'required|numeric',
+            'phone' => 'required|regex:/^0\d{9,10}$/|numeric',
         ]);
 
         $customer = Customer::where('phone', $request->phone)->first();
@@ -38,8 +38,12 @@ class CustomerAuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'phone' => 'required|unique:customers,phone|numeric',
-        ]);
+            'phone' => [
+            'required',
+            'unique:customers,phone',
+            'regex:/^0\d{9,10}$/', // Must start with 0, and be 10 or 11 digits long
+             ],
+           ]);
 
         $customer = Customer::create([
             'phone' => $request->phone,

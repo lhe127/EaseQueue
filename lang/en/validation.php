@@ -142,9 +142,9 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
-        ],
+        'phone' => [
+        'regex' => 'The phone number must start with 0 and contain 10 to 11 digits.',
+    ],
     ],
 
     /*
