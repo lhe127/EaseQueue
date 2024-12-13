@@ -8,6 +8,8 @@ use App\Models\QueueNumber;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Console\View\Components\Alert;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class StaffController extends Controller
 {
@@ -68,16 +70,45 @@ class StaffController extends Controller
         $separate = QueueNumber::where('department_id', auth()->user()->department_id);
         
         // Take number based on the separated group
-        $number = $separate->where('is_served', false)->first();
-        
-        if ($number) {
+        $number = $separate->where('is_served', false)->first()->get();
+        $numberID = $number->id();
+        if ($numberID) {
             // Update the status to 'true'
-            $number->is_served = true;
-            $number->save();
+            $numberID->is_served = true;
+            $numberID->counter_id = auth()->user()->counter->id;
+            $numberID->service_end_time = Carbon::now("Asia/Kuala_Lumpur");
+            $numberID->save();
         }
 
         return redirect("staff/home");
     }
+    
+
+    // public function nextNumber() {
+    //     // Separate all queues into department by department
+    //     $separate = QueueNumber::where('department_id', auth()->user()->department_id);
+        
+    //     // Take number based on the separated group
+    //     $number = $separate->where('is_served', false)->first();
+        
+    //     if ($number) {
+    //         // Store the ID of the number
+    //         $numberID = $number->id;
+            
+    //         // Retrieve the record by its ID
+    //         $numberToUpdate = QueueNumber::find($numberID);
+            
+    //         if ($numberToUpdate) {
+    //             // Update the status to 'true'
+    //             $numberToUpdate->is_served = true;
+    //             $numberToUpdate->counter_id = auth()->user()->counter->id;
+    //             $numberToUpdate->service_end_time = Carbon::now("Asia/Kuala_Lumpur");
+    //             $numberToUpdate->save();
+    //         }
+    //     }
+    
+    //     return redirect("staff/home");
+    // }
     
     private function showQueueNumbers() {
         $departments = Department::all();
@@ -91,8 +122,15 @@ class StaffController extends Controller
                          ->orderBy('created_at', 'ASC')
                          ->paginate(6)
                          ->skip(1);
-
+        
         $number = $separate->where('is_served', false)->first();
+        
+        if ($number) {
+            $number->staffID = auth()->id();
+            $number->counter_id = auth()->user()->counter->id;
+            $number->service_start_time = Carbon::now("Asia/Kuala_Lumpur");
+            $number->save();
+        }
 
         return view('Staff.home', [
             'queueLists' => $newQueueList,
@@ -101,33 +139,6 @@ class StaffController extends Controller
         ]);
     }
     
-    // private function advanceQueueNumber() {
-    //     $departments = Department::all();
-        
-    //     // Separate all queues into department by department
-    //     $separate = QueueNumber::where('department_id', auth()->user()->department_id);
-        
-    //     // Take number based on the separated group
-    //     $number = $separate->where('is_served', false)->first();
-        
-    //     if ($number) {
-    //         // Update the status to 'true'
-    //         $number->is_served = true;
-    //         $number->save();
-    //     }
-        
-    //     // Get the updated list of unserved queue numbers
-    //     $newQueueList = $separate->where('is_served', false)
-    //                              ->orderBy('created_at', 'ASC')
-    //                              ->paginate(5);
-        
-    //     return view('Staff.home', [
-    //         'queueLists' => $newQueueList,
-    //         'number' => $number,
-    //         'departments' => $departments
-    //     ]);
-    // }
-    
     public function transfer(Request $request, $id) {
         $departmentId = $request->input('department_id');
         $number = QueueNumber::find($id);
@@ -135,6 +146,7 @@ class StaffController extends Controller
         if ($number && $departmentId) {
             $number->department_id = $departmentId;
             $number->is_served = false;
+            $number->staffID = null;
             $number->save();
         }
     
