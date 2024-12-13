@@ -5,6 +5,7 @@
     <div class="flex flex-row">
         <div class=" bg-stone-200 border-solid border-2 border-cyan-900 rounded-xl w-9/12 h-[30rem] mr-2 p-6">
             @if($number)
+            
             <div class="flex justify-center mt-[3rem]">
                 <p class="text-7xl text-indigo-900"><strong>{{ $number->queue_number }}</strong></p>
             </div>
@@ -12,7 +13,7 @@
                 <p class="text-3xl text-indigo-900"><strong>{{ $number->department->name }}</strong></p>
             </div>
             <div class="flex justify-center mt-[1rem]">
-                <p class="text-3xl text-indigo-900"><strong>00:00:00</strong>
+                <p class="text-3xl text-indigo-900"><strong>{{ $number->counter->name }}</strong>
             </div>
 
             <div id="modelConfirm" class="fixed hidden z-50 inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 ">
