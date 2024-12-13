@@ -119,7 +119,7 @@ class customerController extends Controller
         // If a customer is being served, return their details
         if ($nowServing) {
             return $nowServing->queue_number; // Assuming the relationship is set correctly
-        }z
+        }
 
         // If no customer is being served, return null
         return null;
