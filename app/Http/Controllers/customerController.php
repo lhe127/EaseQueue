@@ -112,8 +112,8 @@ class customerController extends Controller
     {
         // Get the first customer that is being served in the department
         $nowServing = QueueNumber::where('department_id', $departmentId)
-            ->where('is_served', false) // Ensure not served yet
-            ->orderBy('queue_number')  // Order by queue number
+            ->whereNotNull('staffID')
+            ->orderByDesc('queue_number')  // Order by queue number
             ->first();
 
         // If a customer is being served, return their details
