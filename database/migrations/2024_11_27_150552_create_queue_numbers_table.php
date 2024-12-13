@@ -17,9 +17,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('department_id')->constrained()->onDelete('cascade');
             $table->foreignId('counter_id')->constrained()->onDelete('cascade');
+            $table->string('staffID')->nullable(); // Match the type of staff.staffID
+            $table->foreign('staffID')->references('staffID')->on('staff')->onDelete('cascade'); // Define the foreign key relationship
             $table->integer('queue_number');
             $table->boolean('is_served')->default(0);
             $table->foreignId('customer_id')->nullable()->constrained('customers')->onDelete('set null');
+            $table->timestamp('service_start_time')->nullable();
+            $table->timestamp('service_end_time')->nullable();
             $table->timestamps();
         });
     }
@@ -36,8 +40,12 @@ return new class extends Migration
                 $table->dropForeign(['customer_id']);
                 $table->dropColumn('customer_id');
             }
+             if (Schema::hasColumn('queue_numbers', 'staff_staffID')) {
+                $table->dropForeign(['staff_staffID']);
+                $table->dropColumn('staff_staffID');
+            }
         });
-
+        
         Schema::dropIfExists('queue_numbers');
     }
 };
