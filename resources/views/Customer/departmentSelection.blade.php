@@ -20,6 +20,14 @@
     <div class="container">
         <h2 class="title">Service Providers</h2>
 
+        <!-- Show Error Message if Any -->
+        @if(session('error'))
+        <div class="alert alert-danger">
+            {!! session('error') !!}
+        </div>
+        @endif
+
+
         <!-- Department Selection Area -->
         <div class="row">
             @foreach($departments as $department)
@@ -66,9 +74,6 @@
         </div>
     </div>
 
-
-
-
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -81,14 +86,6 @@
                 $('#joinQueueButton').data('department', department); // Store department name in button data attribute
                 // Replace the form action with the correct department name
                 $('#joinQueueForm').attr('action', "/joinQueue/" + encodeURIComponent(department));
-            });
-
-            // Optional: Handle button click
-            $('#joinQueueButton').on('click', function() {
-                var department = $(this).data('department'); // Get department name from button data attribute
-                if (department) {
-                    // The form will automatically submit on button click
-                }
             });
         });
     </script>

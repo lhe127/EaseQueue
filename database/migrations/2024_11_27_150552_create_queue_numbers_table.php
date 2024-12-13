@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreignId('customer_id')->nullable()->constrained('customers')->onDelete('set null');
             $table->timestamp('service_start_time')->nullable();
             $table->timestamp('service_end_time')->nullable();
-            $table->timestamps("Asia/Kuala_Lumpur");
+            $table->timestamps();
         });
     }
 

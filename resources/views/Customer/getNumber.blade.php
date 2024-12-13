@@ -21,11 +21,15 @@
                     </p>
                     <hr class="my-4">
                     <h5 class="text-muted">Now Serving:
-                        <strong class="text-danger display-4" id="nowServing"></strong>
+                        @if($nowServing)
+                        <strong class="text-danger display-4" id="nowServing">{{ $nowServing }}</strong>
+                        @else
+                        <strong class="text-danger display-4" id="nowServing">No one is being served</strong>
+                        @endif
                     </h5>
                 </div>
             </div>
         </div>
     </div>
 
-@endsection
+    @endsection

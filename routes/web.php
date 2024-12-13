@@ -172,6 +172,7 @@ Route::post('/customer/logout', function () {
 Route::middleware(['auth:customer'])->group(function () {
     Route::get('/customerHome', [customerController::class, 'displayDepartment'])->name('customerHome');
     Route::get('/getNumber', [customerController::class, 'getNumber'])->name('getNumber');
+    Route::get('/queue/{queueId}', [customerController::class, 'showQueueStatus'])->name('showQueueStatus');
 });
 
 // Admin receive mail
