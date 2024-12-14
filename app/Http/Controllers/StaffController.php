@@ -124,6 +124,17 @@ class StaffController extends Controller
 
     //     return redirect("staff/home");
     // }
+    public function queueNum(){
+        // Get the updated list of unserved queue numbers
+        $newQueueList = QueueNumber::whereNull('staffID')
+                         ->where('department_id', auth()->user()->department_id)
+                         ->orderBy('created_at', 'ASC')
+                         ->skip(1)
+                         ->paginate(5);
+
+        
+        return response()->json($newQueueList);
+    }
 
     private function showQueueNumbers()
     {
