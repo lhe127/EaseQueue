@@ -5,20 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\Counter;
 use App\Models\Department;
 use App\Models\QueueNumber;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use PHPUnit\Framework\Constraint\Count;
 
 class customerController extends Controller
 {
     public function index()
     {
+        // Retrieve all departments for the department selection view
         $departments = Department::all();
         return view('customer.departmentSelection', compact('departments'));
     }
 
     public function displayDepartment()
     {
+        // Display departments on a different page
         $departments = Department::all();
         return view('Customer.departmentSelection', compact('departments'));
     }
@@ -26,7 +28,6 @@ class customerController extends Controller
     public function joinQueue(Request $request, $departmentName)
     {
         $customerId = Auth::guard('customer')->id();
-        // dd($customerId); // Get the logged-in customer
 
         // Find the department by name
         $department = Department::where('name', $departmentName)->first();
@@ -45,18 +46,7 @@ class customerController extends Controller
             $existingDepartment = Department::find($existingQueue->department_id);
             $existingDepartmentName = $existingDepartment ? $existingDepartment->name : 'Unknown Department';
 
-            return redirect()->back()->with(
-                'error',
-                '<div style="text-align: justify;">' . // Add CSS for justification
-                    'You already have an active queue number: ' .
-                    '<strong>' . $existingQueue->queue_number . '</strong> for <strong>' . $existingDepartmentName . '</strong>.' .
-                    '</div>' .
-                    '<div class="mt-3 text-center">' .
-                    '<a href="' . route('showQueueStatus', ['queueId' => $existingQueue->id]) . '" class="btn btn-info btn-lg text-white">' .
-                    '<i class="fas fa-ticket-alt"></i> View Your Queue' .
-                    '</a>' .
-                    '</div>'
-            );
+            return redirect()->route('showQueueStatus', ['queueId' => $existingQueue->id]);
         }
 
         // Determine the base number for each department (e.g., 1000, 2000, 3000)
@@ -82,10 +72,13 @@ class customerController extends Controller
             'is_served' => false, // Set as not served initially
         ]);
 
+        // Get the estimated wait time dynamically
+        $estimatedWaitTime = $this->getEstimatedWaitTime($department->id, $queueNumber);
+
         $nowServing = $this->getNowServing($department->id);
 
-        // Return the queue number to the user
-        return view('Customer.getNumber', compact('queue', 'department', 'nowServing'));
+        // Return the queue number and estimated wait time to the user
+        return view('Customer.getNumber', compact('queue', 'department', 'nowServing', 'estimatedWaitTime'))->with('refresh');
     }
 
     public function showQueueStatus($queueId)
@@ -104,8 +97,11 @@ class customerController extends Controller
         // Get the currently serving customer in the same department
         $nowServing = $this->getNowServing($department->id);
 
+        // Get the estimated wait time dynamically
+        $estimatedWaitTime = $this->getEstimatedWaitTime($department->id, $queue->queue_number);
+
         // Return the view with queue, department, and now serving data
-        return view('Customer.getNumber', compact('queue', 'department', 'nowServing'));
+        return view('Customer.getNumber', compact('queue', 'department', 'nowServing', 'estimatedWaitTime'));
     }
 
     private function getNowServing($departmentId)
@@ -117,11 +113,109 @@ class customerController extends Controller
             ->first();
 
         // If a customer is being served, return their details
-        if ($nowServing) {
-            return $nowServing->queue_number; // Assuming the relationship is set correctly
+        if (!is_null($nowServing)) {
+            return $nowServing->queue_number; // Return the queue number of the served customer
         }
 
-        // If no customer is being served, return null
-        return null;
+        // If no customer is being served, return the first customer in the queue
+        $firstInLine = QueueNumber::where('department_id', $departmentId)
+            ->orderBy('queue_number') // Order by queue number in ascending order
+            ->first();
+
+        return $firstInLine ? $firstInLine->queue_number : null; // Return first in line's queue number or null
+    }
+
+    private function getEstimatedWaitTime($departmentId, $queueNumber)
+    {
+        // Get the queue entry for the customer
+        $queue = QueueNumber::where('department_id', $departmentId)
+            ->where('queue_number', $queueNumber)
+            ->first();
+
+        if (!$queue) {
+            return null;  // Return null if queue entry doesn't exist
+        }
+
+        // Get the first customer in line who has not been served
+        $nextCustomer = QueueNumber::where('department_id', $departmentId)
+            ->where('is_served', 0) // Only consider customers who have not been served
+            ->orderBy('queue_number') // Order by queue number to get the first one
+            ->first();
+
+        // If the next customer is the one being served
+        if ($nextCustomer && $nextCustomer->queue_number == $queue->queue_number) {
+            return "Your Turn";  // Display "Your Turn" for the customer at the front of the queue
+        }
+
+        // Calculate the number of customers ahead in the queue
+        $aheadInQueue = QueueNumber::where('department_id', $departmentId)
+            ->where('queue_number', '<', $queueNumber)
+            ->where('is_served', 0) // Only consider customers who have not been served
+            ->count();
+
+        // Get the last 5 served customers for average service time calculation
+        $recentCustomers = QueueNumber::where('department_id', $departmentId)
+            ->whereNotNull('service_start_time')  // Only consider customers with recorded service start time
+            ->whereNotNull('service_end_time')    // Only consider customers with recorded service end time
+            ->orderBy('service_end_time', 'desc') // Get the most recently served customers
+            ->take(5)                             // Limit to the last 5 customers
+            ->get();
+
+        // Calculate the average service time for the last 5 served customers
+        $averageServiceTime = $recentCustomers->avg(function ($queue) {
+            // Calculate service time for each customer
+            $serviceStart = Carbon::parse($queue->service_start_time);
+            $serviceEnd = Carbon::parse($queue->service_end_time);
+
+            // Return the difference in minutes
+            return $serviceEnd->diffInMinutes($serviceStart);
+        });
+
+        // Default service time if no data is available
+        if (!$averageServiceTime) {
+            $averageServiceTime = 5;  // Default to 5 minutes if no data
+        }
+
+        // Calculate the estimated wait time in minutes (before adjusting for elapsed time)
+        $estimatedWaitTime = $aheadInQueue * $averageServiceTime;
+
+        // Get the current time and the time the customer joined the queue
+        $currentTime = Carbon::now();
+        $joinedAt = Carbon::parse($queue->created_at);  // Assuming 'created_at' tracks when they joined the queue
+
+        // Calculate how much time has passed since the customer joined the queue
+        $elapsedTime = $currentTime->diffInMinutes($joinedAt);
+
+        // Reduce the estimated wait time based on elapsed time
+        $dynamicWaitTime = max($estimatedWaitTime - $elapsedTime, 0);  // Ensure it doesn't go negative
+
+        // Add 5 minutes if wait time becomes 0 and the customer has not been served
+        if ($dynamicWaitTime === 0 && !$queue->is_served) {
+            $dynamicWaitTime = 5;  // Add 5 minutes if not served
+        }
+
+        // Return the dynamic estimated wait time
+        return ceil($dynamicWaitTime) . " minutes";
+    }
+
+    public function checkQueueStatus($queueId)
+    {
+        // Find the queue record
+        $queue = QueueNumber::find($queueId);
+
+        if (!$queue) {
+            return response()->json(['error' => 'Queue not found'], 404);
+        }
+
+        // Check if staffID is set
+        if ($queue->staffID) {
+            return response()->json([
+                'staffID' => $queue->staffID,
+                'queue_number' => $queue->queue_number
+            ]);
+        }
+
+        // If no updates, return a default response
+        return response()->json(['staffID' => null]);
     }
 }

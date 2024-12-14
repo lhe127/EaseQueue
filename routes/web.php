@@ -50,9 +50,9 @@ Route::get('fullcalender', [FullCalenderController::class, 'index'])->name('cale
 
 Route::post('fullcalenderAjax', [FullCalenderController::class, 'ajax']);
 
-Route::post('/nextNumber',[StaffController::class, 'nextNumber'])->name('nextNumber');
+Route::post('/nextNumber', [StaffController::class, 'nextNumber'])->name('nextNumber');
 
-Route::post('/transfer/{id}',[StaffController::class, 'transfer'])->name('transfer');
+Route::post('/transfer/{id}', [StaffController::class, 'transfer'])->name('transfer');
 
 // Customer
 
@@ -160,9 +160,11 @@ Route::middleware(['auth:staff', 'is_staff'])->group(function () {
 
 // Customer Login and Registration
 Route::get('/customer/login', [CustomerAuthController::class, 'showLoginForm'])->name('customerLogin.page');
+
 Route::post('/customer/login', [CustomerAuthController::class, 'login'])->name('customerLogin');
 
 Route::get('/customer/register', [CustomerAuthController::class, 'showRegisterForm'])->name('customerRegister.page');
+
 Route::post('/customer/register', [CustomerAuthController::class, 'register'])->name('auth.customerRegister');
 
 Route::post('/customer/logout', function () {
@@ -174,10 +176,15 @@ Route::post('/customer/logout', function () {
 
 Route::middleware(['auth:customer'])->group(function () {
     Route::get('/customerHome', [customerController::class, 'displayDepartment'])->name('customerHome');
+
     Route::get('/getNumber', [customerController::class, 'getNumber'])->name('getNumber');
+
     Route::get('/queue/{queueId}', [customerController::class, 'showQueueStatus'])->name('showQueueStatus');
+
+    Route::get('/queue-status/{queueId}/check', [customerController::class, 'checkQueueStatus'])->name('checkQueueStatus');
 });
 
 // Admin receive mail
 Route::get('/adminMailbox', [AdminController::class, 'showRequests'])->name('adminMailbox');
+
 Route::put('/admin/requests/{id}', [AdminController::class, 'updateRequestStatus'])->name('admin.updateRequest');
