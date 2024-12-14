@@ -30,6 +30,7 @@ Route::get('/', function () {
 });
 
 // Staff
+Route::get('/queueNum', [StaffController::class, 'queueNum']);
 
 Route::get('/dashboard', [StaffController::class, 'dashboard'])->name('staff.dashboard');
 
