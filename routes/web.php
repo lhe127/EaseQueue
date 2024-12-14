@@ -166,6 +166,8 @@ Route::post('/customer/register', [CustomerAuthController::class, 'register'])->
 
 Route::post('/customer/logout', function () {
     Auth::guard('customer')->logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
     return redirect()->route('customerLogin.page');
 })->name('customer.logout');
 
