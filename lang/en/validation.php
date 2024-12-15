@@ -143,7 +143,7 @@ return [
 
     'custom' => [
         'phone' => [
-        'regex' => 'The phone number must start with 0 and contain 10 to 11 digits.',
+        'regex' => 'The phone number must start with 0 or 1 and contain 10 to 11 digits.',
     ],
     ],
 
