@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Contact;
 use App\Models\Counter;
 use App\Models\Department;
+use App\Models\QueueNumber; // Add this import
 use App\Models\Staff;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -20,8 +21,9 @@ class AdminController extends Controller
     public function adminHome()
     {
         $staff = Staff::where('staffID', 'like', 'S%')->get();
+        $queueNumbers = QueueNumber::whereNull('staffID')->orderBy('created_at', 'ASC')->get(); // Fetch all unserved queue numbers
 
-        return view('admin.adminHome', ['staff' => $staff]);
+        return view('admin.adminHome', ['staff' => $staff, 'queueNumbers' => $queueNumbers]);
     }
 
     public function index()
