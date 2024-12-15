@@ -17,7 +17,7 @@ class CustomerAuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'phone' => 'required|regex:/^0\d{9,10}$/|numeric',
+            'phone' => 'required|regex:/^[01]\d{9,10}$/|numeric',
         ]);
 
         $customer = Customer::where('phone', $request->phone)->first();
