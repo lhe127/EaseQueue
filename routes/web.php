@@ -67,6 +67,7 @@ Route::get('/getNumber', function () {
 });
 
 // Admin 
+Route::get('/fetchItems', [AdminController::class, 'fetchItems']);
 
 Route::get('/admin/home', [AdminController::class, 'adminHome'])->name('admin.adminHome');
 

@@ -83,22 +83,11 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody id="queueList" class="text-sm divide-y divide-gray-100">
-                            @foreach($queueNumbers->take(5) as $queueNumber) <!-- Limit to 5 -->
-                                <tr>
-                                    <td class="p-2 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="font-medium text-gray-800">{{ $queueNumber->id }}</div>
-                                        </div>
-                                    </td>
-                                    <td class="p-2 whitespace-nowrap">
-                                        <div class="text-left">{{ $queueNumber->queue_number }}</div>
-                                    </td>
-                                    <td class="p-2 whitespace-nowrap">
-                                        <div class="text-left">{{ $queueNumber->department->name }}</div>
-                                    </td>
-                                </tr>
-                            @endforeach
+
+                        <tbody class="text-sm divide-y divide-gray-100">
+                            <tr id="queueList">
+
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -108,39 +97,44 @@
 </div>
 
 <script>
-    function fetchQueueNumbers() {
-        $.ajax({
-            url: '/queueNum', // URL to fetch data
-            method: 'GET', // HTTP Method
-            success: function(data) {
-                let tableBody = $('#queueList');
-                tableBody.empty(); // Clear the table body
-                // Loop through the JSON data and append rows to the table
-                data.queueNumbers.slice(0, 5).forEach(function(queueNumber) { // Limit to 5
-                    tableBody.append(`
-                        <tr>
-                            <td class="p-2 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="font-medium text-gray-800">${queueNumber.id}</div>
-                                </div>
-                            </td>
-                            <td class="p-2 whitespace-nowrap">
-                                <div class="text-left">${queueNumber.queue_number}</div>
-                            </td>
-                            <td class="p-2 whitespace-nowrap">
-                                <div class="text-left">${queueNumber.department.name}</div>
-                            </td>
-                        </tr>
-                    `);
-                });
-                $('#totalWaiting').text(data.queueNumbers.length);
-            }
+        function fetchItems(){
+        $(document).ready(function() {
+            // Fetch data from the /items endpoint
+            $.ajax({
+                url: '/fetchItems', // URL to fetch data
+                method: 'GET', // HTTP Method
+                success: function(data) {
+                    let tableBody = $('#queueList');
+                    tableBody.empty(); // Clear the table body
+                    // Loop through the JSON data and append rows to the table
+                    data.data.forEach(queueNumber => {
+                        tableBody.append(`
+                            <tr>
+                                    <td class="p-2 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="font-medium text-gray-800">${queueNumber.id}</div>
+                                        </div>
+                                    </td>
+                                    <td class="p-2 whitespace-nowrap">
+                                        <div class="text-left">${queueNumber.queue_number}</div>
+                                    </td>
+                                    <td class="p-2 whitespace-nowrap">
+                                        <div class="text-left">${queueNumber.department_id}</div>
+                                    </td>
+                            </tr>
+                        `);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching items:', error);
+                }
+            });
         });
     }
-
-    // Fetch queue numbers every 3 seconds
-    setInterval(fetchQueueNumbers, 3000);
-</script>
+        // Fetch items every 5 seconds
+        setInterval(fetchItems, 10000);
+        fetchItems(); // Initial fetch
+    </script>
 
 <style>
     .live-table-container {

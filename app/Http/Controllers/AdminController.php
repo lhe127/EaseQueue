@@ -20,10 +20,16 @@ class AdminController extends Controller
 
     public function adminHome()
     {
-        $staff = Staff::where('staffID', 'like', 'S%')->get();
+        $staff = Staff::where('staffID', 'like', 'S%')->skip(1)->paginate(5);
         $queueNumbers = QueueNumber::whereNull('staffID')->orderBy('created_at', 'ASC')->get(); // Fetch all unserved queue numbers
 
         return view('admin.adminHome', ['staff' => $staff, 'queueNumbers' => $queueNumbers]);
+    }
+
+    public function fetchItems()
+    {
+        $queueNumbers = QueueNumber::whereNull('staffID')->orderBy('created_at', 'ASC')->skip(1)->paginate(5);
+        return response()->json($queueNumbers);
     }
 
     public function index()
