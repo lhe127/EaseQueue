@@ -84,7 +84,7 @@
                             </tr>
                         </thead>
                         <tbody id="queueList" class="text-sm divide-y divide-gray-100">
-                            @foreach($queueNumbers as $queueNumber)
+                            @foreach($queueNumbers->take(5) as $queueNumber) <!-- Limit to 5 -->
                                 <tr>
                                     <td class="p-2 whitespace-nowrap">
                                         <div class="flex items-center">
@@ -109,7 +109,6 @@
 
 <script>
     function fetchQueueNumbers() {
-        $(document).ready(function() {
         $.ajax({
             url: '/queueNum', // URL to fetch data
             method: 'GET', // HTTP Method
@@ -117,7 +116,7 @@
                 let tableBody = $('#queueList');
                 tableBody.empty(); // Clear the table body
                 // Loop through the JSON data and append rows to the table
-                data.queueNumbers.forEach(function(queueNumber) {
+                data.queueNumbers.slice(0, 5).forEach(function(queueNumber) { // Limit to 5
                     tableBody.append(`
                         <tr>
                             <td class="p-2 whitespace-nowrap">
@@ -137,12 +136,10 @@
                 $('#totalWaiting').text(data.queueNumbers.length);
             }
         });
-    });
     }
 
     // Fetch queue numbers every 3 seconds
     setInterval(fetchQueueNumbers, 3000);
-    fetchQueueNumbers();
 </script>
 
 <style>
