@@ -28,8 +28,8 @@ class AdminController extends Controller
 
     public function fetchItems()
     {
-        $queueNumbers = QueueNumber::whereNull('staffID')->orderBy('created_at', 'ASC')->skip(1)->paginate(5);
-        return response()->json($queueNumbers);
+        $queueNumbers = QueueNumber::with('department')->whereNull('staffID')->orderBy('created_at', 'ASC')->skip(1)->paginate(5);
+        return response()->json($queueNumbers); //
     }
 
     public function index()
@@ -250,10 +250,5 @@ class AdminController extends Controller
 
         // Redirect with a success message
         return redirect()->route('adminMailbox')->with('message', 'Request status updated successfully!');
-    }
-
-    public function test()
-    {
-        return view('Admin.test');
     }
 }
