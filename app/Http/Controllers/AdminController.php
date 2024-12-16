@@ -245,4 +245,9 @@ class AdminController extends Controller
         // Redirect with a success message
         return redirect()->route('adminMailbox')->with('message', 'Request status updated successfully!');
     }
+
+    public function test()
+    {
+        return view('Admin.test');
+    }
 }
