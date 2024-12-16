@@ -122,7 +122,7 @@
 
 .btn {
     flex: 1; /* Allow buttons to grow and take equal space */
-    margin: 0; /* Remove margin to ensure they fit perfectly */
+    margin: 2.5px; /* Remove margin to ensure they fit perfectly */
     padding: 10px; /* Adjust padding for better appearance */
     border: none; /* No border for clean look */
     border-radius: 50px; /* Rounded corners */

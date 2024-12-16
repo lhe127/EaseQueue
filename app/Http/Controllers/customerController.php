@@ -20,9 +20,16 @@ class customerController extends Controller
 
     public function displayDepartment()
     {
-        // Display departments on a different page
         $departments = Department::all();
-        return view('Customer.departmentSelection', compact('departments'));
+        $customerId = Auth::guard('customer')->id();
+
+        // Check if the customer already has an active queue
+        $existingQueue = QueueNumber::where('customer_id', $customerId)
+            ->where('is_served', false) // The current queue is not served yet
+            ->first();
+
+        // Pass the queue details to the view
+        return view('Customer.departmentSelection', compact('departments', 'existingQueue'));
     }
 
     public function joinQueue(Request $request, $departmentName)
@@ -207,15 +214,22 @@ class customerController extends Controller
             return response()->json(['error' => 'Queue not found'], 404);
         }
 
-        // Check if staffID is set
-        if ($queue->staffID) {
-            return response()->json([
-                'staffID' => $queue->staffID,
-                'queue_number' => $queue->queue_number
-            ]);
-        }
+        // Fetch the department ID
+        $departmentId = $queue->department_id;
 
-        // If no updates, return a default response
-        return response()->json(['staffID' => null]);
+        // Get the currently serving queue number
+        $nowServing = $this->getNowServing($departmentId);
+
+        // Calculate the estimated wait time
+        $estimatedWaitTime = $this->getEstimatedWaitTime($departmentId, $queue->queue_number);
+
+        // Prepare the response data
+        $response = [
+            'nowServing' => $nowServing ?? 'No one is being served',
+            'estimatedTime' => $estimatedWaitTime,
+            'staffID' => $queue->staffID,
+        ];
+
+        return response()->json($response);
     }
 }
