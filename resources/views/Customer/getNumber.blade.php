@@ -6,43 +6,51 @@
     <link rel="stylesheet" href="css/Customer/getNumber.css">
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-    const queueId = @json($queue->id); // Get the queue ID from the server
-    const refreshedKey = `queue_refreshed_${queueId}`; // Unique key for this queue's refresh status
-    let lastNowServing = null; // Store the initial value of nowServing
+        function fetchQueueStatus() {
+            $(document).ready(function () {
+                const queueId = @json($queue->id); // Get the queue ID dynamically from server-side
+                const refreshedKey = `queue_refreshed_${queueId}`; // Unique key for refresh status
+                let isUpdated = sessionStorage.getItem(refreshedKey) === 'true'; // Check refresh status
     
-    // Check if the page has already been refreshed for this queue
-    let isUpdated = sessionStorage.getItem(refreshedKey) === 'true';
-
-    function checkQueueStatus() {
-        if (isUpdated) return; // Stop polling if already updated
-
-        fetch(`/queue-status/${queueId}/check`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.staffID) {
-                    // Mark as updated and refresh the page
-                    isUpdated = true;
-                    sessionStorage.setItem(refreshedKey, 'true'); // Store the refresh status in session storage
-                    location.reload(); // Reload the page
-                }
-                
-                // Check if 'nowServing' has changed
-                if (lastNowServing !== data.nowServing) {
-                    lastNowServing = data.nowServing;
-                    location.reload(); // Reload the page if 'nowServing' has changed
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching queue status:', error);
+                if (isUpdated) return; // Stop further execution if already refreshed
+    
+                // Fetch queue status from the server
+                $.ajax({
+                    url: `/queue-status/${queueId}/check`, // Endpoint to fetch the queue status
+                    method: 'GET',
+                    success: function (data) {
+                        // Check if the page needs to refresh due to `staffID` or other changes
+                        if (data.staffID && !isUpdated) {
+                            sessionStorage.setItem(refreshedKey, 'true'); // Mark as refreshed
+                            location.reload(); // Reload the page
+                            return;
+                        }
+    
+                        // Update nowServing if it has changed
+                        const nowServingElement = $('#nowServing');
+                        if (nowServingElement.text() !== data.nowServing) {
+                            nowServingElement.text(data.nowServing || 'No one is being served');
+                        }
+    
+                        // Update estimated time dynamically
+                        const estimatedTimeElement = $('#estimatedTime');
+                        estimatedTimeElement.text(
+                            data.nowServing === 0
+                                ? 'Waiting for the first customer'
+                                : data.estimatedTime || 'Calculating...'
+                        );
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching queue status:', error);
+                    }
+                });
             });
-    }
-
-    // Poll the server every 5 seconds
-    setInterval(checkQueueStatus, 5000);
-});
-
-    </script>
+        }
+    
+        // Fetch queue status every 5 seconds
+        setInterval(fetchQueueStatus, 5000);
+        fetchQueueStatus(); // Initial fetch
+    </script>    
 
 </head>
 
