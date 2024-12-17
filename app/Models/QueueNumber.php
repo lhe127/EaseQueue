@@ -8,7 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class QueueNumber extends Model
 {
     use HasFactory;
-    protected $fillable = ['department_id', 'counter_id', 'queue_number', 'is_served', 'customer_id','staffID','service_start_time','service_end_time'];
+    protected $fillable = ['department_id', 'counter_id', 'queue_number', 'is_served', 'customer_id','staffID','service_start_time','service_end_time','status',];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($queueNumber) {
+            if (empty($queueNumber->status)) {
+                $queueNumber->status = 'active'; // 设置默认值
+            }
+        });
+    }
+
 
     public function department()
     {
