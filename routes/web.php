@@ -188,3 +188,8 @@ Route::middleware(['auth:customer'])->group(function () {
 Route::get('/adminMailbox', [AdminController::class, 'showRequests'])->name('adminMailbox');
 
 Route::put('/admin/requests/{id}', [AdminController::class, 'updateRequestStatus'])->name('admin.updateRequest');
+
+//customer Live table
+Route::get('/customerLiveTable', [AdminController::class, 'showCustomerLiveTable'])->name('customerLiveTable');
+
+Route::get('/fetchLiveQueue', [AdminController::class, 'fetchLiveQueue']);
