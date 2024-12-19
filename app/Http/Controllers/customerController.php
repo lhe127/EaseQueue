@@ -8,6 +8,8 @@ use App\Models\QueueNumber;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Twilio\Rest\Client;
+
 
 class customerController extends Controller
 {
@@ -39,76 +41,73 @@ class customerController extends Controller
         // Find the department by name
         $department = Department::where('name', $departmentName)->first();
 
-        // Check if the department exists
         if (!$department) {
             return redirect()->back()->with('error', 'Department not found.');
         }
 
         // Check if the customer already has an active queue number
         $existingQueue = QueueNumber::where('customer_id', $customerId)
-            ->where('is_served', false)  // The current queue is not served yet
+            ->where('is_served', false)
             ->first();
 
         if ($existingQueue) {
-            $existingDepartment = Department::find($existingQueue->department_id);
-            $existingDepartmentName = $existingDepartment ? $existingDepartment->name : 'Unknown Department';
-
             return redirect()->route('showQueueStatus', ['queueId' => $existingQueue->id]);
         }
 
-        // Base queue range for the department
+        // Generate a new queue number
         $baseQueueNumber = 1000 * $department->id;
         $maxQueueNumber = $baseQueueNumber + 999;
 
-        // Find the next available queue number
         $nextQueueNumber = QueueNumber::where('queue_number', '>=', $baseQueueNumber)
             ->where('queue_number', '<=', $maxQueueNumber)
             ->orderBy('queue_number', 'asc')
             ->pluck('queue_number')
             ->toArray();
 
-        // Start from the base queue number and check for gaps
         $queueNumber = $baseQueueNumber;
-
         foreach ($nextQueueNumber as $usedNumber) {
             if ($queueNumber == $usedNumber) {
-                $queueNumber++; // Increment to find the next available number
+                $queueNumber++;
             } else {
-                break; // Found a gap in the sequence
+                break;
             }
         }
 
-        // Ensure the queue number does not exceed the department range
         if ($queueNumber > $maxQueueNumber) {
             return redirect()->back()->with('error', 'Queue limit reached for this department.');
         }
 
-        // Find the first available counter for the department
+        // Find an available counter
         $counter = Counter::where('department_id', $department->id)->first();
 
         if (!$counter) {
             return redirect()->back()->with('error', 'No available counters at the moment.');
         }
 
-        // Create the queue number entry in the database
+        // Create the queue entry
         $queue = QueueNumber::create([
             'department_id' => $department->id,
             'counter_id' => $counter->id,
             'queue_number' => $queueNumber,
             'customer_id' => $customerId,
-            'is_served' => false, // Set as not served initially
+            'is_served' => false,
         ]);
 
-        // Get the estimated wait time dynamically
         $estimatedWaitTime = $this->getEstimatedWaitTime($department->id, $queueNumber);
-
-        // Get the current customer that is now serving
         $nowServing = $this->getNowServing($department->id);
 
-        // Return the queue number and estimated wait time to the user
-        return view('Customer.getNumber', compact('queue', 'department', 'nowServing', 'estimatedWaitTime'))->with('refresh');
-    }
+        $counter = Counter::find($queue->counter_id);
 
+        $customerPhone = Auth::guard('customer')->user()->phone;
+
+        if ($customerPhone == '+01155036823') {
+            // Send a message only to this number
+            $message = "Queue Number: {$queueNumber} \nDepartment: {$department->name} \nEstimated wait time: {$estimatedWaitTime} \nNow serving: {$nowServing}";
+            $this->sendMessage($message);
+        }
+
+        return view('Customer.getNumber', compact('queue', 'department', 'nowServing', 'estimatedWaitTime', 'counter'));
+    }
 
     public function showQueueStatus($queueId)
     {
@@ -129,8 +128,10 @@ class customerController extends Controller
         // Get the estimated wait time dynamically
         $estimatedWaitTime = $this->getEstimatedWaitTime($department->id, $queue->queue_number);
 
+        $counter = Counter::find($queue->counter_id);
+
         // Return the view with queue, department, and now serving data
-        return view('Customer.getNumber', compact('queue', 'department', 'nowServing', 'estimatedWaitTime'));
+        return view('Customer.getNumber', compact('queue', 'department', 'nowServing', 'estimatedWaitTime', 'counter'));
     }
 
     private function getNowServing($departmentId)
@@ -155,7 +156,6 @@ class customerController extends Controller
         return $nowServing->queue_number; // Return the queue number of the customer currently being served
     }
 
-
     private function getEstimatedWaitTime($departmentId, $queueNumber)
     {
         // Fetch the customer's queue entry
@@ -167,6 +167,9 @@ class customerController extends Controller
             return null; // Return null if the queue entry doesn't exist
         }
 
+        $counter = Counter::find($queue->counter_id);
+        // dd($counter);
+
         // Check if the customer is next in line
         $nextCustomer = QueueNumber::where('department_id', $departmentId)
             ->where('is_served', 0)
@@ -174,7 +177,8 @@ class customerController extends Controller
             ->first();
 
         if ($nextCustomer && $nextCustomer->queue_number == $queue->queue_number) {
-            return "Your Turn"; // Customer at the front of the queue
+            $counterInfo = $counter ? "{$counter->name}" : "Counter information not available";
+            return "Your Turn - {$counterInfo}"; // Customer at the front of the queue
         }
 
         // Count customers ahead in the queue (based on created time)
@@ -246,5 +250,31 @@ class customerController extends Controller
         ];
 
         return response()->json($response);
+    }
+
+    public function sendMessage($messageBody)
+    {
+        $sid = 'ACf67a8e06f8237213ecfefbdd2b7a1981';
+        $token = 'bcd652d306dbac8aa20f4bc35d1026e2';
+        $twilio = new Client($sid, $token);
+
+        $message = $twilio->messages
+            ->create(
+                "whatsapp:+601155036823", // to
+                array(
+                    "from" => "whatsapp:+14155238886",
+                    "body" => $messageBody
+                )
+            );
+
+        /* sms cost USD0.25
+      $message = $twilio->messages
+      ->create("+60197409931", // to
+        array(
+          "from" => "+13613093734",
+          "body" => "Ease Queue:12"
+        )
+      );*/
+        // print($message->sid);
     }
 }
