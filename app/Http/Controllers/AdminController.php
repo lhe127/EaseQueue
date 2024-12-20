@@ -226,7 +226,7 @@ class AdminController extends Controller
     // Display all requests
     public function showRequests()
     {
-        $requests = Contact::orderBy('created_at', 'desc')->get();
+        $requests = Contact::with('staff')->orderBy('created_at', 'desc')->get();
 
         return view('Admin.adminMailbox', compact('requests'));
     }

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class contact extends Model
 {
     use HasFactory;
-    protected $fillable=[
+    protected $fillable = [
         'staffID',
         'requestType',
         'image',
@@ -17,4 +17,10 @@ class contact extends Model
         'reason',
         'status'
     ];
+
+    // In Contact.php
+    public function staff()
+    {
+        return $this->belongsTo(Staff::class, 'staffID', 'staffID');
+    }
 }
