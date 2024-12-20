@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Twilio\Rest\Client;
 
-
 class customerController extends Controller
 {
     public function index()
@@ -167,9 +166,6 @@ class customerController extends Controller
             return null; // Return null if the queue entry doesn't exist
         }
 
-        $counter = Counter::find($queue->counter_id);
-        // dd($counter);
-
         // Check if the customer is next in line
         $nextCustomer = QueueNumber::where('department_id', $departmentId)
             ->where('is_served', 0)
@@ -177,8 +173,7 @@ class customerController extends Controller
             ->first();
 
         if ($nextCustomer && $nextCustomer->queue_number == $queue->queue_number) {
-            $counterInfo = $counter ? "{$counter->name}" : "Counter information not available";
-            return "Your Turn - {$counterInfo}"; // Customer at the front of the queue
+            return "Your Turn"; // Customer at the front of the queue
         }
 
         // Count customers ahead in the queue (based on created time)
@@ -252,22 +247,22 @@ class customerController extends Controller
         return response()->json($response);
     }
 
-    // public function sendMessage($messageBody)
-    // {
-    //     $sid = 'ACf67a8e06f8237213ecfefbdd2b7a1981';
-    //     $token = 'bcd652d306dbac8aa20f4bc35d1026e2';
-    //     $twilio = new Client($sid, $token);
+    public function sendMessage($messageBody)
+    {
+        $sid = 'ACf67a8e06f8237213ecfefbdd2b7a1981';
+        $token = 'bcd652d306dbac8aa20f4bc35d1026e2';
+        $twilio = new Client($sid, $token);
 
-    //     $message = $twilio->messages
-    //         ->create(
-    //             "whatsapp:+601155036823", // to
-    //             array(
-    //                 "from" => "whatsapp:+14155238886",
-    //                 "body" => $messageBody
-    //             )
-    //         );
-    //     }
-        /* sms cost USD0.25
+        $message = $twilio->messages
+            ->create(
+                "whatsapp:+601155036823", // to
+                array(
+                    "from" => "whatsapp:+14155238886",
+                    "body" => $messageBody
+                )
+            );
+    }
+    /* sms cost USD0.25
       $message = $twilio->messages
       ->create("+60197409931", // to
         array(
@@ -275,6 +270,6 @@ class customerController extends Controller
           "body" => "Ease Queue:12"
         )
       );*/
-        // print($message->sid);
-    
+    // print($message->sid);
+
 }

@@ -8,6 +8,7 @@
             <thead>
                 <tr class="bg-gray-100 border-b">
                     <th class="px-4 py-2">Staff ID</th>
+                    <th class="px-4 py-2">Staff Name</th>
                     <th class="px-4 py-2">Request Type</th>
                     <th class="px-4 py-2">Date (From-To)</th>
                     <th class="px-4 py-2">Reason</th>
@@ -20,6 +21,7 @@
                 @foreach ($requests as $request)
                 <tr class="border-b">
                     <td class="px-4 py-2">{{ $request->staffID }}</td>
+                    <td class="px-4 py-2">{{ $request->staff->name }}</td> <!-- Ensure 'staff' relationship exists -->
                     <td class="px-4 py-2">{{ $request->requestType }}</td>
                     <td class="px-4 py-2">{{ $request->Fdate }} - {{ $request->Tdate }}</td>
                     <td class="px-4 py-2">{{ $request->reason }}</td>
