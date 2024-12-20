@@ -166,9 +166,6 @@ class customerController extends Controller
             return null; // Return null if the queue entry doesn't exist
         }
 
-        $counter = Counter::find($queue->counter_id);
-        // dd($counter);
-
         // Check if the customer is next in line
         $nextCustomer = QueueNumber::where('department_id', $departmentId)
             ->where('is_served', 0)
@@ -176,8 +173,7 @@ class customerController extends Controller
             ->first();
 
         if ($nextCustomer && $nextCustomer->queue_number == $queue->queue_number) {
-            $counterInfo = $counter ? "{$counter->name}" : "Counter information not available";
-            return "Your Turn - {$counterInfo}"; // Customer at the front of the queue
+            return "Your Turn"; // Customer at the front of the queue
         }
 
         // Count customers ahead in the queue (based on created time)
