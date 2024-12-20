@@ -13,6 +13,8 @@ use App\Http\Controllers\CustomerAuthController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Queue;
+use App\Http\Controllers\LiveTableController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -191,6 +193,12 @@ Route::get('/adminMailbox', [AdminController::class, 'showRequests'])->name('adm
 Route::put('/admin/requests/{id}', [AdminController::class, 'updateRequestStatus'])->name('admin.updateRequest');
 
 //customer Live table
-Route::get('/customerLiveTable', [AdminController::class, 'showCustomerLiveTable'])->name('customerLiveTable');
+// Route::get('/customerLiveTable', [AdminController::class, 'showCustomerLiveTable'])->name('customerLiveTable');
 
 Route::get('/fetchLiveQueue', [AdminController::class, 'fetchLiveQueue']);
+
+
+//Monitor
+Route::get('/LiveDashboard', [LiveTableController::class, 'LiveDashboard'])->name('monitor.LiveDashboard');
+
+Route::get('/customerLiveTable', [LiveTableController::class, 'showCustomerLiveTable'])->name('customerLiveTable');
