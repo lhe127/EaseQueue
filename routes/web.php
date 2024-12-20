@@ -32,6 +32,10 @@ Route::get('/', function () {
 });
 
 // Staff
+Route::post('/call/{id}', [StaffController::class, 'call'])->name("callNumber");
+
+Route::post('/skip/{id}', [StaffController::class, 'skip'])->name("skipNumber");
+
 Route::get('/queueNum', [StaffController::class, 'queueNum']);
 
 Route::get('/dashboard', [StaffController::class, 'dashboard'])->name('staff.dashboard');

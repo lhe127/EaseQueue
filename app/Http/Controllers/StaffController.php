@@ -28,9 +28,46 @@ class StaffController extends Controller
         return view('Staff.schedule');
     }
     public function report()
-    {
-        return view('Staff.report');
-    }
+{
+    $separate = QueueNumber::where('department_id', auth()->user()->department_id);
+    $focus = $separate->where('staffID', auth()->id());
+
+    // number of Service(S)
+    $services = [
+        (clone $focus)->whereMonth('created_at', '1')->where('status', 'active')->count(),
+        (clone $focus)->whereMonth('created_at', '2')->where('status', 'active')->count(),
+        (clone $focus)->whereMonth('created_at', '3')->where('status', 'active')->count(),
+        (clone $focus)->whereMonth('created_at', '4')->where('status', 'active')->count(),
+        (clone $focus)->whereMonth('created_at', '5')->where('status', 'active')->count(),
+        (clone $focus)->whereMonth('created_at', '6')->where('status', 'active')->count(),
+        (clone $focus)->whereMonth('created_at', '7')->where('status', 'active')->count(),
+        (clone $focus)->whereMonth('created_at', '8')->where('status', 'active')->count(),
+        (clone $focus)->whereMonth('created_at', '9')->where('status', 'active')->count(),
+        (clone $focus)->whereMonth('created_at', '10')->where('status', 'active')->count(),
+        (clone $focus)->whereMonth('created_at', '11')->where('status', 'active')->count(),
+        (clone $focus)->whereMonth('created_at', '12')->where('status', 'active')->count()
+    ];
+
+    // number of Pass (P)
+    $passes = [
+        (clone $focus)->whereMonth('created_at', '1')->where('status', 'absent')->count(),
+        (clone $focus)->whereMonth('created_at', '2')->where('status', 'absent')->count(),
+        (clone $focus)->whereMonth('created_at', '3')->where('status', 'absent')->count(),
+        (clone $focus)->whereMonth('created_at', '4')->where('status', 'absent')->count(),
+        (clone $focus)->whereMonth('created_at', '5')->where('status', 'absent')->count(),
+        (clone $focus)->whereMonth('created_at', '6')->where('status', 'absent')->count(),
+        (clone $focus)->whereMonth('created_at', '7')->where('status', 'absent')->count(),
+        (clone $focus)->whereMonth('created_at', '8')->where('status', 'absent')->count(),
+        (clone $focus)->whereMonth('created_at', '9')->where('status', 'absent')->count(),
+        (clone $focus)->whereMonth('created_at', '10')->where('status', 'absent')->count(),
+        (clone $focus)->whereMonth('created_at', '11')->where('status', 'absent')->count(),
+        (clone $focus)->whereMonth('created_at', '12')->where('status', 'absent')->count()
+    ];
+
+    return view('Staff.report', compact('services', 'passes'));
+}
+
+
     public function contact()
     {
         return view('Staff.contact');
@@ -78,15 +115,14 @@ class StaffController extends Controller
 
 
         // check if the number have a staffID to avoid conflict between two staff
-        $lock = $separate->where('staffID' , auth()->id())->where('is_served', false)->first();
+        $lock = $separate->where('staffID', auth()->id())->where('is_served', false)->first();
         $number = $separate->where('staffID', null)->first();
-        if($lock){
+        if ($lock) {
             $currentNum = $lock;
-        }
-        else{
+        } else {
             $currentNum = $number;
         }
-    
+
         //Take number based on the separated group
         if ($currentNum) {
             // Update the status to 'true'
@@ -124,15 +160,16 @@ class StaffController extends Controller
 
     //     return redirect("staff/home");
     // }
-    public function queueNum(){
+    public function queueNum()
+    {
         // Get the updated list of unserved queue numbers
         $newQueueList = QueueNumber::whereNull('staffID')
-                         ->where('department_id', auth()->user()->department_id)
-                         ->orderBy('created_at', 'ASC')
-                         ->skip(1)
-                         ->paginate(5);
+            ->where('department_id', auth()->user()->department_id)
+            ->orderBy('created_at', 'ASC')
+            ->skip(1)
+            ->paginate(5);
 
-        
+
         return response()->json($newQueueList);
     }
 
@@ -142,33 +179,31 @@ class StaffController extends Controller
 
         // Separate all queues into department by department
         $separate = QueueNumber::where('department_id', auth()->user()->department_id);
-        
+
         // check if the number have a staffID to avoid conflict between two staff
-        $lock = $separate->where('staffID' , auth()->id())->where('is_served', false)->first();
+        $lock = $separate->where('staffID', auth()->id())->where('is_served', false)->first();
         $number = QueueNumber::where('department_id', auth()->user()->department_id)
-                     ->whereNull('staffID')
-                     ->first();
-        if($lock){
+            ->whereNull('staffID')
+            ->first();
+        if ($lock) {
             $currentNum = $lock;
-        }
-        else{
+        } else {
             $currentNum = $number;
         }
-        
+
         if ($currentNum) {
-                    $currentNum->staffID = auth()->id();
-                    $currentNum->counter_id = auth()->user()->counter->id;
-                    $currentNum->service_start_time = Carbon::now("Asia/Kuala_Lumpur");
-                    $currentNum->save();
-                }
+            $currentNum->staffID = auth()->id();
+            $currentNum->counter_id = auth()->user()->counter->id;
+            $currentNum->service_start_time = Carbon::now("Asia/Kuala_Lumpur");
+            $currentNum->save();
+        }
         // Get the updated list of unserved queue numbers
         $newQueueList = QueueNumber::whereNull('staffID')
-                         ->where('department_id', auth()->user()->department_id)
-                         ->orderBy('created_at', 'ASC')
-                         ->skip(1)
-                         ->paginate(5);
+            ->where('department_id', auth()->user()->department_id)
+            ->orderBy('created_at', 'ASC')
+            ->skip(1)
+            ->paginate(5);
 
-        
 
         return view('Staff.home', [
             'queueLists' => $newQueueList,
@@ -188,6 +223,32 @@ class StaffController extends Controller
             $number->staffID = null;
             $number->save();
         }
+
+        return redirect('staff/home');
+    }
+
+    public function call($id)
+    {
+
+        $setStatus = QueueNumber::find($id);
+        $setStatus->status = 'absent';
+        $setStatus->save();
+        $separate = QueueNumber::where('department_id', auth()->user()->department_id);
+        $call = $separate->where('staffID', auth()->id())->where('is_served', false)->first();
+        $counter = auth()->user()->counter;
+        $counterName = $counter->name;
+        /// voice call here $call是现在要call的号码 $counterName是现在counter的名字
+        return redirect('staff/home');
+    }
+
+    public function skip($id)
+    {
+
+        $number = QueueNumber::find($id);
+        $number->is_served = true;
+        $number->staffID = auth()->id();
+        $number->service_end_time = Carbon::now("Asia/Kuala_Lumpur");
+        $number->save();
 
         return redirect('staff/home');
     }

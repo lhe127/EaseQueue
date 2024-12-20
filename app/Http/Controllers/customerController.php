@@ -252,21 +252,21 @@ class customerController extends Controller
         return response()->json($response);
     }
 
-    public function sendMessage($messageBody)
-    {
-        $sid = 'ACf67a8e06f8237213ecfefbdd2b7a1981';
-        $token = 'bcd652d306dbac8aa20f4bc35d1026e2';
-        $twilio = new Client($sid, $token);
+    // public function sendMessage($messageBody)
+    // {
+    //     $sid = 'ACf67a8e06f8237213ecfefbdd2b7a1981';
+    //     $token = 'bcd652d306dbac8aa20f4bc35d1026e2';
+    //     $twilio = new Client($sid, $token);
 
-        $message = $twilio->messages
-            ->create(
-                "whatsapp:+601155036823", // to
-                array(
-                    "from" => "whatsapp:+14155238886",
-                    "body" => $messageBody
-                )
-            );
-
+    //     $message = $twilio->messages
+    //         ->create(
+    //             "whatsapp:+601155036823", // to
+    //             array(
+    //                 "from" => "whatsapp:+14155238886",
+    //                 "body" => $messageBody
+    //             )
+    //         );
+    //     }
         /* sms cost USD0.25
       $message = $twilio->messages
       ->create("+60197409931", // to
@@ -276,5 +276,5 @@ class customerController extends Controller
         )
       );*/
         // print($message->sid);
-    }
+    
 }
