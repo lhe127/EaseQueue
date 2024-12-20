@@ -54,14 +54,34 @@
             </div>
             @endif
             <div class="flex justify-center gap-[4rem] mt-[4rem]">
-                <form action="">
+
+                @if($number && $number->status == 'active')
+                <form action="{{ route('callNumber', ['id' => $number->id]) }}" method="post">
                     @csrf
                     <div class="self-center">
-                        <button class="text-xl  bg-cyan-300 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full">
+                        <button class="text-xl bg-cyan-300 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full">
                             Call
                         </button>
                     </div>
                 </form>
+                @else
+                @if($number)
+                <form action="{{ route('skipNumber', ['id' => $number->id]) }}" method="post">
+                    @csrf
+                    <div class="self-center">
+                        <button class="text-2xl bg-red-300 hover:bg-red-600 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full">
+                            Skip
+                        </button>
+                    </div>
+                </form>
+                @else
+                <div class="self-center">
+                        <button class="text-xl bg-cyan-300 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full">
+                            Call
+                        </button>
+                </div>
+                @endif
+                @endif
                 @csrf
                 <div onclick="openModal('modelConfirm')" class="self-center">
                     <button class="text-xl bg-cyan-300 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full">
