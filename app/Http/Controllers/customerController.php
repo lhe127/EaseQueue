@@ -95,9 +95,9 @@ class customerController extends Controller
         $estimatedWaitTime = $this->getEstimatedWaitTime($department->id, $queueNumber);
         $nowServing = $this->getNowServing($department->id);
 
-        $counter = Counter::find($queue->counter_id);
-
         $isYourTurn = $queue->queue_number == $nowServing;
+
+        $counter = Counter::find($queue->counter_id);
 
         $customerPhone = Auth::guard('customer')->user()->phone;
 
