@@ -24,6 +24,7 @@ return new class extends Migration
             $table->timestamp('service_start_time')->nullable();
             $table->timestamp('service_end_time')->nullable();
             $table->string('status')->default('active');
+            $table->string('processing_status')->nullable();
             $table->timestamps();
         });
     }
