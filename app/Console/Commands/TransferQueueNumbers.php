@@ -45,21 +45,28 @@ class TransferQueueNumbers extends Command
             // Insert the data into the archive table
             DB::table('queue_numbers_archive')->insert($queueNumbersArray);
 
-            // Delete all records from the queue_numbers table (soft reset)
+            // Commit the transaction first
+            DB::commit();
+
+            // Now delete all records from the queue_numbers table after committing
             DB::table('queue_numbers')->delete();
 
             // Reset the auto-increment value of the 'id' field to 1
             DB::statement('ALTER TABLE queue_numbers AUTO_INCREMENT = 1;');
 
-            // Commit the transaction
-            DB::commit();
-
             $this->info('Data successfully transferred and table reset.');
         } catch (\Exception $e) {
-            // Rollback the transaction if any error occurs
-            DB::rollBack();
+            // Rollback the transaction if any error occurs and the transaction is active
+            if (DB::transactionLevel() > 0) {
+                DB::rollBack();
+            }
+
+            // Log the error with details
             Log::error('Error transferring queue numbers: ' . $e->getMessage());
             $this->error('An error occurred: ' . $e->getMessage());
+
+            // Exit after logging the error to halt the process
+            exit(1); // Exits the script with a failure status
         }
 
         return 0;

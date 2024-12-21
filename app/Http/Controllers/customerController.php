@@ -97,6 +97,8 @@ class customerController extends Controller
 
         $counter = Counter::find($queue->counter_id);
 
+        $isYourTurn = $queue->queue_number == $nowServing;
+
         $customerPhone = Auth::guard('customer')->user()->phone;
 
         if ($customerPhone == '+01155036823') {
@@ -105,7 +107,7 @@ class customerController extends Controller
             $this->sendMessage($message);
         }
 
-        return view('Customer.getNumber', compact('queue', 'department', 'nowServing', 'estimatedWaitTime', 'counter'));
+        return view('Customer.getNumber', compact('queue', 'department', 'nowServing', 'estimatedWaitTime', 'counter','isYourTurn'));
     }
 
     public function showQueueStatus($queueId)
@@ -129,8 +131,10 @@ class customerController extends Controller
 
         $counter = Counter::find($queue->counter_id);
 
+        $isYourTurn = $queue->queue_number == $nowServing;
+
         // Return the view with queue, department, and now serving data
-        return view('Customer.getNumber', compact('queue', 'department', 'nowServing', 'estimatedWaitTime', 'counter'));
+        return view('Customer.getNumber', compact('queue', 'department', 'nowServing', 'estimatedWaitTime', 'counter','isYourTurn'));
     }
 
     private function getNowServing($departmentId)
