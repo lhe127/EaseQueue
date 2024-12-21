@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\contact;
 use App\Models\Department;
 use App\Models\QueueNumber;
+use App\Models\QueueNumberArchive;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Console\View\Components\Alert;
 use Illuminate\Http\Request;
@@ -18,54 +19,57 @@ class StaffController extends Controller
         return view('Staff.dashboard');
     }
 
-
     public function history()
     {
-        return view('Staff.history');
+        $separate = QueueNumber::where('department_id', auth()->user()->department_id);
+        $focus = $separate->where('staffID', auth()->id())->where('is_served', true)->orderBy('created_at','DESC');
+        $results = $focus->paginate(7); // Call paginate directly on the query builder
+
+        return view('Staff.history', ['queueNumbers' => $results]);
     }
     public function schedule()
     {
         return view('Staff.schedule');
     }
     public function report()
-{
-    $separate = QueueNumber::where('department_id', auth()->user()->department_id);
-    $focus = $separate->where('staffID', auth()->id());
+    {
+        $separate = QueueNumber::where('department_id', auth()->user()->department_id);
+        $focus = $separate->where('staffID', auth()->id());
 
-    // number of Service(S)
-    $services = [
-        (clone $focus)->whereMonth('created_at', '1')->where('status', 'active')->count(),
-        (clone $focus)->whereMonth('created_at', '2')->where('status', 'active')->count(),
-        (clone $focus)->whereMonth('created_at', '3')->where('status', 'active')->count(),
-        (clone $focus)->whereMonth('created_at', '4')->where('status', 'active')->count(),
-        (clone $focus)->whereMonth('created_at', '5')->where('status', 'active')->count(),
-        (clone $focus)->whereMonth('created_at', '6')->where('status', 'active')->count(),
-        (clone $focus)->whereMonth('created_at', '7')->where('status', 'active')->count(),
-        (clone $focus)->whereMonth('created_at', '8')->where('status', 'active')->count(),
-        (clone $focus)->whereMonth('created_at', '9')->where('status', 'active')->count(),
-        (clone $focus)->whereMonth('created_at', '10')->where('status', 'active')->count(),
-        (clone $focus)->whereMonth('created_at', '11')->where('status', 'active')->count(),
-        (clone $focus)->whereMonth('created_at', '12')->where('status', 'active')->count()
-    ];
+        // number of Service(S)
+        $services = [
+            (clone $focus)->whereMonth('created_at', '1')->where('status', 'active')->count(),
+            (clone $focus)->whereMonth('created_at', '2')->where('status', 'active')->count(),
+            (clone $focus)->whereMonth('created_at', '3')->where('status', 'active')->count(),
+            (clone $focus)->whereMonth('created_at', '4')->where('status', 'active')->count(),
+            (clone $focus)->whereMonth('created_at', '5')->where('status', 'active')->count(),
+            (clone $focus)->whereMonth('created_at', '6')->where('status', 'active')->count(),
+            (clone $focus)->whereMonth('created_at', '7')->where('status', 'active')->count(),
+            (clone $focus)->whereMonth('created_at', '8')->where('status', 'active')->count(),
+            (clone $focus)->whereMonth('created_at', '9')->where('status', 'active')->count(),
+            (clone $focus)->whereMonth('created_at', '10')->where('status', 'active')->count(),
+            (clone $focus)->whereMonth('created_at', '11')->where('status', 'active')->count(),
+            (clone $focus)->whereMonth('created_at', '12')->where('status', 'active')->count()
+        ];
 
-    // number of Pass (P)
-    $passes = [
-        (clone $focus)->whereMonth('created_at', '1')->where('status', 'absent')->count(),
-        (clone $focus)->whereMonth('created_at', '2')->where('status', 'absent')->count(),
-        (clone $focus)->whereMonth('created_at', '3')->where('status', 'absent')->count(),
-        (clone $focus)->whereMonth('created_at', '4')->where('status', 'absent')->count(),
-        (clone $focus)->whereMonth('created_at', '5')->where('status', 'absent')->count(),
-        (clone $focus)->whereMonth('created_at', '6')->where('status', 'absent')->count(),
-        (clone $focus)->whereMonth('created_at', '7')->where('status', 'absent')->count(),
-        (clone $focus)->whereMonth('created_at', '8')->where('status', 'absent')->count(),
-        (clone $focus)->whereMonth('created_at', '9')->where('status', 'absent')->count(),
-        (clone $focus)->whereMonth('created_at', '10')->where('status', 'absent')->count(),
-        (clone $focus)->whereMonth('created_at', '11')->where('status', 'absent')->count(),
-        (clone $focus)->whereMonth('created_at', '12')->where('status', 'absent')->count()
-    ];
+        // number of Pass (P)
+        $passes = [
+            (clone $focus)->whereMonth('created_at', '1')->where('status', 'absent')->count(),
+            (clone $focus)->whereMonth('created_at', '2')->where('status', 'absent')->count(),
+            (clone $focus)->whereMonth('created_at', '3')->where('status', 'absent')->count(),
+            (clone $focus)->whereMonth('created_at', '4')->where('status', 'absent')->count(),
+            (clone $focus)->whereMonth('created_at', '5')->where('status', 'absent')->count(),
+            (clone $focus)->whereMonth('created_at', '6')->where('status', 'absent')->count(),
+            (clone $focus)->whereMonth('created_at', '7')->where('status', 'absent')->count(),
+            (clone $focus)->whereMonth('created_at', '8')->where('status', 'absent')->count(),
+            (clone $focus)->whereMonth('created_at', '9')->where('status', 'absent')->count(),
+            (clone $focus)->whereMonth('created_at', '10')->where('status', 'absent')->count(),
+            (clone $focus)->whereMonth('created_at', '11')->where('status', 'absent')->count(),
+            (clone $focus)->whereMonth('created_at', '12')->where('status', 'absent')->count()
+        ];
 
-    return view('Staff.report', compact('services', 'passes'));
-}
+        return view('Staff.report', compact('services', 'passes'));
+    }
 
 
     public function contact()

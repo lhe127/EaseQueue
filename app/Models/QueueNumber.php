@@ -35,4 +35,9 @@ class QueueNumber extends Model
     public function staff(){
         return $this->hasOne(Staff::class);
     }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
 }
