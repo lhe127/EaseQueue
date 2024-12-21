@@ -206,3 +206,7 @@ Route::get('/fetchLiveQueue', [AdminController::class, 'fetchLiveQueue']);
 Route::get('/LiveDashboard', [LiveTableController::class, 'LiveDashboard'])->name('monitor.LiveDashboard');
 
 Route::get('/customerLiveTable', [LiveTableController::class, 'showCustomerLiveTable'])->name('customerLiveTable');
+
+Route::get('/fetch-live-queue', [LiveTableController::class, 'fetchLiveQueue'])->name('fetchLiveQueue');
+
+Route::post('/queue/next', [LiveTableController::class, 'moveToNextQueue'])->name('moveToNextQueue');
