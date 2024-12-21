@@ -48,7 +48,7 @@
         }
     
         // Fetch queue status every 5 seconds
-        setInterval(fetchQueueStatus, 5000);
+        setInterval(fetchQueueStatus, 4000);
         fetchQueueStatus(); // Initial fetch
     </script>
 
@@ -67,16 +67,12 @@
                     <p class="lead">
                         Estimated Time:
                         <strong class="text-warning display-5" id="estimatedTime">
-                            @if($queue->staffID)
-                            Your Turn
+                            @if($isYourTurn)
+                            Your Turn - {{$counter->name}}
                             @else
                             {{ $estimatedWaitTime }}
                             @endif
                         </strong>
-                        <!-- Display the counter name beside "Your Turn" -->
-                        @if($counter)
-                        <strong class="text-warning display-5">- {{ $counter->name }}</strong>
-                        @endif
                     </p>
                     <hr class="my-4">
                     <h5 class="text-muted">Now Serving:
