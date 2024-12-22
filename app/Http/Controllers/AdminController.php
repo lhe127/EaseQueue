@@ -8,6 +8,7 @@ use App\Models\Department;
 use App\Models\QueueNumber; // Add this import
 use App\Models\Staff;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -252,36 +253,48 @@ class AdminController extends Controller
         return redirect()->route('adminMailbox')->with('message', 'Request status updated successfully!');
     }
 
-//     public function fetchLiveQueue()
-// {
-//     // 获取当前最新的号码
-//     $currentQueue = QueueNumber::with('department')
-//         ->where('status', 'active') // 例如：状态为“active”表示正在服务的号码
-//         ->orderBy('updated_at', 'DESC')
-//         ->first();
+    //     public function fetchLiveQueue()
+    // {
+    //     // 获取当前最新的号码
+    //     $currentQueue = QueueNumber::with('department')
+    //         ->where('status', 'active') // 例如：状态为“active”表示正在服务的号码
+    //         ->orderBy('updated_at', 'DESC')
+    //         ->first();
 
-//     // 获取上一个号码（已完成服务的最近号码）
-//     $previousQueue = QueueNumber::with('department')
-//         ->where('status', 'completed') // 例如：状态为“completed”表示已完成服务
-//         ->orderBy('updated_at', 'DESC')
-//         ->first();
+    //     // 获取上一个号码（已完成服务的最近号码）
+    //     $previousQueue = QueueNumber::with('department')
+    //         ->where('status', 'completed') // 例如：状态为“completed”表示已完成服务
+    //         ->orderBy('updated_at', 'DESC')
+    //         ->first();
 
-//     return response()->json([
-//         'current' => [
-//             'queue_number' => $currentQueue->queue_number ?? null,
-//             'department' => $currentQueue->department->name ?? null,
-//             'counter' => $currentQueue->counter ?? null,
-//         ],
-//         'previous' => [
-//             'queue_number' => $previousQueue->queue_number ?? null,
-//             'counter' => $previousQueue->counter ?? null,
-//         ],
-//     ]);
-// }
+    //     return response()->json([
+    //         'current' => [
+    //             'queue_number' => $currentQueue->queue_number ?? null,
+    //             'department' => $currentQueue->department->name ?? null,
+    //             'counter' => $currentQueue->counter ?? null,
+    //         ],
+    //         'previous' => [
+    //             'queue_number' => $previousQueue->queue_number ?? null,
+    //             'counter' => $previousQueue->counter ?? null,
+    //         ],
+    //     ]);
+    // }
 
-//     public function showCustomerLiveTable()
-//     {
-//         return view('admin.customerLiveTable'); // 返回 Blade 视图
-//     }
+    //     public function showCustomerLiveTable()
+    //     {
+    //         return view('admin.customerLiveTable'); // 返回 Blade 视图
+    //     }
+
+    public function updateStatus(Request $request)
+    {
+        $request->validate(['status' => 'required|string']);
+        $user = Auth::user(); // Ensure $user is an instance of a model
+        if (!$user instanceof \Illuminate\Database\Eloquent\Model) {
+            return redirect()->back()->with('error', 'User not found or invalid.');
+        }
+        $user->status = $request->status;
+        $user->save();
+
+        return redirect()->back()->with('status', 'Status updated successfully!');
+    }
 }
- 
