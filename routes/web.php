@@ -89,6 +89,8 @@ Route::get('/adminReportDetail', function () {
     return view('Admin.Report.adminReportDetail');
 })->name('adminReportDetail');
 
+Route::post('/update-status', [AdminController::class, 'updateStatus']);
+
 // Route::get('/adminSettingDepartment', function(){
 //     return view('Admin.Setting.settingDepartment');
 // })->name('adminSetDepartment');
