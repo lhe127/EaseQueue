@@ -45,20 +45,14 @@
                                 </td>
                                 <td class="p-4 whitespace-nowrap">
                                     <div class="text-left font-medium">{{$member->counter->name }}</div>
-                                </td>
                                 <td class="p-4 whitespace-nowrap">
-                                    <select class="border border-gray-300 rounded px-2 py-1 w-32">
-                                        <option value="available" {{ $member->status === 'available' ? 'selected' : ''
-                                            }}>Available</option>
-                                        <option value="pause" {{ $member->status === 'pause' ? 'selected' : '' }}>Pause
-                                        </option>
-                                        <option value="services" {{ $member->status === 'services' ? 'selected' : ''
-                                            }}>Services</option>
-                                        <option value="break" {{ $member->status === 'break' ? 'selected' : '' }}>Break
-                                        </option>
-                                        <option value="offline" {{ $member->status === 'offline' ? 'selected' : ''
-                                            }}>Offline</option>
-                                    </select>
+                                    <div class="text-left">
+                                        <span class="px-3 py-1 rounded 
+    {{ $member->status === 'active' ? 'bg-green-500 text-white' : 
+       ($member->status === 'inactive' ? 'bg-red-500 text-white' : 'bg-gray-500 text-white') }}">
+                                            {{ ucfirst($member->status) }}
+                                        </span>
+                                    </div>
                                 </td>
                             </tr>
                             @endforeach

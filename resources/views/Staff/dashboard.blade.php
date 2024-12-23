@@ -34,9 +34,7 @@
                         class="ml-4 border rounded-md p-2 text-white shadow-sm focus:outline-none focus:border-blue-500"
                         style="width: 150px;" onchange="changeStatus()">
                         <option value="active" @if(Auth::user()->status == 'active') selected @endif>Active</option>
-                        <option value="inactive" @if(Auth::user()->status == 'inactive') selected @endif>Inactive
-                        </option>
-                        <option value="logout" >Log out</option>
+                        <option value="logout">Log out</option>
                     </select>
 
                     <!-- Hidden Form for Status Update -->
@@ -114,12 +112,10 @@
         function setInitialStatus() {
             const dropdown = document.getElementById('statusDropdown');
             const selectedValue = dropdown.value;  // Get the selected value
-            
+
             // Add the corresponding color class based on the selected status
             if (selectedValue === 'active') {
                 dropdown.classList.add('bg-green-500');  // Green for active
-            } else if (selectedValue === 'inactive') {
-                dropdown.classList.add('bg-yellow-500');  // Yellow for inactive
             } else if (selectedValue === 'logout') {
                 dropdown.classList.add('bg-red-500');  // Red for logout
             }
@@ -131,23 +127,22 @@
             const selectedValue = dropdown.value;
 
             // Remove all background color classes
-            dropdown.classList.remove('bg-green-500', 'bg-yellow-500', 'bg-red-500');
+            dropdown.classList.remove('bg-green-500','bg-red-500');
 
             // Add the corresponding background color class based on the selected status
             if (selectedValue === 'active') {
                 dropdown.classList.add('bg-green-500'); // Green for active
-            } else if (selectedValue === 'inactive') {
-                dropdown.classList.add('bg-yellow-500'); // Yellow for inactive
+                document.getElementById('statusInput').value = selectedValue;
+                document.getElementById('statusForm').submit();
             } else if (selectedValue === 'logout') {
                 dropdown.classList.add('bg-red-500'); // Red for logout
+                document.getElementById('statusInput').value = 'inactive';
+                document.getElementById('statusForm').submit();
 
-                document.getElementById('logoutForm').submit();
-                return;
+                setTimeout(function() {
+                    document.getElementById('logoutForm').submit();
+                }, 500);  // Delay for status form to be processed
             }
-
-            // Update hidden input and submit the status form
-            document.getElementById('statusInput').value = selectedValue;
-            document.getElementById('statusForm').submit();
         }
     </script>
 </body>

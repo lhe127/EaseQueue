@@ -25,13 +25,21 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-            $staff = Auth::user();
-
-            // If the user is an admin, redirect to the admin's home page
-            if ($staff->is_admin == 1) {
-                return redirect()->route('admin.adminHome');
-            } else {
-                return redirect()->route('staff.home');
+            // Fetch the authenticated user explicitly from the Staff model
+            $staff = Staff::find(Auth::id()); // Fetch the authenticated staff by their ID
+    
+            // Check if the staff record was found
+            if ($staff) {
+                // Update the staff status to 'active'
+                $staff->status = 'active';
+                $staff->save();  // Save the updated status to the database
+    
+                // If the user is an admin, redirect to the admin's home page
+                if ($staff->is_admin == 1) {
+                    return redirect()->route('admin.adminHome');
+                } else {
+                    return redirect()->route('staff.home');
+                }
             }
         }
     

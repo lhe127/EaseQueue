@@ -23,7 +23,7 @@ class AdminController extends Controller
     {
         $staff = Staff::where('staffID', 'like', 'S%')->skip(1)->paginate(5);
         $queueNumbers = QueueNumber::whereNull('staffID')->orderBy('created_at', 'ASC')->get(); // Fetch all unserved queue numbers
-
+        
         return view('admin.adminHome', ['staff' => $staff, 'queueNumbers' => $queueNumbers]);
     }
 
