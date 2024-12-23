@@ -61,7 +61,7 @@
         <div class="col-12 col-md-8 col-lg-6">
             <div class="card shadow-lg p-4" style="border-radius: 15px;">
                 <div class="card-body">
-                    <h4 class="mb-3">Your Queue Number:
+                    <h4 class="mb-3">Queue Number:
                         <strong class="text-success display-4" id="queueNumber">{{ $queue->queue_number }}</strong>
                     </h4>
                     <p class="lead">
