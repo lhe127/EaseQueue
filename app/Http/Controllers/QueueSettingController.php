@@ -41,4 +41,29 @@ class QueueSettingController extends Controller
 
         return redirect()->route('adminSetQueue');
     }
+
+    public function openTime(Request $request)
+    {
+        $request->validate([
+            'open_hour_from' => 'required|integer|min:0|max:23',
+            'open_minute_from' => 'required|integer|min:0|max:59',
+            'open_hour_to' => 'required|integer|min:0|max:23',
+            'open_minute_to' => 'required|integer|min:0|max:59',
+        ]);
+
+        // Combine hours and minutes into time strings
+        $openTimeFrom = sprintf('%02d:%02d', $request->open_hour_from, $request->open_minute_from);
+        $openTimeTo = sprintf('%02d:%02d', $request->open_hour_to, $request->open_minute_to);
+
+        // Retrieve or create the queue settings
+        $queueSetting = QueueSetting::firstOrNew(['id' => 1]); // Adjust 'id' logic based on your database
+        $queueSetting->open_time_from = $openTimeFrom;
+        $queueSetting->open_time_to = $openTimeTo;
+
+        // Save settings
+        $queueSetting->save();
+
+        // Redirect with a success message
+        return redirect()->back()->with('success', 'Updated successfully.');
+    }
 }

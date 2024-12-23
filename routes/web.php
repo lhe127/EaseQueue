@@ -31,7 +31,6 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-// Staff
 Route::post('/call/{id}', [StaffController::class, 'call'])->name("callNumber");
 
 Route::post('/skip/{id}', [StaffController::class, 'skip'])->name("skipNumber");
@@ -60,10 +59,6 @@ Route::post('/nextNumber', [StaffController::class, 'nextNumber'])->name('nextNu
 
 Route::post('/transfer/{id}', [StaffController::class, 'transfer'])->name('transfer');
 
-// Customer
-
-// Route::get('/customerHome', [pageController::class, 'home'])->name('customerHome');
-
 Route::get('/customerHistory', [pageController::class, 'history'])->name('customerHistory');
 
 Route::get('/customerAbout', [pageController::class, 'about'])->name('customerAbout');
@@ -77,10 +72,6 @@ Route::get('/fetchItems', [AdminController::class, 'fetchItems']);
 
 Route::get('/admin/home', [AdminController::class, 'adminHome'])->name('admin.adminHome');
 
-// Route::get('/adminMailbox', function () {
-//     return view('Admin.adminMailbox');
-// })->name('adminMailbox');
-
 Route::get('/adminReport', function () {
     return view('Admin.Report.adminReport');
 })->name('adminReport');
@@ -90,22 +81,6 @@ Route::get('/adminReportDetail', function () {
 })->name('adminReportDetail');
 
 Route::post('/update-status', [AdminController::class, 'updateStatus']);
-
-// Route::get('/adminSettingDepartment', function(){
-//     return view('Admin.Setting.settingDepartment');
-// })->name('adminSetDepartment');
-
-// Route::get('/adminSettingStaff', function(){
-//     return view('Admin.Setting.settingStaff');
-// })->name('adminSetStaff');
-
-// Route::get('/updateStaffInfo', function(){
-//     return view('Admin.Setting.updateStaffInfo');
-// })->name('updateStaffInfo');
-
-// Route::get('/adminSettingQueue', function () {
-//     return view('Admin.Setting.settingQueue');
-// })->name('adminSetQueue');
 
 /* Manage Department */
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
@@ -132,22 +107,20 @@ Route::post('/updateStaff/{staffID}', [AdminController::class, 'updateStaff'])->
 
 Route::middleware(['check.queue.hours'])->group(function () {
     Route::get('/adminSettingQueue', [QueueSettingController::class, 'show'])->name('adminSetQueue');
-    Route::post('/updatedQueueSetting', [QueueSettingController::class, 'update'])->name('updateQueueSettings');
+    Route::post('/updatedQueueSetting', [QueueSettingController::class, 'openTime'])->name('updateQueueSettings');
     // Other queue-related routes
 });
 
-/* Customer Page */
-
-// Route::get('/customerHome', [customerController::class, 'displayDepartment'])->name('customerHome');
-
 Route::get('/joinQueue/{deparment}', [customerController::class, 'joinQueue'])->name('joinQueue');
 
-// Route::get('/queueStatus/{queue_number}', [customerController::class, 'getQueueStatus'])->name('queue.status');
-
 Route::get('/login', [AuthController::class, 'loginPage'])->name('login.page');
+
 Route::post('/login', [AuthController::class, 'login'])->name('login');
+
 Route::get('/register', [AuthController::class, 'registerPage'])->name('auth.registerPage');
+
 Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
+
 Route::middleware(['web'])->group(function () {
     // Other routes...
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -168,29 +141,31 @@ Route::middleware(['auth:staff', 'is_staff'])->group(function () {
 });
 
 // Customer Login and Registration
-Route::get('/customer/login', [CustomerAuthController::class, 'showLoginForm'])->name('customerLogin.page');
+Route::middleware(['restrictTime'])->group(function () {
+    Route::get('/customer/login', [CustomerAuthController::class, 'showLoginForm'])->name('customerLogin.page');
 
-Route::post('/customer/login', [CustomerAuthController::class, 'login'])->name('customerLogin');
+    Route::post('/customer/login', [CustomerAuthController::class, 'login'])->name('customerLogin');
 
-Route::get('/customer/register', [CustomerAuthController::class, 'showRegisterForm'])->name('customerRegister.page');
+    Route::get('/customer/register', [CustomerAuthController::class, 'showRegisterForm'])->name('customerRegister.page');
 
-Route::post('/customer/register', [CustomerAuthController::class, 'register'])->name('auth.customerRegister');
+    Route::post('/customer/register', [CustomerAuthController::class, 'register'])->name('auth.customerRegister');
 
-Route::post('/customer/logout', function () {
-    Auth::guard('customer')->logout();
-    request()->session()->invalidate();
-    request()->session()->regenerateToken();
-    return redirect()->route('customerLogin.page');
-})->name('customer.logout');
+    Route::post('/customer/logout', function () {
+        Auth::guard('customer')->logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+        return redirect()->route('customerLogin.page');
+    })->name('customer.logout');
 
-Route::middleware(['auth:customer'])->group(function () {
-    Route::get('/customerHome', [customerController::class, 'displayDepartment'])->name('customerHome');
+    Route::middleware(['auth:customer'])->group(function () {
+        Route::get('/customerHome', [customerController::class, 'displayDepartment'])->name('customerHome');
 
-    Route::get('/getNumber', [customerController::class, 'getNumber'])->name('getNumber');
+        Route::get('/getNumber', [customerController::class, 'getNumber'])->name('getNumber');
 
-    Route::get('/queue/{queueId}', [customerController::class, 'showQueueStatus'])->name('showQueueStatus');
+        Route::get('/queue/{queueId}', [customerController::class, 'showQueueStatus'])->name('showQueueStatus');
 
-    Route::get('/queue-status/{queueId}/check', [customerController::class, 'checkQueueStatus'])->name('checkQueueStatus');
+        Route::get('/queue-status/{queueId}/check', [customerController::class, 'checkQueueStatus'])->name('checkQueueStatus');
+    });
 });
 
 // Admin receive mail
@@ -198,11 +173,7 @@ Route::get('/adminMailbox', [AdminController::class, 'showRequests'])->name('adm
 
 Route::put('/admin/requests/{id}', [AdminController::class, 'updateRequestStatus'])->name('admin.updateRequest');
 
-//customer Live table
-// Route::get('/customerLiveTable', [AdminController::class, 'showCustomerLiveTable'])->name('customerLiveTable');
-
 Route::get('/fetchLiveQueue', [AdminController::class, 'fetchLiveQueue']);
-
 
 //Monitor
 Route::get('/LiveDashboard', [LiveTableController::class, 'LiveDashboard'])->name('monitor.LiveDashboard');
