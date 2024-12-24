@@ -72,13 +72,9 @@ Route::get('/fetchItems', [AdminController::class, 'fetchItems']);
 
 Route::get('/admin/home', [AdminController::class, 'adminHome'])->name('admin.adminHome');
 
-Route::get('/adminReport', function () {
-    return view('Admin.Report.adminReport');
-})->name('adminReport');
+Route::get('/reportDetail', [AdminController::class, 'adminReportDetail'])->name('Admin.Report.adminReportDetail');
 
-Route::get('/adminReportDetail', function () {
-    return view('Admin.Report.adminReportDetail');
-})->name('adminReportDetail');
+Route::get('/staffPerformance', [AdminController::class, 'staffPerformance'])->name('Admin.Report.staffPerformance');
 
 Route::post('/update-status', [AdminController::class, 'updateStatus']);
 

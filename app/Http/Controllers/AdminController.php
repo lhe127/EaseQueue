@@ -5,12 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Contact;
 use App\Models\Counter;
 use App\Models\Department;
-use App\Models\QueueNumber; // Add this import
+use App\Models\QueueNumber; 
 use App\Models\Staff;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-
 
 class AdminController extends Controller
 {
@@ -253,38 +252,6 @@ class AdminController extends Controller
         return redirect()->route('adminMailbox')->with('message', 'Request status updated successfully!');
     }
 
-    //     public function fetchLiveQueue()
-    // {
-    //     // 获取当前最新的号码
-    //     $currentQueue = QueueNumber::with('department')
-    //         ->where('status', 'active') // 例如：状态为“active”表示正在服务的号码
-    //         ->orderBy('updated_at', 'DESC')
-    //         ->first();
-
-    //     // 获取上一个号码（已完成服务的最近号码）
-    //     $previousQueue = QueueNumber::with('department')
-    //         ->where('status', 'completed') // 例如：状态为“completed”表示已完成服务
-    //         ->orderBy('updated_at', 'DESC')
-    //         ->first();
-
-    //     return response()->json([
-    //         'current' => [
-    //             'queue_number' => $currentQueue->queue_number ?? null,
-    //             'department' => $currentQueue->department->name ?? null,
-    //             'counter' => $currentQueue->counter ?? null,
-    //         ],
-    //         'previous' => [
-    //             'queue_number' => $previousQueue->queue_number ?? null,
-    //             'counter' => $previousQueue->counter ?? null,
-    //         ],
-    //     ]);
-    // }
-
-    //     public function showCustomerLiveTable()
-    //     {
-    //         return view('admin.customerLiveTable'); // 返回 Blade 视图
-    //     }
-
     public function updateStatus(Request $request)
     {
         $request->validate(['status' => 'required|string']);
@@ -297,4 +264,77 @@ class AdminController extends Controller
 
         return redirect()->back()->with('status', 'Status updated successfully!');
     }
+    public function adminReportDetail()
+{
+    $currentYear = date('Y');
+    $departments = Department::all();
+    $departmentData = [];
+
+    foreach ($departments as $department) {
+        $query = QueueNumber::where('department_id', $department->id)
+                          ->whereYear('created_at', $currentYear);
+
+        $services = [];
+        $passes = [];
+
+        for ($month = 1; $month <= 12; $month++) {
+            $services[] = (clone $query)->whereMonth('created_at', $month)
+                                      ->where('status', 'active')
+                                      ->count();
+            $passes[] = (clone $query)->whereMonth('created_at', $month)
+                                    ->where('status', 'absent')
+                                    ->count();
+        }
+
+        $departmentData[$department->id] = [
+            'name' => $department->name,
+            'services' => $services,
+            'passes' => $passes
+        ];
+    }
+
+    return view('Admin.Report.adminReportDetail', compact('departmentData'));
+}
+
+public function staffPerformance()
+{
+    try {
+        $currentYear = date('Y');
+        // Get all active staff members except admin
+        $staffMembers = Staff::where('staffID', 'like', 'S%')->get();
+        $staffData = [];
+
+        foreach ($staffMembers as $staff) {
+            $query = QueueNumber::where('staffID', $staff->staffID)
+                              ->whereYear('created_at', $currentYear);
+
+            $services = [];
+            $skipped = [];
+
+            for ($month = 1; $month <= 12; $month++) {
+                // Count completed services
+                $services[] = (clone $query)->whereMonth('created_at', $month)
+                                          ->where('status', 'active')
+                                          ->count();
+                
+                // Count skipped/absent services
+                $skipped[] = (clone $query)->whereMonth('created_at', $month)
+                                        ->whereIn('status', ['skip', 'absent'])
+                                        ->count();
+            }
+
+            $staffData[$staff->staffID] = [
+                'name' => $staff->name,
+                'services' => $services,
+                'skipped' => $skipped,
+                'department' => $staff->department ? $staff->department->name : 'N/A'
+            ];
+        }
+
+        return view('Admin.Report.staffPerformance', compact('staffData'));
+    } catch (\Exception $e) {
+        \Log::error('Staff Performance Error: ' . $e->getMessage());
+        return back()->with('error', 'Unable to fetch staff performance data.');
+    }
+}
 }
