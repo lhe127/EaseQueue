@@ -41,8 +41,7 @@
                             <div class="md:col-span-5">
                                 <label for="password">Password</label>
                                 <input type="password" name="password" id="password"
-                                    class="h-10 border rounded px-4 w-full bg-gray-50" 
-                                    value="{{ old('password') }}" />
+                                    class="h-10 border rounded px-4 w-full bg-gray-50" value="{{ old('password') }}" />
                             </div>
 
                             <!-- Department Dropdown -->
@@ -75,25 +74,36 @@
                                 </select>
                             </div>
 
-                            <!-- Submit Button -->
-                            <div class="md:col-span-5 text-right">
-                                <div class="inline-flex items-end">
+                            <div class="md:col-span-5 flex justify-end space-x-1">
+                                <!-- Update Button (Inside Update Form) -->
+                                <form method="POST" action="{{ route('updateStaff', $staff->staffID) }}">
+                                    @csrf
                                     <button type="submit"
-                                        class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 whitespace-nowrap">
+                                        class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
                                         Update
                                     </button>
-                                </div>
+                                </form>
+
+                                <!-- Delete Button (Separate Form) -->
+                                <form action="{{ route('deleteStaff', $staff->staffID) }}" method="POST"
+                                    onsubmit="return confirm('Are you sure you want to delete this staff member?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                                        Delete
+                                    </button>
+                                </form>
                             </div>
+
                         </div>
-                    </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
         const departmentSelect = document.getElementById('department_id');
         const counterSelect = document.getElementById('counter_id');
 
@@ -123,6 +133,6 @@
         // Apply filtering on page load
         filterCounters();
     });
-</script>
+    </script>
 
-@endsection
+    @endsection
