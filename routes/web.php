@@ -31,6 +31,8 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+Route::get('/staff/showRequests', [StaffController::class, 'showRequests'])->name("Staff_ShowRequests");
+
 Route::post('/call/{id}', [StaffController::class, 'call'])->name("callNumber");
 
 Route::post('/skip/{id}', [StaffController::class, 'skip'])->name("skipNumber");
