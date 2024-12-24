@@ -15,13 +15,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<div class="flex bg-cyan-100 h-screen">  
+<div class="flex bg-gray-200 h-screen">  
     <!-- Previous Queue Table -->
     <div class="w-2/6 pt-24 pl-16 "> 
         <table class="table-auto w-full">
             <thead>
                 <tr class="text-3xl font-semibold tracking-wide text-center text-gray-900 bg-gray-100 uppercase border border-gray-600">
-                    <th colspan="2" class="px-4 py-3">Previous Number</th>
+                    <th colspan="2" class="px-4 py-3 bg-gray-300">Previous Number</th>
                 </tr>
             </thead>
             <tbody id="previous-number-table-body" class="bg-white font-semibold text-xl">
@@ -34,8 +34,8 @@
     <div class="w-3/6">
         <div class="flex flex-col items-center justify-center pt-24 mr-10">
             <div id="currentQueueNumber" class="text-9xl py-3 font-semibold animate-flicker text-red-600">Loading...</div>
-            <div id="currentDepartment" class="text-4xl py-2 font-semibold text-gray-900">Loading...</div>
-            <div id="currentCounter" class="text-4xl py-2 font-semibold text-gray-900">Loading...</div>
+            <div id="currentDepartment" class="text-4xl py-2 font-semibold text-gray-900"></div>
+            <div id="currentCounter" class="text-4xl py-2 font-semibold text-gray-900"></div>
         </div>
     </div>
     

@@ -12,7 +12,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: rgb(50, 183, 224);
+            background-color: rgb(0, 0, 0);
             color: white;
             padding: 20px 40px;
         }
