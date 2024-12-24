@@ -25,7 +25,8 @@
             <div class="flex items-center justify-between py-2 text-5x1">
                 <div class="font-bold text-blue-900 text-4xl">Staff<span class="text-orange-600">Panel</span></div>
                 <div class="flex items-center text-gray-500">
-                    <span class="material-icons-outlined p-2" style="font-size: 30px">notifications</span>
+                    <a href="{{route('Staff_ShowRequests')}}"><span class="material-icons-outlined p-2" style="font-size: 30px">notifications</span></a>
+                    
                     <div class="bg-center bg-cover bg-no-repeat rounded-full inline-block h-12 w-12 ml-2"
                         style="background-image: url(https://i.pinimg.com/564x/de/0f/3d/de0f3d06d2c6dbf29a888cf78e4c0323.jpg)">
                     </div>

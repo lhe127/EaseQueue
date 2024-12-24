@@ -10,6 +10,7 @@ use App\Models\Staff;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
@@ -333,7 +334,7 @@ public function staffPerformance()
 
         return view('Admin.Report.staffPerformance', compact('staffData'));
     } catch (\Exception $e) {
-        \Log::error('Staff Performance Error: ' . $e->getMessage());
+        Log::error('Staff Performance Error: ' . $e->getMessage());
         return back()->with('error', 'Unable to fetch staff performance data.');
     }
 }
