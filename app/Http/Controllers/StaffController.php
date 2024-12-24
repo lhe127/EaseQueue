@@ -14,6 +14,17 @@ use Carbon\Carbon;
 
 class StaffController extends Controller
 {
+
+    public function showRequests()
+    {
+        $requests = Contact::where('staffID', auth()->id())
+                   ->orderBy('updated_at', 'DESC')
+                   ->get();
+
+
+        return view('Staff.Staff_mailBox', ['requests' => $requests]);
+    }
+
     public function dashboard()
     {
         return view('Staff.dashboard');
