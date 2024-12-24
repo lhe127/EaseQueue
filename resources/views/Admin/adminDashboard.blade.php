@@ -52,7 +52,7 @@
                         Home
                         <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
                     </a>
-                    <a href="{{route('adminReport')}}" class="inline-block hover:text-black  my-4 w-full">
+                    <a href="{{route('Admin.Report.adminReportDetail')}}" class="inline-block hover:text-black  my-4 w-full">
                         <div class="fill-current text-gray-600 hover:text-black">
                             <svg xmlns="http://www.w3.org/2000/svg"
                                 class="w-6 h-6 material-icons-outlined float-left pr-1 mr-1 ml-px"
