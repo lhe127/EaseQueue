@@ -101,6 +101,8 @@ Route::get('/adminSettingStaff', [AdminController::class, 'displayStaffInfo'])->
 
 Route::get('/editStaff/{staffID}', [AdminController::class, 'editStaff'])->name('updateStaffInfo');
 
+Route::delete('/staff/{staffID}', [AdminController::class, 'destroy'])->name('deleteStaff');
+
 Route::post('/updateStaff/{staffID}', [AdminController::class, 'updateStaff'])->name('updateStaff');
 
 /* Queue Setting Page */
