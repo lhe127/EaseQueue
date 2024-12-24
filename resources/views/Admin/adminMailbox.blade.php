@@ -42,8 +42,8 @@
                         <form action="{{ route('admin.updateRequest', $request->id) }}" method="POST" class="inline-block">
                             @csrf
                             @method('PUT')
-                            <button name="status" value="Approved" class="bg-green-500 text-white px-3 py-1 rounded">Approve</button>
-                            <button name="status" value="Rejected" class="bg-red-500 text-white px-3 py-1 rounded">Reject</button>
+                            <button name="status" value="Approved" class="bg-green-500 text-white px-3 py-1 rounded fa fa-check" style="font-size:18px"></button>
+                            <button name="status" value="Rejected" class="bg-red-500 text-white px-3 py-1 rounded fa fa-close" style="font-size:18px"></button>
                         </form>
                         @else
                         <span class="text-gray-500 italic">No Actions Available</span>

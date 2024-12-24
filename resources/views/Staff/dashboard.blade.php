@@ -25,8 +25,15 @@
             <div class="flex items-center justify-between py-2 text-5x1">
                 <div class="font-bold text-blue-900 text-4xl">Staff<span class="text-orange-600">Panel</span></div>
                 <div class="flex items-center text-gray-500">
-                    <a href="{{route('Staff_ShowRequests')}}"><span class="material-icons-outlined p-2" style="font-size: 30px">notifications</span></a>
-                    
+                    <a href="{{ route('Staff_ShowRequests') }}" class="relative" onclick="markNotificationsViewed()">
+                        <span class="material-icons-outlined p-2" style="font-size: 30px;">notifications</span>
+
+                        {{-- Red Dot for New Notifications --}}
+                        @if($newNotificationsCount > 0)
+                        <span class="absolute top-0 right-0 h-3 w-3 bg-red-600 rounded-full"></span>
+                        @endif
+                    </a>
+
                     <div class="bg-center bg-cover bg-no-repeat rounded-full inline-block h-12 w-12 ml-2"
                         style="background-image: url(https://i.pinimg.com/564x/de/0f/3d/de0f3d06d2c6dbf29a888cf78e4c0323.jpg)">
                     </div>
@@ -145,6 +152,12 @@
                 }, 500);  // Delay for status form to be processed
             }
         }
+    </script>
+
+    <script>
+        function markNotificationsViewed() {
+        fetch('/mark-notifications-viewed'); // Mark notifications as viewed
+    }
     </script>
 </body>
 @endif

@@ -61,6 +61,8 @@ Route::post('/nextNumber', [StaffController::class, 'nextNumber'])->name('nextNu
 
 Route::post('/transfer/{id}', [StaffController::class, 'transfer'])->name('transfer');
 
+Route::get('/mark-notifications-viewed', [StaffController::class, 'markNotificationsAsViewed']);
+
 Route::get('/customerHistory', [pageController::class, 'history'])->name('customerHistory');
 
 Route::get('/customerAbout', [pageController::class, 'about'])->name('customerAbout');
