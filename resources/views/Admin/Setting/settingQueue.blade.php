@@ -91,5 +91,30 @@
         <button type="submit"
             class="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition">Update</button>
     </form>
+
+    <form method="POST" action="{{route('adminSettingQueue')}}" id="transferForm">
+        @csrf
+        <button type="button"
+            class="mt-4 w-full py-3 bg-gray-600 text-white font-semibold rounded-md hover:bg-red-700 transition"
+            onclick="confirmTransfer()">
+            Transfer and Clear Queue Data
+        </button>
+    </form>
+
 </div>
+
+<script>
+    // Function to show the confirmation alert before form submission
+    function confirmTransfer() {
+        const userConfirmed = confirm("Are you sure you want to transfer the queue data and clear the current queue?");
+        
+        if (userConfirmed) {
+            // If confirmed, submit the form
+            document.getElementById('transferForm').submit();
+        } else {
+            // If not confirmed, do nothing
+            return;
+        }
+    }
+</script>
 @endsection

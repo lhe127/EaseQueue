@@ -111,6 +111,8 @@ Route::middleware(['check.queue.hours'])->group(function () {
     Route::get('/adminSettingQueue', [QueueSettingController::class, 'show'])->name('adminSetQueue');
     Route::post('/updatedQueueSetting', [QueueSettingController::class, 'openTime'])->name('updateQueueSettings');
     // Other queue-related routes
+    Route::post('/transferData', [QueueSettingController::class, 'transferData'])->name('adminSettingQueue');
+
 });
 
 Route::get('/joinQueue/{deparment}', [customerController::class, 'joinQueue'])->name('joinQueue');

@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
         View::share('newRequestsCount', $newRequestsCount);
 
         View::composer('*', function ($view) {
-            if (auth()->check()) {
+            if (auth()->check() && auth()->user() instanceof \App\Models\Staff) {
                 $staff = \App\Models\Staff::find(auth()->id());
                 $lastViewedAt = $staff->viewed_at;
                 $newNotificationsCount = \App\Models\Contact::where('staffID', auth()->id())
