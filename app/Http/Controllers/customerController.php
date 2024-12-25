@@ -107,7 +107,7 @@ class customerController extends Controller
             $this->sendMessage($message);
         }
 
-        return view('Customer.getNumber', compact('queue', 'department', 'nowServing', 'estimatedWaitTime', 'counter','isYourTurn'));
+        return view('Customer.getNumber', compact('queue', 'department', 'nowServing', 'estimatedWaitTime', 'counter', 'isYourTurn'));
     }
 
     public function showQueueStatus($queueId)
@@ -134,7 +134,7 @@ class customerController extends Controller
         $isYourTurn = $queue->queue_number == $nowServing;
 
         // Return the view with queue, department, and now serving data
-        return view('Customer.getNumber', compact('queue', 'department', 'nowServing', 'estimatedWaitTime', 'counter','isYourTurn'));
+        return view('Customer.getNumber', compact('queue', 'department', 'nowServing', 'estimatedWaitTime', 'counter', 'isYourTurn'));
     }
 
     private function getNowServing($departmentId)
@@ -216,7 +216,20 @@ class customerController extends Controller
 
         // Ensure a minimum wait time of 5 minutes if not yet served
         if ($dynamicWaitTime === 0 && !$queue->is_served) {
-            $dynamicWaitTime = 5;
+            // If no minimum wait start time has been set, update it to the current time
+            if ($queue->min_wait_start_time) {
+                $queue->update(['min_wait_start_time' => now()]);
+            }
+        
+            // Calculate how many minutes have passed since the minimum wait start time was set
+            $minutesElapsed = Carbon::parse($queue->min_wait_start_time)->diffInMinutes(now());
+        
+            // Ensure the dynamic wait time is at least 0, but no less than 5 minutes
+            $dynamicWaitTime = max(5 - $minutesElapsed, 0); // Subtract elapsed minutes from 5 to calculate the remaining wait time
+
+            // Calculate remaining minutes from the 5-minute minimum
+            $minutesElapsed = Carbon::parse($queue->min_wait_start_time)->diffInMinutes(now());
+            $dynamicWaitTime = max(5 - $minutesElapsed, 0);
         }
 
         return ceil($dynamicWaitTime) . " minutes";

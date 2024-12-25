@@ -22,6 +22,7 @@ class QueueNumberArchive extends Model
         'customer_id',
         'service_start_time',
         'service_end_time',
+        'min_wait_start_time',
         'status',
         'processing_status',
     ];
