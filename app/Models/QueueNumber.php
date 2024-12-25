@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class QueueNumber extends Model
 {
     use HasFactory;
-    protected $fillable = ['department_id', 'counter_id', 'queue_number', 'is_served', 'customer_id','staffID','service_start_time','service_end_time','status','processing_status',];
+    protected $fillable = ['department_id', 'counter_id', 'queue_number', 'is_served', 'customer_id','staffID','service_start_time','service_end_time','status','processing_status', 'min_wait_start_time',];
 
     protected static function boot()
     {
