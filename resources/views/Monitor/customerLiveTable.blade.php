@@ -1,45 +1,58 @@
 @extends('Monitor.LiveDashboard')
 @section('content')
+
 <head>
     <style>
         @keyframes flicker {
-            0% { color: red; }
-            50% { color: white; }
-            100% { color: red; }
+            0% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+
+            100% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
         }
 
         .animate-flicker {
-            animation: flicker 0.3s linear alternate 2;
+            animation: flicker 1.2s ease-in-out infinite;
         }
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<div class="flex bg-gray-200 h-screen">  
-    <!-- Previous Queue Table -->
-    <div class="w-2/6 pt-24 pl-16 "> 
-        <table class="table-auto w-full">
-            <thead>
-                <tr class="text-3xl font-semibold tracking-wide text-center text-gray-900 bg-gray-100 uppercase border border-gray-600">
-                    <th colspan="2" class="px-4 py-3 bg-gray-300">Previous Number</th>
-                </tr>
-            </thead>
-            <tbody id="previous-number-table-body" class="bg-white font-semibold text-xl">
-                <!-- Previous queue numbers will be dynamically inserted here -->
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Current Queue Display -->
-    <div class="w-3/6">
-        <div class="flex flex-col items-center justify-center pt-24 mr-10">
-            <div id="currentQueueNumber" class="text-9xl py-3 font-semibold animate-flicker text-red-600">Loading...</div>
-            <div id="currentDepartment" class="text-4xl py-2 font-semibold text-gray-900"></div>
-            <div id="currentCounter" class="text-4xl py-2 font-semibold text-gray-900"></div>
+<div class="flex bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 h-screen">
+    <!-- Previous Queue Section on the Left -->
+    <div class="w-1/2 px-16 pt-16">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-3xl font-bold text-gray-800 text-center mb-4">Previous Numbers</h2>
+            <div id="previous-number-container" class="space-y-4">
+                <!-- Previous queue numbers will be dynamically inserted here as cards -->
+            </div>
         </div>
     </div>
-    
-    <div class="w-1/6"></div>
+
+    <!-- Current Queue Display on the Right -->
+    <div class="w-1/2 px-16 pt-16">
+        <div class="bg-white rounded-lg shadow-xl p-10 text-center">
+            <div id="currentQueueNumber"
+                class="text-9xl py-2 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400 animate-flicker">
+                Loading...
+            </div>
+            <div id="currentDepartment" class="text-2xl py-3 font-semibold text-gray-700">
+                Department: Loading...
+            </div>
+            <div id="currentCounter" class="text-2xl py-3 font-semibold text-gray-700">
+                Counter: Loading...
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -61,33 +74,36 @@
 
             if (lastCurrentQueue === null) {
                 document.getElementById('currentQueueNumber').textContent = currentQueueNumber;
-                document.getElementById('currentDepartment').textContent = currentDepartment || "N/A";
-                document.getElementById('currentCounter').textContent = currentCounter || "N/A";
+                document.getElementById('currentDepartment').textContent = `Department: ${currentDepartment || "N/A"}`;
+                document.getElementById('currentCounter').textContent = `Counter: ${currentCounter || "N/A"}`;
                 lastCurrentQueue = { queue_number: currentQueueNumber, counter: currentCounter };
                 return;
             }
 
             if (currentQueueNumber !== lastCurrentQueue.queue_number) {
-                const previousTableBody = document.getElementById('previous-number-table-body');
+                const previousContainer = document.getElementById('previous-number-container');
 
-                // 限制表格最多显示 5 行
-                if (previousTableBody.rows.length >= 5) {
-                    previousTableBody.deleteRow(previousTableBody.rows.length - 1); // 移除最后一行 (最旧的)
+                // Limit to display a maximum of 5 previous numbers
+                if (previousContainer.childElementCount >= 5) {
+                    previousContainer.removeChild(previousContainer.lastElementChild); // Remove the last card (oldest)
                 }
 
-                const row = previousTableBody.insertRow(0);
-                const numberCell = row.insertCell(0);
-                const counterCell = row.insertCell(1);
+                // Create a new card for the previous number
+                const card = document.createElement('div');
+                card.className = "bg-gray-100 border border-gray-300 rounded-lg p-4 shadow-sm flex justify-between items-center";
 
-                numberCell.textContent = lastCurrentQueue.queue_number;
-                counterCell.textContent = lastCurrentQueue.counter;
+                card.innerHTML = `
+                    <div class="text-xl font-bold text-gray-800">${lastCurrentQueue.queue_number}</div>
+                    <div class="text-sm text-gray-500">Counter: ${lastCurrentQueue.counter}</div>
+                `;
 
-                numberCell.classList.add("px-4", "py-3", "border", "border-gray-600", "text-center");
-                counterCell.classList.add("px-4", "py-3", "border", "border-gray-600", "text-center");
+                // Insert the new card at the top
+                previousContainer.prepend(card);
 
+                // Update the current queue details
                 document.getElementById('currentQueueNumber').textContent = currentQueueNumber;
-                document.getElementById('currentDepartment').textContent = currentDepartment || "N/A";
-                document.getElementById('currentCounter').textContent = currentCounter || "N/A";
+                document.getElementById('currentDepartment').textContent = `Department: ${currentDepartment || "N/A"}`;
+                document.getElementById('currentCounter').textContent = `Counter: ${currentCounter || "N/A"}`;
                 lastCurrentQueue = { queue_number: currentQueueNumber, counter: currentCounter };
             }
         } catch (error) {
