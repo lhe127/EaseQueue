@@ -9,7 +9,7 @@ class Staff extends Authenticatable
 {
     use HasFactory;
     protected $table = 'staff';
-    protected $fillable = ['staffID','name','email','password','department_id','counter_id','status', 'is_admin',];
+    protected $fillable = ['staffID','name','email','password','department_id','counter_id','status', 'is_admin', 'viewed_at'];
     protected $primaryKey = 'staffID';
     protected $keyType = 'string';
 

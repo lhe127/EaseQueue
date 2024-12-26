@@ -6,6 +6,7 @@ use App\Models\contact;
 use App\Models\Department;
 use App\Models\QueueNumber;
 use App\Models\QueueNumberArchive;
+use App\Models\Staff;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Console\View\Components\Alert;
 use Illuminate\Http\Request;
@@ -18,8 +19,8 @@ class StaffController extends Controller
     public function showRequests()
     {
         $requests = Contact::where('staffID', auth()->id())
-                   ->orderBy('updated_at', 'DESC')
-                   ->get();
+            ->orderBy('updated_at', 'DESC')
+            ->get();
 
 
         return view('Staff.Staff_mailBox', ['requests' => $requests]);
@@ -27,13 +28,44 @@ class StaffController extends Controller
 
     public function dashboard()
     {
-        return view('Staff.dashboard');
+        $staffId = auth()->id(); // Assuming staff is authenticated
+
+        // Get the staff's last viewed time (from Staff model, not Contact)
+        $staff = Staff::find($staffId);
+        $lastViewedAt = $staff->viewed_at;
+
+        // Check if there are new notifications
+        $newNotificationsCount = Contact::where('staffID', $staffId)
+            ->where(function ($query) use ($lastViewedAt) {
+                $query->where('status', 'approved')
+                    ->orWhere('status', 'rejected')
+                    ->where('updated_at', '>', $lastViewedAt ?? now()->subDays(30));
+            })
+            ->count();
+
+        dd($newNotificationsCount);
+
+        return view('Staff.dashboard', compact('newNotificationsCount'));
+    }
+
+    public function markNotificationsAsViewed()
+    {
+        $staffId = auth()->id(); // Assuming staff is authenticated
+
+        // Update the staff's last viewed time
+        $staff = Staff::find($staffId);
+        if ($staff) {
+            $staff->viewed_at = now();
+            $staff->save();
+        }
+
+        return response()->json(['status' => 'success']);
     }
 
     public function history()
     {
         $separate = QueueNumber::where('department_id', auth()->user()->department_id);
-        $focus = $separate->where('staffID', auth()->id())->where('is_served', true)->orderBy('created_at','DESC');
+        $focus = $separate->where('staffID', auth()->id())->where('is_served', true)->orderBy('created_at', 'DESC');
         $results = $focus->paginate(7); // Call paginate directly on the query builder
 
         return view('Staff.history', ['queueNumbers' => $results]);

@@ -61,6 +61,8 @@ Route::post('/nextNumber', [StaffController::class, 'nextNumber'])->name('nextNu
 
 Route::post('/transfer/{id}', [StaffController::class, 'transfer'])->name('transfer');
 
+Route::get('/mark-notifications-viewed', [StaffController::class, 'markNotificationsAsViewed']);
+
 Route::get('/customerHistory', [pageController::class, 'history'])->name('customerHistory');
 
 Route::get('/customerAbout', [pageController::class, 'about'])->name('customerAbout');
@@ -99,6 +101,8 @@ Route::get('/adminSettingStaff', [AdminController::class, 'displayStaffInfo'])->
 
 Route::get('/editStaff/{staffID}', [AdminController::class, 'editStaff'])->name('updateStaffInfo');
 
+Route::delete('/staff/{staffID}', [AdminController::class, 'destroy'])->name('deleteStaff');
+
 Route::post('/updateStaff/{staffID}', [AdminController::class, 'updateStaff'])->name('updateStaff');
 
 /* Queue Setting Page */
@@ -107,6 +111,8 @@ Route::middleware(['check.queue.hours'])->group(function () {
     Route::get('/adminSettingQueue', [QueueSettingController::class, 'show'])->name('adminSetQueue');
     Route::post('/updatedQueueSetting', [QueueSettingController::class, 'openTime'])->name('updateQueueSettings');
     // Other queue-related routes
+    Route::post('/transferData', [QueueSettingController::class, 'transferData'])->name('adminSettingQueue');
+
 });
 
 Route::get('/joinQueue/{deparment}', [customerController::class, 'joinQueue'])->name('joinQueue');

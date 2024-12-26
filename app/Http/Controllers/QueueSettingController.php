@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\QueueSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class QueueSettingController extends Controller
 {
@@ -65,5 +66,27 @@ class QueueSettingController extends Controller
 
         // Redirect with a success message
         return redirect()->back()->with('success', 'Updated successfully.');
+    }
+
+    public function transferData(Request $request)
+    {
+        // Get all records from queue_numbers
+        $queueNumbers = DB::table('queue_numbers')->get();
+
+        // Convert each record to an associative array and insert into queue_numbers_archive
+        foreach ($queueNumbers as $queue) {
+            // Exclude the `id` field to let the database auto-increment
+            $queueArray = (array) $queue;
+            unset($queueArray['id']); // Remove the id field from the insert
+
+            // Insert into the archive table
+            DB::table('queue_numbers_archive')->insert($queueArray);
+        }
+
+        // Truncate the queue_numbers table
+        DB::table('queue_numbers')->truncate();
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Queue data transferred and cleared successfully.');
     }
 }
