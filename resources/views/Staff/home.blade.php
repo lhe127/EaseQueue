@@ -49,8 +49,8 @@
                 </div>
             </div>
             @else
-            <div class="flex justify-center ml-[6rem] mt-[3rem]">
-                <p class="text-7xl text-red-500"><strong>No unserved queue numbers available.</strong></p>
+            <div class="flex justify-center ml-[3rem] mr-[3rem] mt-[3rem]">
+                <p class="text-6xl text-gray-600"><strong>No active queue numbers at the moment.</strong></p>
             </div>
             @endif
             <div class="flex justify-center gap-[4rem] mt-[4rem]">
@@ -59,7 +59,7 @@
                 <form action="{{ route('callNumber', ['id' => $number->id]) }}" method="post">
                     @csrf
                     <div class="self-center">
-                        <button class="text-xl bg-cyan-300 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full">
+                        <button class="text-xl bg-cyan-400 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full font-roboto">
                             Call
                         </button>
                     </div>
@@ -69,29 +69,29 @@
                 <form action="{{ route('skipNumber', ['id' => $number->id]) }}" method="post">
                     @csrf
                     <div class="self-center">
-                        <button class="text-2xl bg-red-300 hover:bg-red-600 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full">
+                        <button class="text-xl bg-orange-400 hover:bg-red-600 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full font-roboto">
                             Skip
                         </button>
                     </div>
                 </form>
                 @else
                 <div class="self-center">
-                        <button class="text-xl bg-cyan-300 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full">
-                            Call
-                        </button>
+                    <button class="text-xl bg-cyan-400 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full font-roboto">
+                        Call
+                    </button>
                 </div>
                 @endif
                 @endif
                 @csrf
                 <div onclick="openModal('modelConfirm')" class="self-center">
-                    <button class="text-xl bg-cyan-300 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full">
+                    <button class="text-xl bg-cyan-400 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full font-roboto">
                         Transfer
                     </button>
                 </div>
                 <form action="{{route('nextNumber')}}" method="post">
                     @csrf
                     <div class="self-center">
-                        <button class="text-xl bg-cyan-300 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full">
+                        <button class="text-xl bg-cyan-400 hover:bg-blue-400 text-blue-dark font-semibold hover:text-white py-2 px-4 w-[8rem] h-[3.5rem] border border-blue hover:border-transparent rounded-full font-roboto">
                             Next
                         </button>
                     </div>
@@ -101,7 +101,7 @@
 
         <div class="bg-white shadow-md rounded-md overflow-hidden max-w-lg mx-auto">
             <div class="bg-gray-300 py-3 px-4">
-                <h2 class="text-2xl font-semibold text-gray-800 my-2">Queue Numbers</h2>
+                <h2 class="= font-semibold text-gray-800 my-2 text-2xl  font-lato">Queue Numbers</h2>
             </div>
             <ul class="divide-y divide-gray-200">
                 <div id="queueList">
@@ -156,7 +156,7 @@
                         tableBody.append(`
                         <li class="flex items-center py-4 px-6">
                             <div class="flex-1">
-                                <h2 class="text-xl font-medium text-gray-800">${queueList.queue_number}</h2>
+                                <h2 class="text-2xl font-bold text-gray-800 font-lato">${queueList.queue_number}</h2>
                             </div>
                         </li>
                     `);
