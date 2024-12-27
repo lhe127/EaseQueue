@@ -17,6 +17,17 @@
         rel="stylesheet" />
     <script src="https://kit.fontawesome.com/6a7808c541.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .font-roboto {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .font-lato {
+            font-family: 'Lato', sans-serif;
+        }
+    </style>
 </head>
 
 <body onload="setInitialStatus()">
@@ -119,13 +130,13 @@
         // Function to set the initial status color based on current value of dropdown
         function setInitialStatus() {
             const dropdown = document.getElementById('statusDropdown');
-            const selectedValue = dropdown.value;  // Get the selected value
+            const selectedValue = dropdown.value; // Get the selected value
 
             // Add the corresponding color class based on the selected status
             if (selectedValue === 'active') {
-                dropdown.classList.add('bg-green-500');  // Green for active
+                dropdown.classList.add('bg-green-500'); // Green for active
             } else if (selectedValue === 'logout') {
-                dropdown.classList.add('bg-red-500');  // Red for logout
+                dropdown.classList.add('bg-red-500'); // Red for logout
             }
         }
 
@@ -135,7 +146,7 @@
             const selectedValue = dropdown.value;
 
             // Remove all background color classes
-            dropdown.classList.remove('bg-green-500','bg-red-500');
+            dropdown.classList.remove('bg-green-500', 'bg-red-500');
 
             // Add the corresponding background color class based on the selected status
             if (selectedValue === 'active') {
@@ -149,15 +160,15 @@
 
                 setTimeout(function() {
                     document.getElementById('logoutForm').submit();
-                }, 500);  // Delay for status form to be processed
+                }, 500); // Delay for status form to be processed
             }
         }
     </script>
 
     <script>
         function markNotificationsViewed() {
-        fetch('/mark-notifications-viewed'); // Mark notifications as viewed
-    }
+            fetch('/mark-notifications-viewed'); // Mark notifications as viewed
+        }
     </script>
 </body>
 @endif
