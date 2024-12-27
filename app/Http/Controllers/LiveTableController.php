@@ -10,6 +10,9 @@ use App\Models\Counter;
 
 use App\Models\Department;
 
+use App\Events\QueueUpdated;
+
+
 class LiveTableController extends Controller
 {
     public function LiveDashboard()
@@ -26,6 +29,13 @@ class LiveTableController extends Controller
             })
             ->orderBy('updated_at', 'DESC')
             ->first();
+
+            if ($currentQueue) {
+                broadcast(new QueueUpdated(
+                    $currentQueue->queue_number,
+                    $currentQueue->counter->name
+                ))->toOthers();
+            }
 
         $previousQueues = QueueNumber::with('department', 'counter')
             ->where('is_served', 1)
@@ -52,7 +62,6 @@ class LiveTableController extends Controller
 
     public function nextQueue(Request $request)
     {
-        // 1. 获取当前 processing 的号码，并将其状态更新为 completed
         $currentQueue = QueueNumber::where('processing_status', 'processing')->first();
         if ($currentQueue) {
             $currentQueue->processing_status = 'completed';
@@ -60,7 +69,6 @@ class LiveTableController extends Controller
             $currentQueue->save();
         }
 
-        // 2. 获取下一个 pending 的号码，并将其状态更新为 processing
         $nextQueue = QueueNumber::where('processing_status', 'pending')
             ->orderBy('created_at', 'asc')
             ->first();
@@ -73,6 +81,19 @@ class LiveTableController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function updateQueue(Request $request)
+    {
+        $queueNumber = $request->input('queue_number');
+        $counterNumber = $request->input('counter_number');
+    
+        // Update logic in your database or application here
+    
+        // Broadcast the update
+        broadcast(new QueueUpdated($queueNumber, $counterNumber));
+    
+        return response()->json(['message' => 'Queue updated successfully']);
+    }
+    
     public function showCustomerLiveTable()
     {
         return view('monitor.customerLiveTable'); 

@@ -54,9 +54,25 @@
         </div>
     </div>
 </div>
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 
 <script>
+    let lastAnnouncedQueue = null;
     let lastCurrentQueue = null;
+
+    const pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+        cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+        encrypted: true
+    });
+
+    // Subscribe to the channel
+    const channel = pusher.subscribe('queue-updates');
+    
+    // Listen for updates
+    channel.bind('queue.updated', function(data) {
+        console.log('Received Pusher update:', data);
+        updateQueueDisplay(data);
+    });
 
     async function fetchLiveQueue() {
         try {
@@ -68,51 +84,85 @@
                 return;
             }
 
-            const currentQueueNumber = data.current.queue_number;
-            const currentCounter = data.current.counter;
-            const currentDepartment = data.current.department;
+            updateQueueDisplay({
+                queue_number: data.current.queue_number,
+                counter_number: data.current.counter,
+                department: data.current.department
+            });
 
-            if (lastCurrentQueue === null) {
-                document.getElementById('currentQueueNumber').textContent = currentQueueNumber;
-                document.getElementById('currentDepartment').textContent = `Department: ${currentDepartment || "N/A"}`;
-                document.getElementById('currentCounter').textContent = `Counter: ${currentCounter || "N/A"}`;
-                lastCurrentQueue = { queue_number: currentQueueNumber, counter: currentCounter };
-                return;
-            }
+            // Update previous queues
+            data.previous.forEach(queue => {
+                updatePreviousQueues({
+                    queue_number: queue.queue_number,
+                    counter_number: queue.counter
+                });
+            });
 
-            if (currentQueueNumber !== lastCurrentQueue.queue_number) {
-                const previousContainer = document.getElementById('previous-number-container');
-
-                // Limit to display a maximum of 5 previous numbers
-                if (previousContainer.childElementCount >= 5) {
-                    previousContainer.removeChild(previousContainer.lastElementChild); // Remove the last card (oldest)
-                }
-
-                // Create a new card for the previous number
-                const card = document.createElement('div');
-                card.className = "bg-gray-100 border border-gray-300 rounded-lg p-4 shadow-sm flex justify-between items-center";
-
-                card.innerHTML = `
-                    <div class="text-xl font-bold text-gray-800">${lastCurrentQueue.queue_number}</div>
-                    <div class="text-sm text-gray-500">Counter: ${lastCurrentQueue.counter}</div>
-                `;
-
-                // Insert the new card at the top
-                previousContainer.prepend(card);
-
-                // Update the current queue details
-                document.getElementById('currentQueueNumber').textContent = currentQueueNumber;
-                document.getElementById('currentDepartment').textContent = `Department: ${currentDepartment || "N/A"}`;
-                document.getElementById('currentCounter').textContent = `Counter: ${currentCounter || "N/A"}`;
-                lastCurrentQueue = { queue_number: currentQueueNumber, counter: currentCounter };
-            }
         } catch (error) {
             console.error("Error fetching live queue:", error);
         }
     }
 
+    function updateQueueDisplay(data) {
+        const currentQueueNumber = document.getElementById('currentQueueNumber');
+        const currentCounter = document.getElementById('currentCounter');
+        const currentDepartment = document.getElementById('currentDepartment');
+
+        if (currentQueueNumber && data.queue_number) {
+            currentQueueNumber.textContent = data.queue_number;
+        }
+        
+        if (currentCounter && data.counter_number) {
+            currentCounter.textContent = ` ${data.counter_number}`;
+        }
+
+        if (currentDepartment && data.department) {
+            currentDepartment.textContent = ` ${data.department}`;
+        }
+
+        // Check if this is a new queue number for announcement
+        if (lastAnnouncedQueue !== data.queue_number) {
+            announceQueue(data.queue_number, data.counter_number);
+            lastAnnouncedQueue = data.queue_number;
+            updatePreviousQueues(data);
+        }
+    }
+
+    function updatePreviousQueues(currentData) {
+        const previousContainer = document.getElementById('previous-number-container');
+        
+        if (!previousContainer || !currentData.queue_number) return;
+
+        const card = document.createElement('div');
+        card.className = "bg-gray-100 border border-gray-300 rounded-lg p-4 shadow-sm flex justify-between items-center";
+        card.innerHTML = `
+            <div class="text-xl font-bold text-gray-800">${currentData.queue_number}</div>
+            <div class="text-sm text-gray-500">Counter: ${currentData.counter_number}</div>
+        `;
+
+        while (previousContainer.childElementCount >= 5) {
+            previousContainer.removeChild(previousContainer.lastElementChild);
+        }
+
+        previousContainer.prepend(card);
+    }
+
+
+    function announceQueue(queueNumber, counterNumber) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const speech = new SpeechSynthesisUtterance();
+            speech.text = `Queue number ${queueNumber}, please proceed to ${counterNumber}`;
+            speech.lang = 'en-US';
+            speech.volume = 1;
+            speech.rate = 0.1;
+            speech.pitch = 2.5;
+            window.speechSynthesis.speak(speech);
+        }
+    }
+
     fetchLiveQueue();
     setInterval(fetchLiveQueue, 3000);
-</script>
 
+</script>
 @endsection
