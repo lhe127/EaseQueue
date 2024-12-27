@@ -6,6 +6,7 @@ use App\Models\Contact;
 use App\Models\Counter;
 use App\Models\Department;
 use App\Models\QueueNumber;
+use App\Models\QueueNumberArchive;
 use App\Models\Staff;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -283,7 +284,7 @@ class AdminController extends Controller
         $departmentData = [];
 
         foreach ($departments as $department) {
-            $query = QueueNumber::where('department_id', $department->id)
+            $query = QueueNumberArchive::where('department_id', $department->id)
                 ->whereYear('created_at', $currentYear);
 
             $services = [];
@@ -317,7 +318,7 @@ class AdminController extends Controller
             $staffData = [];
 
             foreach ($staffMembers as $staff) {
-                $query = QueueNumber::where('staffID', $staff->staffID)
+                $query = QueueNumberArchive::where('staffID', $staff->staffID)
                     ->whereYear('created_at', $currentYear);
 
                 $services = [];

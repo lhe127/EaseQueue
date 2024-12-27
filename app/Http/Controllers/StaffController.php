@@ -76,7 +76,7 @@ class StaffController extends Controller
     }
     public function report()
     {
-        $separate = QueueNumber::where('department_id', auth()->user()->department_id);
+        $separate = QueueNumberArchive::where('department_id', auth()->user()->department_id);
         $focus = $separate->where('staffID', auth()->id());
 
         // number of Service(S)
