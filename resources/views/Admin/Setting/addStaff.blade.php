@@ -11,7 +11,7 @@
                 </div>
 
                 <div class="lg:col-span-2">
-                    <form method="POST" action="{{ route('addStaff') }}">
+                    <form method="POST" action="{{ route('addStaff') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
 

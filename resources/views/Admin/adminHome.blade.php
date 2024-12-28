@@ -34,7 +34,7 @@
                                 <td class="p-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div class="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
-                                            <img class="rounded-full" src="https://via.placeholder.com/40"
+                                            <img class="rounded-full object-cover w-10 h-10" src="{{ asset('staff_photos/' . $member->photo) }}"
                                                 alt="{{ $member->name }}">
                                         </div>
                                         <div class="font-medium text-gray-800">{{ $member->name }}</div>

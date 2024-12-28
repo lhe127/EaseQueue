@@ -10,7 +10,7 @@
                     <p class="font-medium text-lg">Staff Details</p>
                 </div>
                 <div class="lg:col-span-2">
-                    <form method="POST" action="{{ route('updateStaff', $staff->staffID) }}">
+                    <form method="POST" action="{{ route('updateStaff', $staff->staffID) }}" enctype="multipart/form-data">
                         @csrf
                         <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
                             <!-- Staff ID Field (Read-Only) -->
