@@ -79,11 +79,23 @@ class AuthController extends Controller
     // Logout the user
     public function logout(Request $request)
     {
-        Auth::logout(); // Log the user out
-        $request->session()->invalidate(); // Invalidate the session
-        $request->session()->regenerateToken(); // Regenerate CSRF token
+        $staff = Staff::find(Auth::id()); // Fetch the authenticated staff by their ID
+        // Check if the staff record was found
+        if ($staff) {
+            // Update the staff status to 'active'
+            $staff->status = 'inactive';
+            $staff->save();
+        }
 
-        return redirect()->route('login.page'); // Redirect to the login page
+        // Log the user out
+        Auth::guard('staff')->logout();
+
+        // Invalidate the session and regenerate CSRF token
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // Redirect to the login page
+        return redirect()->route('login.page');
     }
 
     public function getIsAdminAttribute()
