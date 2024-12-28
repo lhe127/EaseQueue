@@ -30,14 +30,25 @@ class AppServiceProvider extends ServiceProvider
         View::share('newRequestsCount', $newRequestsCount);
 
         View::composer('*', function ($view) {
+            // Check if the user is authenticated and is an instance of Staff
             if (auth()->check() && auth()->user() instanceof \App\Models\Staff) {
+                // Retrieve the authenticated staff user
                 $staff = \App\Models\Staff::find(auth()->id());
-                $lastViewedAt = $staff->viewed_at;
-                $newNotificationsCount = \App\Models\Contact::where('staffID', auth()->id())
-                    ->where('updated_at', '>', $lastViewedAt ?? now()->subDays(30))
-                    ->whereIn('status', ['approved', 'rejected'])
-                    ->count();
-                $view->with('newNotificationsCount', $newNotificationsCount);
+
+                // Check if the staff exists before accessing properties like 'viewed_at'
+                if ($staff) {
+                    // Get the last viewed timestamp, defaulting to now() if not set
+                    $lastViewedAt = $staff->viewed_at ?? now()->subDays(30);
+
+                    // Count new notifications based on the last viewed time and the condition on 'status'
+                    $newNotificationsCount = \App\Models\Contact::where('staffID', auth()->id())
+                        ->where('updated_at', '>', $lastViewedAt)
+                        ->whereIn('status', ['approved', 'rejected'])
+                        ->count();
+
+                    // Pass the count of new notifications to the view
+                    $view->with('newNotificationsCount', $newNotificationsCount);
+                }
             }
         });
     }

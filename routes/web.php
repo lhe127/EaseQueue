@@ -31,6 +31,11 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+
+Route::get('/customerHistory', [pageController::class, 'history'])->name('customerHistory');
+
+Route::get('/customerAbout', [pageController::class, 'about'])->name('customerAbout');
+
 Route::get('/getNumber', function () {
     return view('Customer.getNumber');
 });
@@ -144,10 +149,6 @@ Route::middleware(['auth:staff', 'is_staff'])->group(function () {
     Route::post('/transfer/{id}', [StaffController::class, 'transfer'])->name('transfer');
 
     Route::get('/mark-notifications-viewed', [StaffController::class, 'markNotificationsAsViewed']);
-
-    Route::get('/customerHistory', [pageController::class, 'history'])->name('customerHistory');
-
-    Route::get('/customerAbout', [pageController::class, 'about'])->name('customerAbout');
 });
 
 // Customer Login and Registration

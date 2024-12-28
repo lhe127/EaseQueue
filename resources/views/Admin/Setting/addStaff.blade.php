@@ -46,6 +46,12 @@
                                     required />
                             </div>
 
+                            <div class="md:col-span-5">
+                                <label for="photo">Photo</label>
+                                <input type="file" name="photo" id="photo"
+                                    class="w-full border border-gray-300 rounded p-2" accept="image/*" />
+                            </div>
+
                             <!-- Department Name Field -->
                             <div class="md:col-span-5">
                                 <label for="department_id">Department</label>
