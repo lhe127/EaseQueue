@@ -27,13 +27,13 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             // Fetch the authenticated user explicitly from the Staff model
             $staff = Staff::find(Auth::id()); // Fetch the authenticated staff by their ID
-    
+
             // Check if the staff record was found
             if ($staff) {
                 // Update the staff status to 'active'
                 $staff->status = 'active';
                 $staff->save();  // Save the updated status to the database
-    
+
                 // If the user is an admin, redirect to the admin's home page
                 if ($staff->is_admin == 1) {
                     return redirect()->route('admin.adminHome');
@@ -42,7 +42,7 @@ class AuthController extends Controller
                 }
             }
         }
-    
+
         // If the login attempt fails, return back with an error message
         return back()->withErrors(['email' => 'Invalid credentials']);
     }
@@ -74,20 +74,20 @@ class AuthController extends Controller
 
         Auth::login($staff);
 
-         return view('auth.login');
-
+        return view('auth.login');
     }
     // Logout the user
     public function logout(Request $request)
-{
-    Auth::logout(); // Log the user out
-    $request->session()->invalidate(); // Invalidate the session
-    $request->session()->regenerateToken(); // Regenerate CSRF token
+    {
+        Auth::logout(); // Log the user out
+        $request->session()->invalidate(); // Invalidate the session
+        $request->session()->regenerateToken(); // Regenerate CSRF token
 
-    return redirect()->route('login.page'); // Redirect to the login page
-}
+        return redirect()->route('login.page'); // Redirect to the login page
+    }
 
-    public function getIsAdminAttribute() {
+    public function getIsAdminAttribute()
+    {
         return Auth::user()->is_admin == 1;
     }
 }
