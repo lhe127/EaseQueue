@@ -60,14 +60,17 @@
     let lastAnnouncedQueue = null;
     let lastCurrentQueue = null;
 
-    const pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
-        cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
-        encrypted: true
+    const PUSHER_APP_KEY = "{{ config('broadcasting.connections.pusher.key') }}";
+    const PUSHER_APP_CLUSTER = "{{ config('broadcasting.connections.pusher.options.cluster') }}";
+
+    const pusher = new Pusher(PUSHER_APP_KEY, {
+        cluster: PUSHER_APP_CLUSTER,
+        encrypted: true,
     });
 
     // Subscribe to the channel
     const channel = pusher.subscribe('queue-updates');
-    
+
     // Listen for updates
     channel.bind('queue.updated', function(data) {
         console.log('Received Pusher update:', data);
@@ -111,7 +114,7 @@
         if (currentQueueNumber && data.queue_number) {
             currentQueueNumber.textContent = data.queue_number;
         }
-        
+
         if (currentCounter && data.counter_number) {
             currentCounter.textContent = ` ${data.counter_number}`;
         }
@@ -130,7 +133,7 @@
 
     function updatePreviousQueues(currentData) {
         const previousContainer = document.getElementById('previous-number-container');
-        
+
         if (!previousContainer || !currentData.queue_number) return;
 
         const card = document.createElement('div');
@@ -155,7 +158,7 @@
             speech.text = `Queue number ${queueNumber}, please proceed to ${counterNumber}`;
             speech.lang = 'en-US';
             speech.volume = 1;
-            speech.rate = 0.1;
+            speech.rate = 1;
             speech.pitch = 2.5;
             window.speechSynthesis.speak(speech);
         }
@@ -163,6 +166,5 @@
 
     fetchLiveQueue();
     setInterval(fetchLiveQueue, 3000);
-
 </script>
 @endsection
