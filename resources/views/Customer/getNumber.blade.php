@@ -61,27 +61,28 @@
         <div class="col-12 col-md-8 col-lg-6">
             <div class="card shadow-lg p-4" style="border-radius: 15px;">
                 <div class="card-body">
-                    <h4 class="mb-3">Queue Number:
-                        <strong class="text-success display-4" id="queueNumber">{{ $queue->queue_number }}</strong>
-                    </h4>
-                    <p class="lead">
-                        Estimated Time:
-                        <strong class="text-warning display-5" id="estimatedTime">
-                            @if($isYourTurn)
-                            Your Turn - {{$counter->name}}
-                            @else
-                            {{ $estimatedWaitTime }}
-                            @endif
-                        </strong>
-                    </p>
-                    <hr class="my-4">
-                    <h5 class="text-muted">Now Serving:
-                        @if($nowServing)
-                        <strong class="text-danger display-4" id="nowServing">{{ $nowServing }}</strong>
+                    <p class="lead font-weight-bold">Queue Number:</p>
+                    <strong class="text-success display-4 font-weight-bold" id="queueNumber">{{ $queue->queue_number
+                        }}</strong>
+
+                    <p class="lead mt-3 font-weight-bold">Estimated Time:</p>
+                    <strong class="text-warning font-weight-bold" style="font-size: 25px" id="estimatedTime">
+                        @if($isYourTurn)
+                        Your Turn - {{$counter->name}}
                         @else
-                        <strong class="text-danger display-4" id="nowServing">No one is being served</strong>
+                        {{ $estimatedWaitTime }}
                         @endif
-                    </h5>
+                    </strong>
+
+                    <hr class="my-4">
+
+                    <p class="lead mt-3 font-weight-bold">Now Serving:</p>
+                    @if($nowServing)
+                    <strong class="text-danger display-4 font-weight-bold" id="nowServing">{{ $nowServing }}</strong>
+                    @else
+                    <strong class="text-danger display-4 font-weight-bold" id="nowServing">No one is being
+                        served</strong>
+                    @endif
                 </div>
             </div>
         </div>
