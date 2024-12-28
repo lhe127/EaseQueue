@@ -151,9 +151,22 @@ class AdminController extends Controller
             'department_id' => 'required|exists:departments,id',
             'counter_id' => 'required|exists:counters,id',
             'password' => 'required|string|min:8', // Ensuring a secure password
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $staffID = $this->generateNewStaffID();
+
+        $imageName = null;
+        if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
+            // Get the uploaded file
+            $image = $request->file('photo');
+
+            // Generate a unique name for the photo to avoid conflicts
+            $imageName = time() . '_' . $image->getClientOriginalName();
+
+            // Move the photo to the staff_photos directory
+            $image->move(public_path('staff_photos'), $imageName);
+        }
 
         // Save the staff details to the database
         $staff = new Staff();
@@ -163,6 +176,7 @@ class AdminController extends Controller
         $staff->department_id = $request->input('department_id');
         $staff->counter_id = $request->input('counter_id');
         $staff->password = bcrypt($request->input('password')); // Ensure passwords are stored securely
+        $staff->photo = $imageName;
         $staff->save();
 
         return redirect()->route('adminSetStaff');
@@ -213,29 +227,50 @@ class AdminController extends Controller
 
     public function updateStaff(Request $request, $staffID)
     {
+        // Validate the incoming request data
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:staff,email,' . $staffID . ',staffID', // Adding validation for email
+            'email' => 'required|string|email|max:255|unique:staff,email,' . $staffID . ',staffID', // Email validation
             'department_id' => 'required|exists:departments,id',
             'counter_id' => 'required|exists:counters,id',
             'password' => 'nullable|string|min:8', // Password is optional during update
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048' // Photo validation (optional)
         ]);
 
+        // Find the staff member by their ID
         $staff = Staff::where('staffID', $staffID)->first();
+
+        // Update staff details
         $staff->name = $request->input('name');
         $staff->email = $request->input('email'); // Update the email
         $staff->department_id = $request->input('department_id');
         $staff->counter_id = $request->input('counter_id');
 
+        // Update the password only if it's provided
         if ($request->filled('password')) {
-            $staff->password = bcrypt($request->input('password')); // Update password only if provided
+            $staff->password = bcrypt($request->input('password'));
         }
 
+        // Handle photo upload if a new photo is provided
+        if ($request->hasFile('photo')) {
+            // Delete the old photo if it exists
+            if ($staff->photo && file_exists(public_path('staff_photos/' . $staff->photo))) {
+                unlink(public_path('staff_photos/' . $staff->photo));
+            }
+
+            // Store the new photo and update the photo field
+            $photo = $request->file('photo');
+            $photoName = time() . '.' . $photo->getClientOriginalExtension();
+            $photo->move(public_path('staff_photos'), $photoName);
+            $staff->photo = $photoName; // Save the new photo name
+        }
+
+        // Save the staff data
         $staff->save();
 
+        // Redirect to the staff list page
         return redirect()->route('adminSetStaff');
     }
-
     // Display all requests
     public function showRequests()
     {
