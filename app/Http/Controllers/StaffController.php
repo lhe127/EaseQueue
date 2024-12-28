@@ -152,7 +152,12 @@ class StaffController extends Controller
 
     public function home()
     {
-        return $this->showQueueNumbers();
+        // Retrieve the authenticated staff member's photo
+        $staff = Auth::user(); // Assuming the authenticated user is the staff
+        $staffPhoto = $staff->photo; // Adjust this to the correct field in your database
+
+        // Show queue numbers
+        return $this->showQueueNumbers()->with('staffPhoto', $staffPhoto);
     }
 
     public function nextNumber()
