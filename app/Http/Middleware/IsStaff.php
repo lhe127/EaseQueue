@@ -13,6 +13,6 @@ class IsStaff
             return $next($request);
         }
 
-        return redirect('/adminHome'); // Redirect to admin home if not staff
+        return redirect('/no-access'); // Redirect to admin home if not staff
     }
 }
