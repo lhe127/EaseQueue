@@ -44,6 +44,12 @@
                                     class="h-10 border rounded px-4 w-full bg-gray-50" value="{{ old('password') }}" />
                             </div>
 
+                            <div class="md:col-span-5">
+                                <label for="photo">Photo</label>
+                                <input type="file" name="photo" id="photo"
+                                    class="w-full border border-gray-300 rounded p-2" accept="image/*" />
+                            </div>
+
                             <!-- Department Dropdown -->
                             <div class="md:col-span-5">
                                 <label for="department_id">Department</label>
