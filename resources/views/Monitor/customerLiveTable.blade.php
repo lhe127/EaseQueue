@@ -79,7 +79,17 @@
 
     async function fetchLiveQueue() {
         try {
-            const response = await fetch("{{ route('fetchLiveQueue') }}");
+            const response = await fetch("{{ route('fetchLiveQueue') }}", {
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
             const data = await response.json();
 
             if (!data.current) {
@@ -87,6 +97,7 @@
                 return;
             }
 
+            // Update current queue display
             updateQueueDisplay({
                 queue_number: data.current.queue_number,
                 counter_number: data.current.counter,
@@ -94,12 +105,19 @@
             });
 
             // Update previous queues
-            data.previous.forEach(queue => {
-                updatePreviousQueues({
-                    queue_number: queue.queue_number,
-                    counter_number: queue.counter
+            if (Array.isArray(data.previous)) {
+                // Clear existing cards if needed
+                const previousContainer = document.getElementById('previous-number-container');
+                previousContainer.innerHTML = '';
+                
+                // Add each previous queue
+                data.previous.forEach(queue => {
+                    updatePreviousQueues({
+                        queue_number: queue.queue_number,
+                        counter_number: queue.counter
+                    });
                 });
-            });
+            }
 
         } catch (error) {
             console.error("Error fetching live queue:", error);
@@ -133,21 +151,30 @@
 
     function updatePreviousQueues(currentData) {
         const previousContainer = document.getElementById('previous-number-container');
-
         if (!previousContainer || !currentData.queue_number) return;
 
-        const card = document.createElement('div');
-        card.className = "bg-gray-100 border border-gray-300 rounded-lg p-4 shadow-sm flex justify-between items-center";
-        card.innerHTML = `
-            <div class="text-xl font-bold text-gray-800">${currentData.queue_number}</div>
-            <div class="text-sm text-gray-500">Counter: ${currentData.counter_number}</div>
-        `;
+        // Check if this queue number already exists in the list
+        const existingCards = previousContainer.querySelectorAll('.queue-card');
+        const alreadyExists = Array.from(existingCards).some(card => 
+            card.querySelector('.queue-number').textContent === currentData.queue_number.toString()
+        );
 
-        while (previousContainer.childElementCount >= 5) {
-            previousContainer.removeChild(previousContainer.lastElementChild);
+        if (!alreadyExists) {
+            const card = document.createElement('div');
+            card.className = "bg-gray-100 border border-gray-300 rounded-lg p-4 shadow-sm flex justify-between items-center queue-card";
+            card.innerHTML = `
+                <div class="text-xl font-bold text-gray-800 queue-number">${currentData.queue_number}</div>
+                <div class="text-sm text-gray-500">Counter: ${currentData.counter_number}</div>
+            `;
+
+            // Remove oldest card if we have 5 or more
+            while (previousContainer.childElementCount >= 5) {
+                previousContainer.removeChild(previousContainer.lastElementChild);
+            }
+
+            // Add new card at the beginning
+            previousContainer.prepend(card);
         }
-
-        previousContainer.prepend(card);
     }
 
 
@@ -165,6 +192,15 @@
     }
 
     fetchLiveQueue();
-    setInterval(fetchLiveQueue, 3000);
+    const refreshInterval = setInterval(fetchLiveQueue, 3000);
+    
+    document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        clearInterval(refreshInterval);
+    } else {
+        fetchLiveQueue();
+        setInterval(fetchLiveQueue, 3000);
+    }
+});
 </script>
 @endsection

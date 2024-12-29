@@ -22,24 +22,25 @@ class LiveTableController extends Controller
 
     public function fetchLiveQueue()
     {
-        $currentQueue = QueueNumber::with('department', 'counter')
+        // Add cache control headers
+        $headers = [
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ];
+
+        $currentQueue = QueueNumber::with(['department', 'counter'])
             ->where(function ($query) { 
                 $query->where('is_served', 1)
-                      ->orWhereNotNull('staffID');
+                    ->orWhereNotNull('staffID');
             })
             ->orderBy('updated_at', 'DESC')
             ->first();
 
-            if ($currentQueue) {
-                broadcast(new QueueUpdated(
-                    $currentQueue->queue_number,
-                    $currentQueue->counter->name
-                ))->toOthers();
-            }
-
-        $previousQueues = QueueNumber::with('department', 'counter')
+        $previousQueues = QueueNumber::with(['department', 'counter'])
             ->where('is_served', 1)
-            ->whereNotNull('staffID') 
+            ->whereNotNull('staffID')
+            ->where('id', '!=', $currentQueue?->id ?? 0)
             ->orderBy('updated_at', 'DESC')
             ->take(5)
             ->get();
@@ -56,7 +57,7 @@ class LiveTableController extends Controller
                     'counter' => $queue->counter->name ?? 'N/A',
                 ];
             }),
-        ]);
+        ], 200, $headers);
     }
 
 
