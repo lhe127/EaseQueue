@@ -379,7 +379,7 @@ class AdminController extends Controller
                 ];
             }
 
-            return view('Admin.Report.staffPerformance', compact('staffData'));
+            return view('Admin.report.staffPerformance', compact('staffData'));
         } catch (\Exception $e) {
             Log::error('Staff Performance Error: ' . $e->getMessage());
             return back()->with('error', 'Unable to fetch staff performance data.');
