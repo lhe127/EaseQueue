@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
-use App\Models\contact;
+use App\Models\Contact;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,7 +26,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+
+        URL::forceScheme('https');
+    
         $newRequestsCount = Contact::where('status', 'Pending')->count();
         View::share('newRequestsCount', $newRequestsCount);
 
@@ -37,6 +40,10 @@ class AppServiceProvider extends ServiceProvider
 
                 // Check if the staff exists before accessing properties like 'viewed_at'
                 if ($staff) {
+
+                    $staffPhoto = $staff->photo ?? 'default.jpg'; // Default image if no photo is set
+                    $view->with('staffPhoto', $staffPhoto);
+
                     // Get the last viewed timestamp, defaulting to now() if not set
                     $lastViewedAt = $staff->viewed_at ?? now()->subDays(30);
 

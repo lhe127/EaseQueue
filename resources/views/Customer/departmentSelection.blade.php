@@ -1,4 +1,4 @@
-@extends('customer.shared.customerNavigation')
+@extends('Customer.shared.customerNavigation')
 
 @section('title', 'Service Providers')
 

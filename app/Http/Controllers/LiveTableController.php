@@ -96,6 +96,6 @@ class LiveTableController extends Controller
     
     public function showCustomerLiveTable()
     {
-        return view('monitor.customerLiveTable'); 
+        return view('Monitor.customerLiveTable'); 
     }
 }

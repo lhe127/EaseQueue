@@ -1,4 +1,4 @@
-@extends('customer.shared.customerNavigation')
+@extends('Customer.shared.customerNavigation')
 @section('content')
 
 <head>
@@ -6,51 +6,65 @@
     <link rel="stylesheet" href="css/Customer/getNumber.css">
 
     <script>
+        let remainingTime = null; // Track the estimated time
+    
+        // Function to decrement the estimated time every minute
+        setInterval(function () {
+            if (remainingTime !== null && remainingTime > 0) {
+                remainingTime--; // Reduce time by one minute
+                $('#estimatedTime').text(`${remainingTime} minutes`); // Update the displayed time
+            }
+        }, 60000); // Trigger every 60 seconds
+    
         function fetchQueueStatus() {
-            $(document).ready(function () {
-                const queueId = @json($queue->id); // Get the queue ID dynamically from server-side
-                const refreshedKey = `queue_refreshed_${queueId}`; // Unique key for refresh status
-                let isUpdated = sessionStorage.getItem(refreshedKey) === 'true'; // Check refresh status
+            const queueId = @json($queue->id); // Get the queue ID dynamically from server-side
+            const refreshedKey = `queue_refreshed_${queueId}`; // Unique key for refresh status
+            const isUpdated = sessionStorage.getItem(refreshedKey) === 'true'; // Check refresh status
     
-                if (isUpdated) return; // Stop further execution if already refreshed
+            if (isUpdated) return; // Stop further execution if already refreshed
     
-                // Fetch queue status from the server
-                $.ajax({
-                    url: `/queue-status/${queueId}/check`, // Endpoint to fetch the queue status
-                    method: 'GET',
-                    success: function (data) {
-                        // Check if the page needs to refresh due to `staffID` or other changes
-                        if (data.staffID && !isUpdated) {
-                            sessionStorage.setItem(refreshedKey, 'true'); // Mark as refreshed
-                            location.reload(); // Reload the page
-                            return;
-                        }
+            // Fetch queue status from the server
+            $.ajax({
+                url: `/queue-status/${queueId}/check`, // Endpoint to fetch the queue status
+                method: 'GET',
+                success: function (data) {
+                    // Check if the page needs to refresh due to `staffID` or other changes
+                    if (data.staffID && !isUpdated) {
+                        sessionStorage.setItem(refreshedKey, 'true'); // Mark as refreshed
+                        location.reload(); // Reload the page
+                        return;
+                    }
     
-                        // Update nowServing if it has changed
-                        const nowServingElement = $('#nowServing');
-                        if (nowServingElement.text() !== data.nowServing) {
-                            nowServingElement.text(data.nowServing || 'No one is being served');
-                        }
+                    // Update nowServing if it has changed
+                    const nowServingElement = $('#nowServing');
+                    if (nowServingElement.text() !== data.nowServing) {
+                        nowServingElement.text(data.nowServing || 'No one is being served');
+                    }
     
-                        // Update estimated time dynamically
-                        const estimatedTimeElement = $('#estimatedTime');
+                    // Update estimated time dynamically
+                    const estimatedTimeElement = $('#estimatedTime');
+                    if (data.estimatedTime !== undefined) {
+                        remainingTime = parseInt(data.estimatedTime); // Update the countdown timer
+                        estimatedTimeElement.text(`${remainingTime} minutes`); // Display initial time
+                    } else {
                         estimatedTimeElement.text(
                             data.nowServing === 0
                                 ? 'Waiting for the first customer'
-                                : data.estimatedTime || 'Calculating...'
+                                : 'Calculating...'
                         );
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error fetching queue status:', error);
                     }
-                });
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching queue status:', error);
+                }
             });
         }
     
         // Fetch queue status every 5 seconds
-        setInterval(fetchQueueStatus, 4000);
+        setInterval(fetchQueueStatus, 5000); // Adjust polling frequency as needed
         fetchQueueStatus(); // Initial fetch
     </script>
+
 
 </head>
 

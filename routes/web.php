@@ -109,7 +109,7 @@ Route::middleware(['auth:staff', 'is_admin'])->group(function () {
 
     Route::put('/admin/requests/{id}', [AdminController::class, 'updateRequestStatus'])->name('admin.updateRequest');
 
-    Route::get('/fetchLiveQueue', [AdminController::class, 'fetchLiveQueue']);
+    // Route::get('/fetchLiveQueue', [AdminController::class, 'fetchLiveQueue']);
 });
 
 // Staff Routes

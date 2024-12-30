@@ -25,7 +25,7 @@ class AdminController extends Controller
         $staff = Staff::where('staffID', 'like', 'S%')->skip(1)->paginate(5);
         $queueNumbers = QueueNumber::whereNull('staffID')->orderBy('created_at', 'ASC')->get(); // Fetch all unserved queue numbers
 
-        return view('admin.adminHome', ['staff' => $staff, 'queueNumbers' => $queueNumbers]);
+        return view('Admin.adminHome', ['staff' => $staff, 'queueNumbers' => $queueNumbers]);
     }
 
     public function fetchItems()
@@ -341,7 +341,7 @@ class AdminController extends Controller
             ];
         }
 
-        return view('Admin.Report.adminReportDetail', compact('departmentData'));
+        return view('Admin.report.adminReportDetail', compact('departmentData'));
     }
 
     public function staffPerformance()
@@ -379,7 +379,7 @@ class AdminController extends Controller
                 ];
             }
 
-            return view('Admin.Report.staffPerformance', compact('staffData'));
+            return view('Admin.report.staffPerformance', compact('staffData'));
         } catch (\Exception $e) {
             Log::error('Staff Performance Error: ' . $e->getMessage());
             return back()->with('error', 'Unable to fetch staff performance data.');
