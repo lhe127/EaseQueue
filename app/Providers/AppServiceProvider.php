@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Contact;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,7 +26,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+
+        URL::forceScheme('https');
+    
         $newRequestsCount = Contact::where('status', 'Pending')->count();
         View::share('newRequestsCount', $newRequestsCount);
 
