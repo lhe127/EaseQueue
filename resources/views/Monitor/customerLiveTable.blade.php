@@ -140,7 +140,7 @@
         card.className = "bg-gray-100 border border-gray-300 rounded-lg p-4 shadow-sm flex justify-between items-center";
         card.innerHTML = `
             <div class="text-xl font-bold text-gray-800">${currentData.queue_number}</div>
-            <div class="text-sm text-gray-500">Counter: ${currentData.counter_number}</div>
+            <div class="text-sm text-gray-500">${currentData.counter_number}</div>
         `;
 
         while (previousContainer.childElementCount >= 5) {
